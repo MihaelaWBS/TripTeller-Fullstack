@@ -25,6 +25,13 @@ app.use("/api/posts", postRouter);
 app.use("/auth", authRouter);
 app.use("/auth/currentUser", authRouter);
 
+if (process.env.NODE_ENV === "production") {
+  const buildPath = path.join(__dirname, "../client/dist");
+  app.use(express.static(buildPath));
+
+  app.get("*", (req, res) => res.sendFile(path.join(buildPath, "index.html")));
+}
+
 connectDB().then(() => {
   app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 });
