@@ -14,7 +14,7 @@ const createPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().populate("createdBy", "username email");
+    const posts = await Post.find().populate("userId", "username email");
     res.json(posts);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -24,10 +24,7 @@ const getAllPosts = async (req, res) => {
 const getPostById = async (req, res) => {
   const { id } = req.params;
   try {
-    const post = await Post.findById(id).populate(
-      "createdBy",
-      "username email"
-    );
+    const post = await Post.findById(id).populate("userId", "username email");
     if (!post) {
       res.status(404).json({ message: `Post with id ${id} Not Found` });
     } else {
