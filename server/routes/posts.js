@@ -1,14 +1,14 @@
 const express = require("express");
-/* const authenticate = require("../middleware/auth");
- */ const postRouter = express.Router();
+const { authenticate } = require("../middleware/auth");
+const postRouter = express.Router();
 const {
-	createPost,
-	getAllPosts,
-	getPostById,
-	updatePost,
-	deletePost,
+  createPost,
+  getAllPosts,
+  getPostById,
+  updatePost,
+  deletePost,
 } = require("../controllers/posts");
-/* postRouter.use(authenticate); */
+postRouter.use(authenticate);
 postRouter.post("/", createPost);
 postRouter.get("/", getAllPosts);
 postRouter.get("/:id", getPostById);

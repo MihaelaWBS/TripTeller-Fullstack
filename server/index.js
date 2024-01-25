@@ -4,7 +4,7 @@ const app = express();
 const PORT = 8000;
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const { createServer } = require('node:http');
+const { createServer } = require("node:http");
 const server = createServer(app);
 
 const cors = require("cors");
@@ -26,7 +26,7 @@ app.use("/auth", authRouter);
 app.use("/auth/currentUser", authRouter);
 
 connectDB().then(() => {
-	app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+  app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 });
 
 /*
