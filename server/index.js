@@ -1,7 +1,7 @@
 require("dotenv/config");
 const express = require("express");
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 4000;
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const { createServer } = require("node:http");
