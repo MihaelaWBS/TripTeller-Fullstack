@@ -5,7 +5,7 @@ const createPost = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User is not defined" });
     }
-    const newPost = await Post.create({ ...req.body, createdBy: req.user._id });
+    const newPost = await Post.create({ ...req.body, userId: req.user._id });
     res.status(201).json(newPost);
   } catch (error) {
     res.status(500).json({ message: error.message });
