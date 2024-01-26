@@ -228,6 +228,71 @@ const index = () => {
           </div>
         </div>
       </form>
+      {/*   MOBILE ONLY!!!  */}
+      <form onSubmit={handleSubmit} className="flex md:hidden">
+        <div className="max-w-sm mx-auto mt-6">
+          <div className="bg-white rounded-lg border shadow-md p-5 max-w-xs">
+            <div className="flex flex-col space-y-4">
+              <div className="relative">
+                <input
+                  readOnly
+                  value={displayLocation()}
+                  className="w-full px-2 py-2 pl-4 border text-left rounded-md"
+                  type="text"
+                  placeholder="Where would you like to go?"
+                />
+
+                <FontAwesomeIcon
+                  onClick={fetchCoordinates}
+                  icon={faMapMarkerAlt}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2"
+                />
+              </div>
+              <div className="flex space-x-4">
+                <input
+                  className="w-1/2 px-4 py-2 border rounded-md"
+                  type="date"
+                  name="checkin"
+                  value={checkInDate}
+                  ref={checkInInputRef}
+                  onChange={(e) => setCheckInDate(e.target.value)}
+                />
+                <input
+                  value={checkOutDate}
+                  ref={checkOutInputRef}
+                  onChange={(e) => setCheckOutDate(e.target.value)}
+                  className="w-1/2 px-4 py-2 border rounded-md"
+                  type="date"
+                  name="checkout"
+                />
+              </div>
+              <div className="flex space-x-4">
+                <input
+                  className="w-1/3 px-4 py-2 border rounded-md"
+                  type="number"
+                  value={rooms}
+                  placeholder="1 Room"
+                />
+                <input
+                  className="w-1/3 px-4 py-2 border rounded-md"
+                  type="number"
+                  value={adults}
+                  placeholder="2 Adults"
+                />
+                <input
+                  className="w-1/3 px-4 py-2 border rounded-md"
+                  type="number"
+                  value={childrenAge}
+                  placeholder="0 Children"
+                />
+              </div>
+              <button className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">
+                SEARCH
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
     </>
   );
 };

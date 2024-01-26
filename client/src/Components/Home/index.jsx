@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import SearchComponentMobile from "../SearchComponentMobile/index";
+import SearchComponent from "../SearchComponent/index";
 
 const index = () => {
   return (
     <>
-      <SearchComponentMobile />
+      <SearchComponent />
     </>
   );
 };
