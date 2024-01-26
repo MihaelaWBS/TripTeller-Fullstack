@@ -29,9 +29,9 @@ const SearchResults = () => {
 			</div>
 
 			{hotels &&
-				hotels.map((hotel) => (
+				hotels.slice(0, 2).map((hotel) => (
 					<Link to={`/hotels/${hotel.hotel_id}`} key={hotel.hotel_id}>
-						<div className="max-w-2xl mx-auto mt-4 bg-white shadow-md rounded-lg overflow-hidden mb-4 flex md:flex hidden">
+						<div className="max-w-2xl mx-auto mt-4 bg-white shadow-md rounded-lg overflow-hidden mb-4 flex xxs:hidden md:flex">
 							{" "}
 							<div className="flex w-3/4">
 								<img
@@ -104,7 +104,7 @@ const SearchResults = () => {
 			{hotels &&
 				hotels.map((hotel) => (
 					<Link to={`/hotels/${hotel.hotel_id}`} key={hotel.hotel_id}>
-						<div className="max-w-lg mx-auto bg-white shadow-md rounded-lg overflow-hidden mb-4 :hidden">
+						<div className="max-w-lg mx-auto bg-white shadow-md rounded-lg overflow-hidden mb-4 md:hidden">
 							{/* Image Section */}
 							<div className="flex  justify-between">
 								<img
