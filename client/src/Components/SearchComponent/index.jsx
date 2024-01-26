@@ -14,6 +14,7 @@ import {
   faTimesCircle,
   faUser,
   faMapMarkerAlt,
+  faPlane,
 } from "@fortawesome/free-solid-svg-icons";
 
 /* import chevronRight from "../../";
@@ -75,20 +76,27 @@ const index = () => {
   };
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <div className="flex items-center justify-around mt-8">
-          <div className=" hidden sm:grid md:max-w-2xl lg:max-w-3xl  dark:bg-gray-800 dark:border-white  dark:border-[0.5px] bg-white shadow-xl p-4 rounded-3xl  ">
-            <div className="flex space-x-8 flex-col sm:flex-row justify-around items-center ">
-              <div className="group relative flex cursor-pointer flex-col gap-1 ">
-                <div className="flex gap-2 items-center justify-between">
-                  <FontAwesomeIcon
-                    icon={faEarth}
-                    className="text-black dark:text-white  "
-                  />
-                  <p className="font-bold" onClick={toggleCitiesModal}>
-                    {selectedCity || "Destination"}
-                  </p>
-                  {/*    {isCitiesModalOpen && (
+      <div className="flex items-center flex-col justify-center">
+        <div className="flex items-center justify-center mt-6 gap-2">
+          <h2 className="mt- text-white font-bold xxs:text-base md:text-xl">
+            Book your trip and plan with us!
+          </h2>
+          <FontAwesomeIcon icon={faPlane} color="orange" />
+        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="flex items-center justify-around mt-8">
+            <div className=" hidden sm:grid md:max-w-2xl lg:max-w-3xl  dark:bg-gray-800 dark:border-white  dark:border-[0.5px] bg-white shadow-xl p-4 rounded-3xl  ">
+              <div className="flex space-x-8 flex-col sm:flex-row justify-around items-center ">
+                <div className="group relative flex cursor-pointer flex-col gap-1 ">
+                  <div className="flex gap-2 items-center justify-between">
+                    <FontAwesomeIcon
+                      icon={faEarth}
+                      className="text-black dark:text-white  "
+                    />
+                    <p className="font-bold" onClick={toggleCitiesModal}>
+                      {selectedCity || "Destination"}
+                    </p>
+                    {/*    {isCitiesModalOpen && (
                     <div className="modal">
                       {citiesData.map((city, index) => (
                         <p key={index} onClick={() => handleCityClick(city)}>
@@ -98,201 +106,202 @@ const index = () => {
                     </div>
                   )} */}
 
+                    <FontAwesomeIcon
+                      onClick={fetchCoordinates}
+                      icon={faMapMarkerAlt}
+                    />
+
+                    <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
+                  </div>
+                  <p className="text-gray-500">{displayLocation()}</p>
+                </div>
+                <div className="w-px bg-gray-300 h-full  dark:bg-blue-500"></div>
+                <div className="group relative flex cursor-pointer gap-1 flex-col">
+                  <div className="flex gap-2 items-center">
+                    <FontAwesomeIcon
+                      icon={faCalendar}
+                      className="text-black dark:text-white"
+                    />
+                    <p
+                      onClick={() => checkInInputRef.current.focus()}
+                      className="font-bold"
+                    >
+                      Check in
+                    </p>
+
+                    <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
+                  </div>
+                  <p className="text-gray-500">{formatDate(checkInDate)}</p>
+                  <input
+                    type="date"
+                    ref={checkInInputRef}
+                    value={checkInDate}
+                    onChange={(e) => setCheckInDate(e.target.value)}
+                    style={{
+                      position: "absolute",
+                      opacity: 0,
+                      top: 0,
+                      right: 0,
+                      width: "100%",
+                      height: "100%",
+                      zIndex: 9999,
+                    }}
+                  />
+                </div>
+                <div className="w-px bg-gray-300 h-full dark:bg-blue-500"></div>
+                <div className="group relative flex cursor-pointer gap-1 flex-col">
+                  <div className="flex gap-2 items-center">
+                    <FontAwesomeIcon
+                      icon={faCalendar}
+                      className="text-black dark:text-white"
+                    />
+                    <p
+                      onClick={() => checkOutInputRef.current.focus()}
+                      className="font-bold"
+                    >
+                      Check out
+                    </p>
+                    <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
+                  </div>
+                  <p className="text-gray-500">{formatDate(checkOutDate)}</p>
+                  <input
+                    type="date"
+                    ref={checkInInputRef}
+                    value={checkInDate}
+                    onChange={(e) => setCheckOutDate(e.target.value)}
+                    style={{
+                      position: "absolute",
+                      opacity: 0,
+                      top: 0,
+                      right: 0,
+                      width: "100%",
+                      height: "100%",
+                      zIndex: 9999,
+                    }}
+                  />
+                </div>
+                <div className="w-px bg-gray-300 h-full  dark:text-white  dark:bg-blue-500"></div>
+                <div className="group relative flex cursor-pointer gap-1 flex-col">
+                  <div className="flex gap-2 items-center">
+                    <FontAwesomeIcon
+                      icon={faUser}
+                      className="text-black dark:text-white"
+                    />
+                    <div onClick={toggleModal} className="flex flex-col">
+                      <p className="text-gray-500">
+                        {adults} adult{adults > 1 ? "s" : ""}
+                      </p>
+                      <p className="text-gray-500">
+                        {rooms} room{rooms > 1 ? "s" : ""}
+                      </p>
+                    </div>
+                    {isModalOpen && (
+                      <div className="absolute top-20  -left-50  bg-white p-4">
+                        <div>
+                          <label>Rooms:</label>
+                          <input
+                            type="number"
+                            value={rooms}
+                            onChange={(e) => setRooms(e.target.value)}
+                            min="1"
+                          />
+                        </div>
+                        <div>
+                          <label>Adults:</label>
+                          <input
+                            type="number"
+                            value={adults}
+                            onChange={(e) => setAdults(e.target.value)}
+                            min="1"
+                          />
+                        </div>
+                        <div>
+                          <label>Children:</label>
+                          <input
+                            type="number"
+                            value={childrenAge}
+                            onChange={(e) => setChildrenAge(e.target.value)}
+                            min="0"
+                          />
+                        </div>
+                      </div>
+                    )}
+                    <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
+                  </div>
+                </div>
+                <button className="bg-orange-500  rounded-full h-12 w-12 flex items-center justify-center">
+                  <img alt="chevronright" style={{ width: "30px" }} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        {/*   MOBILE ONLY!!!  */}
+        <form onSubmit={handleSubmit} className="flex md:hidden">
+          <div className="max-w-sm mx-auto">
+            <div className="bg-white rounded-lg border shadow-md p-5 max-w-xs">
+              <div className="flex flex-col space-y-4">
+                <div className="relative">
+                  <input
+                    readOnly
+                    value={displayLocation()}
+                    className="w-full px-2 py-2 pl-4 border text-left rounded-md"
+                    type="text"
+                    placeholder="Where would you like to go?"
+                  />
+
                   <FontAwesomeIcon
                     onClick={fetchCoordinates}
                     icon={faMapMarkerAlt}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2"
                   />
-
-                  <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                 </div>
-                <p className="text-gray-500">{displayLocation()}</p>
-              </div>
-              <div className="w-px bg-gray-300 h-full  dark:bg-blue-500"></div>
-              <div className="group relative flex cursor-pointer gap-1 flex-col">
-                <div className="flex gap-2 items-center">
-                  <FontAwesomeIcon
-                    icon={faCalendar}
-                    className="text-black dark:text-white"
+                <div className="flex space-x-4">
+                  <input
+                    className="w-1/2 px-4 py-2 border rounded-md"
+                    type="date"
+                    name="checkin"
+                    value={checkInDate}
+                    ref={checkInInputRef}
+                    onChange={(e) => setCheckInDate(e.target.value)}
                   />
-                  <p
-                    onClick={() => checkInInputRef.current.focus()}
-                    className="font-bold"
-                  >
-                    Check in
-                  </p>
-
-                  <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
-                </div>
-                <p className="text-gray-500">{formatDate(checkInDate)}</p>
-                <input
-                  type="date"
-                  ref={checkInInputRef}
-                  value={checkInDate}
-                  onChange={(e) => setCheckInDate(e.target.value)}
-                  style={{
-                    position: "absolute",
-                    opacity: 0,
-                    top: 0,
-                    right: 0,
-                    width: "100%",
-                    height: "100%",
-                    zIndex: 9999,
-                  }}
-                />
-              </div>
-              <div className="w-px bg-gray-300 h-full dark:bg-blue-500"></div>
-              <div className="group relative flex cursor-pointer gap-1 flex-col">
-                <div className="flex gap-2 items-center">
-                  <FontAwesomeIcon
-                    icon={faCalendar}
-                    className="text-black dark:text-white"
+                  <input
+                    value={checkOutDate}
+                    ref={checkOutInputRef}
+                    onChange={(e) => setCheckOutDate(e.target.value)}
+                    className="w-1/2 px-4 py-2 border rounded-md"
+                    type="date"
+                    name="checkout"
                   />
-                  <p
-                    onClick={() => checkOutInputRef.current.focus()}
-                    className="font-bold"
-                  >
-                    Check out
-                  </p>
-                  <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                 </div>
-                <p className="text-gray-500">{formatDate(checkOutDate)}</p>
-                <input
-                  type="date"
-                  ref={checkInInputRef}
-                  value={checkInDate}
-                  onChange={(e) => setCheckOutDate(e.target.value)}
-                  style={{
-                    position: "absolute",
-                    opacity: 0,
-                    top: 0,
-                    right: 0,
-                    width: "100%",
-                    height: "100%",
-                    zIndex: 9999,
-                  }}
-                />
-              </div>
-              <div className="w-px bg-gray-300 h-full  dark:text-white  dark:bg-blue-500"></div>
-              <div className="group relative flex cursor-pointer gap-1 flex-col">
-                <div className="flex gap-2 items-center">
-                  <FontAwesomeIcon
-                    icon={faUser}
-                    className="text-black dark:text-white"
+                <div className="flex space-x-4">
+                  <input
+                    className="w-1/3 px-4 py-2 border rounded-md"
+                    type="number"
+                    value={rooms}
+                    placeholder="1 Room"
                   />
-                  <div onClick={toggleModal} className="flex flex-col">
-                    <p className="text-gray-500">
-                      {adults} adult{adults > 1 ? "s" : ""}
-                    </p>
-                    <p className="text-gray-500">
-                      {rooms} room{rooms > 1 ? "s" : ""}
-                    </p>
-                  </div>
-                  {isModalOpen && (
-                    <div className="absolute top-20  -left-50  bg-white p-4">
-                      <div>
-                        <label>Rooms:</label>
-                        <input
-                          type="number"
-                          value={rooms}
-                          onChange={(e) => setRooms(e.target.value)}
-                          min="1"
-                        />
-                      </div>
-                      <div>
-                        <label>Adults:</label>
-                        <input
-                          type="number"
-                          value={adults}
-                          onChange={(e) => setAdults(e.target.value)}
-                          min="1"
-                        />
-                      </div>
-                      <div>
-                        <label>Children:</label>
-                        <input
-                          type="number"
-                          value={childrenAge}
-                          onChange={(e) => setChildrenAge(e.target.value)}
-                          min="0"
-                        />
-                      </div>
-                    </div>
-                  )}
-                  <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
+                  <input
+                    className="w-1/3 px-4 py-2 border rounded-md"
+                    type="number"
+                    value={adults}
+                    placeholder="2 Adults"
+                  />
+                  <input
+                    className="w-1/3 px-4 py-2 border rounded-md"
+                    type="number"
+                    value={childrenAge}
+                    placeholder="0 Children"
+                  />
                 </div>
+                <button className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">
+                  SEARCH
+                </button>
               </div>
-              <button className="bg-orange-500  rounded-full h-12 w-12 flex items-center justify-center">
-                <img alt="chevronright" style={{ width: "30px" }} />
-              </button>
             </div>
           </div>
-        </div>
-      </form>
-      {/*   MOBILE ONLY!!!  */}
-      <form onSubmit={handleSubmit} className="flex md:hidden">
-        <div className="max-w-sm mx-auto mt-6">
-          <div className="bg-white rounded-lg border shadow-md p-5 max-w-xs">
-            <div className="flex flex-col space-y-4">
-              <div className="relative">
-                <input
-                  readOnly
-                  value={displayLocation()}
-                  className="w-full px-2 py-2 pl-4 border text-left rounded-md"
-                  type="text"
-                  placeholder="Where would you like to go?"
-                />
-
-                <FontAwesomeIcon
-                  onClick={fetchCoordinates}
-                  icon={faMapMarkerAlt}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2"
-                />
-              </div>
-              <div className="flex space-x-4">
-                <input
-                  className="w-1/2 px-4 py-2 border rounded-md"
-                  type="date"
-                  name="checkin"
-                  value={checkInDate}
-                  ref={checkInInputRef}
-                  onChange={(e) => setCheckInDate(e.target.value)}
-                />
-                <input
-                  value={checkOutDate}
-                  ref={checkOutInputRef}
-                  onChange={(e) => setCheckOutDate(e.target.value)}
-                  className="w-1/2 px-4 py-2 border rounded-md"
-                  type="date"
-                  name="checkout"
-                />
-              </div>
-              <div className="flex space-x-4">
-                <input
-                  className="w-1/3 px-4 py-2 border rounded-md"
-                  type="number"
-                  value={rooms}
-                  placeholder="1 Room"
-                />
-                <input
-                  className="w-1/3 px-4 py-2 border rounded-md"
-                  type="number"
-                  value={adults}
-                  placeholder="2 Adults"
-                />
-                <input
-                  className="w-1/3 px-4 py-2 border rounded-md"
-                  type="number"
-                  value={childrenAge}
-                  placeholder="0 Children"
-                />
-              </div>
-              <button className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">
-                SEARCH
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </>
   );
 };
