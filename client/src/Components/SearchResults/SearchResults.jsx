@@ -2,7 +2,6 @@ import React from "react";
 import { useSearch } from "../../Context/SearchContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
 import {
 	faBreadSlice,
 	faEgg,
