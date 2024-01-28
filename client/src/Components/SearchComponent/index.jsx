@@ -78,6 +78,13 @@ const index = () => {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+
+  const StyledButton = ({ icon, children }) => (
+    <Button className="rounded-3xl bg-orange-500">
+      <FontAwesomeIcon icon={icon} className="mr-2" />
+      {children}
+    </Button>
+  );
   return (
     <>
       <div className="flex items-center flex-col justify-center div-test pb-12">
@@ -305,7 +312,7 @@ const index = () => {
                     onChange={(e) => setChildrenAge(e.target.value)}
                   />
                 </div>
-                <button className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">
+                <button className="w-full px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-blue-700">
                   SEARCH
                 </button>
               </div>
@@ -314,29 +321,29 @@ const index = () => {
         </form>
       </div>
       <div className="flex items-center mt-2">
-        <div className="flex-grow h-0.5 bg-white"></div>
+        <div className="flex-grow h-0.5 bg-black"></div>
         <span className="px-4 md:text-3xl font-extrabold text-black dark:text-white">
           Explore more
         </span>
-        <div className="flex-grow h-0.5 bg-white"></div>
+        <div className="flex-grow h-0.5 bg-black"></div>
       </div>
-      <div className="flex gap-2 items-center justify-between mt-2 mx-2 overflow-auto">
-        <Button>
+      <div className="flex gap-2 items-center justify-between mt-2  mx-2 overflow-auto">
+        <StyledButton>
           <FontAwesomeIcon icon={faUtensils} className="mr-2" />
           Restaurants
-        </Button>
-        <Button>
+        </StyledButton>
+        <StyledButton>
           <FontAwesomeIcon icon={faLandmark} className="mr-2" />
           Attractions
-        </Button>
-        <Button>
+        </StyledButton>
+        <StyledButton>
           <FontAwesomeIcon icon={faCar} className="mr-2" />
           Taxi
-        </Button>
-        <Button>
+        </StyledButton>
+        <StyledButton>
           <FontAwesomeIcon icon={faHotel} className="mr-2" />
           Hotels
-        </Button>
+        </StyledButton>
       </div>
     </>
   );
