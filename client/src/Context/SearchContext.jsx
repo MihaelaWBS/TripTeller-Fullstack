@@ -159,6 +159,7 @@ export const SearchProvider = ({ children }) => {
   // NEARBY CITIES API! //
 
   const fetchNearbyCities = async (latitude, longitude) => {
+    console.log("Fetching data...");
     const options = {
       method: "GET",
       url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getNearbyCities",
@@ -177,11 +178,11 @@ export const SearchProvider = ({ children }) => {
     return response.data;
   };
 
-  useEffect(() => {
+  /*  useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       fetchNearbyCities(position.coords.latitude, position.coords.longitude);
     });
-  }, []);
+  }, []); */
   // NEARBY CITIES API! //
 
   const value = {
