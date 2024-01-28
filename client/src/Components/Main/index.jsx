@@ -10,7 +10,7 @@ import HotelDetails from "../HotelDetails/HotelDetails";
 const Main = () => {
   return (
     <>
-      <main className="flex flex-col flex-grow div-test">
+      <main className="flex flex-col flex-grow ">
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/trips/itinerary" element={<Itinerary />} />
