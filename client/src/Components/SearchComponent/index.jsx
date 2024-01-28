@@ -15,7 +15,12 @@ import {
   faUser,
   faMapMarkerAlt,
   faPlane,
+  faUtensils,
+  faCar,
+  faLandmark,
+  faHotel,
 } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "flowbite-react";
 
 /* import chevronRight from "../../";
 import logoTravel from "./assets/logo-travel-2.png";
@@ -280,18 +285,21 @@ const index = () => {
                     type="number"
                     value={rooms}
                     placeholder="1 Room"
+                    onChange={(e) => setRooms(e.target.value)}
                   />
                   <input
                     className="w-1/3 px-4 py-2 border rounded-md"
                     type="number"
                     value={adults}
                     placeholder="2 Adults"
+                    onChange={(e) => setAdults(e.target.value)}
                   />
                   <input
                     className="w-1/3 px-4 py-2 border rounded-md"
                     type="number"
                     value={childrenAge}
                     placeholder="0 Children"
+                    onChange={(e) => setChildrenAge(e.target.value)}
                   />
                 </div>
                 <button className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">
@@ -301,6 +309,29 @@ const index = () => {
             </div>
           </div>
         </form>
+      </div>
+      <div className="flex items-center mt-2">
+        <div className="flex-grow h-0.5 bg-white"></div>
+        <span className="px-4 text-sm text-white">Explore more</span>
+        <div className="flex-grow h-0.5 bg-white"></div>
+      </div>
+      <div className="flex gap-2 items-center justify-between mt-2 mx-2 overflow-auto">
+        <Button>
+          <FontAwesomeIcon icon={faUtensils} className="mr-2" />
+          Restaurants
+        </Button>
+        <Button>
+          <FontAwesomeIcon icon={faLandmark} className="mr-2" />
+          Attractions
+        </Button>
+        <Button>
+          <FontAwesomeIcon icon={faCar} className="mr-2" />
+          Taxi
+        </Button>
+        <Button>
+          <FontAwesomeIcon icon={faHotel} className="mr-2" />
+          Hotels
+        </Button>
       </div>
     </>
   );
