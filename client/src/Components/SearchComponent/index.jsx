@@ -320,30 +320,32 @@ const index = () => {
           </div>
         </form>
       </div>
-      <div className="flex items-center mt-2">
-        <div className="flex-grow h-0.5 bg-black"></div>
-        <span className="px-4 md:text-3xl font-extrabold text-black dark:text-white">
-          Explore more
-        </span>
-        <div className="flex-grow h-0.5 bg-black"></div>
-      </div>
-      <div className="flex gap-2 items-center justify-between mt-2  mx-2 overflow-auto">
-        <StyledButton>
-          <FontAwesomeIcon icon={faUtensils} className="mr-2" />
-          Restaurants
-        </StyledButton>
-        <StyledButton>
-          <FontAwesomeIcon icon={faLandmark} className="mr-2" />
-          Attractions
-        </StyledButton>
-        <StyledButton>
-          <FontAwesomeIcon icon={faCar} className="mr-2" />
-          Taxi
-        </StyledButton>
-        <StyledButton>
-          <FontAwesomeIcon icon={faHotel} className="mr-2" />
-          Hotels
-        </StyledButton>
+      <div className="lg:hidden">
+        <div className="flex items-center mt-2">
+          <div className="flex-grow h-0.5 bg-black"></div>
+          <span className="px-4 md:text-3xl font-extrabold text-black dark:text-white">
+            Explore more
+          </span>
+          <div className="flex-grow h-0.5 bg-black"></div>
+        </div>
+        <div className="flex gap-2 items-center justify-between mt-2  mx-2 overflow-auto">
+          <StyledButton>
+            <FontAwesomeIcon icon={faUtensils} className="mr-2" />
+            Restaurants
+          </StyledButton>
+          <StyledButton>
+            <FontAwesomeIcon icon={faLandmark} className="mr-2" />
+            Attractions
+          </StyledButton>
+          <StyledButton>
+            <FontAwesomeIcon icon={faCar} className="mr-2" />
+            Taxi
+          </StyledButton>
+          <StyledButton>
+            <FontAwesomeIcon icon={faHotel} className="mr-2" />
+            Hotels
+          </StyledButton>
+        </div>
       </div>
     </>
   );
