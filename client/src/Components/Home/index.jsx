@@ -6,7 +6,7 @@ const index = () => {
   return (
     <>
       <SearchComponent />
-      <NearbyCities />
+      {/*  <NearbyCities /> */}
     </>
   );
 };

@@ -178,7 +178,8 @@ export const SearchProvider = ({ children }) => {
     return response.data;
   };
 
-  /*  useEffect(() => {
+  /*   ACTIVATE THIS WHEN THE SITE IS FINISHED!
+   */ /*  useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       fetchNearbyCities(position.coords.latitude, position.coords.longitude);
     });

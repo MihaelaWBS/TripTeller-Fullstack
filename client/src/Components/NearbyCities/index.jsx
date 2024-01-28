@@ -102,7 +102,7 @@ const index = () => {
           ))}
       </div>
       {/* DESKTOP */}
-      <div className="relative max-w-4xl mx-auto overflow-hidden">
+      <div className="xxs:hidden md:block md:max-w-xl relative lg:max-w-4xl mx-auto overflow-hidden">
         <div className="flex flex-col   mt-2 lg:text-2xl font-extrabold">
           <p className="text-3xl text-center">Nearby cities</p>
           <div
