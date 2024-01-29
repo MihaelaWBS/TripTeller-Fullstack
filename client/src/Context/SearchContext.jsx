@@ -85,7 +85,7 @@ export const SearchProvider = ({ children }) => {
     const currencyCode = await getCurrencyCode();
     try {
       const response = await axios.get(
-        `https://test-project-8zcp.onrender.com/api/hotels?latitude=${latitude}&longitude=${longitude}&search_type=CITY&arrival_date=${checkInDate}&departure_date=${checkOutDate}&adults=${adults}&children_age=${childrenAge}&room_qty=${rooms}&page_number=1&languagecode=en-us&currency_code=${currencyCode}`
+        `https://mihaelawbs-tripteller-fullstack-dev.onrender.com/api/hotels?latitude=${latitude}&longitude=${longitude}&search_type=CITY&arrival_date=${checkInDate}&departure_date=${checkOutDate}&adults=${adults}&children_age=${childrenAge}&room_qty=${rooms}&page_number=1&languagecode=en-us&currency_code=${currencyCode}`
       );
 
       setApiCallsCount((prevCount) => prevCount + 1);
