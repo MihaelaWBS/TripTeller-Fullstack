@@ -30,10 +30,10 @@ const index = () => {
 
   const fetchImage = async (cityName) => {
     const response = await fetch(
-      `https://api.unsplash.com/search/photos?query=${cityName}&client_id=zQzuy7VqeYHfxnqB3JcH8zNW1F2VndGKqTMtft5sy4s`
+      `http://localhost:4000/api/photos/${cityName}`
     );
-    const data = await response.json();
-    return data.results[0]?.urls.small;
+    const url = await response.json();
+    return url;
   };
   const scrollToNext = () => {
     if (scrollRef.current) {
@@ -116,6 +116,11 @@ const index = () => {
           >
             {nearbyCities &&
               nearbyCities
+                .filter(
+                  (city) =>
+                    city.image &&
+                    city.image !== "https://via.placeholder.com/300"
+                )
                 .sort((a, b) => (b.image ? 1 : -1))
                 .map((city, index) => (
                   <div
@@ -132,7 +137,7 @@ const index = () => {
                         }}
                       >
                         <img
-                          src={city.image || "https://via.placeholder.com/300"}
+                          src={city.image}
                           alt={city.name}
                           className="object-cover w-full h-full"
                         />

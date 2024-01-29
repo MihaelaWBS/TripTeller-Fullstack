@@ -185,6 +185,31 @@ export const SearchProvider = ({ children }) => {
     });
   }, []); */
   // NEARBY CITIES API! //
+  // ATTRACTIONS API! //
+  const fetchAttractions = async () => {
+    const options = {
+      method: "GET",
+      url: "https://booking-com15.p.rapidapi.com/api/v1/attraction/searchAttractions?sort=",
+      params: {
+        id: "eyJ1ZmkiOi0yMDkyMTc0fQ==",
+        page: "1",
+        currency_code: "INR",
+        languagecode: "en-us",
+      },
+      headers: {
+        "X-RapidAPI-Key": "67e6b85d33mshd5e8a69a6d26d50p140b38jsn02c7a8bf3e37",
+        "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
+      },
+    };
+
+    try {
+      const response = await axios.request(options);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  // ATTRACTIONS API! //
 
   const value = {
     hotels,
@@ -216,6 +241,7 @@ export const SearchProvider = ({ children }) => {
     displayLocation,
     fetchCoordinates,
     fetchNearbyCities,
+    fetchAttractions,
   };
   return (
     <SearchContext.Provider value={value}>{children}</SearchContext.Provider>
