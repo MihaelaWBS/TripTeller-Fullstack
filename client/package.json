@@ -12,6 +12,7 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "api": "^6.1.1",
     "axios": "^1.6.7",
     "flowbite": "^2.2.1",
     "flowbite-react": "^0.7.2",

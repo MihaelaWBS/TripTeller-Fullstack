@@ -5,6 +5,14 @@
 @tailwind utilities;
 
 body {
-	font-family: Nunito;
-	background-color: #faf8ed;
+  font-family: Nunito;
+  background-color: #ffffff;
+}
+
+.div-test {
+  background-image: url("../src/assets/main-background-2.jpg");
+}
+
+.card-scrollbar-container::-webkit-scrollbar {
+  display: none;
 }

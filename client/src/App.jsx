@@ -7,16 +7,18 @@ import { SearchProvider } from "./Context/SearchContext";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
-	return (
-		<>
-			<SearchProvider>
-				<Header />
+  return (
+    <>
+      <SearchProvider>
+        <div className="flex flex-col min-h-screen">
+          <Header />
 
-				<Main />
-				<Footer />
-			</SearchProvider>
-		</>
-	);
+          <Main />
+          <Footer />
+        </div>
+      </SearchProvider>
+    </>
+  );
 }
 
 export default App;
