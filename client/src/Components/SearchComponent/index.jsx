@@ -86,7 +86,7 @@ const index = () => {
   );
   return (
     <>
-      <div className="flex items-center flex-col justify-center div-test pb-12 z-10">
+      <div className="flex items-center flex-col justify-center div-test pb-12">
         <div className="flex items-center justify-center mt-6 gap-2">
           <h2 className="mt- text-white font-bold xxs:text-base md:text-xl">
             Book your trip and plan with us!
@@ -96,7 +96,7 @@ const index = () => {
         <form onSubmit={handleSubmit}>
           <div className="flex items-center justify-around mt-8">
             <div className=" hidden sm:grid md:max-w-3xl lg:max-w-3xl  dark:bg-gray-800 dark:border-white  dark:border-[0.5px] bg-white shadow-xl p-4 rounded-3xl  ">
-              <div className="flex space-x-8 flex-col sm:flex-row justify-around items-center ">
+             <div className=" hidden sm:grid md:max-w-3xl lg:max-w-3xl z-10 dark:bg-gray-800 dark:border-white  dark:border-[0.5px] bg-white shadow-xl p-4 rounded-3xl  "></div>
                 <div className="group relative flex cursor-pointer flex-col gap-1 ">
                   <div className="flex gap-2 items-center justify-between">
                     <FontAwesomeIcon
