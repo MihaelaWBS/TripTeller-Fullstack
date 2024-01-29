@@ -86,7 +86,7 @@ const index = () => {
   );
   return (
     <>
-      <div className="flex items-center flex-col justify-center div-test pb-12">
+      <div className="flex items-center flex-col justify-center div-test pb-12 z-10">
         <div className="flex items-center justify-center mt-6 gap-2">
           <h2 className="mt- text-white font-bold xxs:text-base md:text-xl">
             Book your trip and plan with us!
