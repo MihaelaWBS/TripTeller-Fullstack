@@ -18,7 +18,27 @@ const postSchema = new mongoose.Schema(
     likes: {
       type: Number,
       default: 0 
+    },
+
+
+    /*Here below I added username, imageUrl and avatar so that we use them in the cards rendered in Blogdashboard */
+
+    userName: {
+      type: String,
+      required: [true, 'Username is required!']
+    }, 
+
+    imageUrl: {
+      type: String,
+      required: [true, 'Image Url is required!']
+    }, 
+
+    avatar: {
+      type: String,
+      required: [true, 'Avatar is required!']
     }
+
+
   },
   { timestamps: true } 
 );
