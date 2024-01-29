@@ -30,7 +30,7 @@ const index = () => {
 
   const fetchImage = async (cityName) => {
     const response = await fetch(
-      `http://localhost:4000/api/photos/${cityName}`
+      `https://mihaelawbs-tripteller-fullstack-dev.onrender.com/api/photos/${cityName}`
     );
     const url = await response.json();
     return url;
