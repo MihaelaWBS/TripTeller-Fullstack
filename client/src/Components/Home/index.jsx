@@ -8,7 +8,10 @@ const index = () => {
     <>
       <SearchComponent />
       <NearbyCities />
+
+
       {/*  <Attractions /> */}
+
     </>
   );
 };

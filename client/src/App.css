@@ -11,6 +11,8 @@ body {
 
 .div-test {
   background-image: url("../src/assets/main-background-2.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .card-scrollbar-container::-webkit-scrollbar {
