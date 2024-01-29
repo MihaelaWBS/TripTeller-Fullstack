@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-/* import logo from "../../assets/bearLogo.png";
- */
+import chevronRight from "../../assets/icons8-right-50.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSearch } from "../../Context/SearchContext";
 
@@ -79,9 +78,16 @@ const index = () => {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+
+  const StyledButton = ({ icon, children }) => (
+    <Button className="rounded-3xl bg-orange-500">
+      <FontAwesomeIcon icon={icon} className="mr-2" />
+      {children}
+    </Button>
+  );
   return (
     <>
-      <div className="flex items-center flex-col justify-center">
+      <div className="flex items-center flex-col justify-center div-test pb-12">
         <div className="flex items-center justify-center mt-6 gap-2">
           <h2 className="mt- text-white font-bold xxs:text-base md:text-xl">
             Book your trip and plan with us!
@@ -90,7 +96,7 @@ const index = () => {
         </div>
         <form onSubmit={handleSubmit}>
           <div className="flex items-center justify-around mt-8">
-            <div className=" hidden sm:grid md:max-w-2xl lg:max-w-3xl  dark:bg-gray-800 dark:border-white  dark:border-[0.5px] bg-white shadow-xl p-4 rounded-3xl  ">
+            <div className=" hidden sm:grid md:max-w-3xl lg:max-w-3xl  dark:bg-gray-800 dark:border-white  dark:border-[0.5px] bg-white shadow-xl p-4 rounded-3xl  ">
               <div className="flex space-x-8 flex-col sm:flex-row justify-around items-center ">
                 <div className="group relative flex cursor-pointer flex-col gap-1 ">
                   <div className="flex gap-2 items-center justify-between">
@@ -235,7 +241,11 @@ const index = () => {
                   </div>
                 </div>
                 <button className="bg-orange-500  rounded-full h-12 w-12 flex items-center justify-center">
-                  <img alt="chevronright" style={{ width: "30px" }} />
+                  <img
+                    alt="chevronright"
+                    src={chevronRight}
+                    style={{ width: "30px" }}
+                  />
                 </button>
               </div>
             </div>
@@ -302,7 +312,7 @@ const index = () => {
                     onChange={(e) => setChildrenAge(e.target.value)}
                   />
                 </div>
-                <button className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">
+                <button className="w-full px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-blue-700">
                   SEARCH
                 </button>
               </div>
@@ -310,28 +320,32 @@ const index = () => {
           </div>
         </form>
       </div>
-      <div className="flex items-center mt-2">
-        <div className="flex-grow h-0.5 bg-white"></div>
-        <span className="px-4 text-sm text-white">Explore more</span>
-        <div className="flex-grow h-0.5 bg-white"></div>
-      </div>
-      <div className="flex gap-2 items-center justify-between mt-2 mx-2 overflow-auto">
-        <Button>
-          <FontAwesomeIcon icon={faUtensils} className="mr-2" />
-          Restaurants
-        </Button>
-        <Button>
-          <FontAwesomeIcon icon={faLandmark} className="mr-2" />
-          Attractions
-        </Button>
-        <Button>
-          <FontAwesomeIcon icon={faCar} className="mr-2" />
-          Taxi
-        </Button>
-        <Button>
-          <FontAwesomeIcon icon={faHotel} className="mr-2" />
-          Hotels
-        </Button>
+      <div className="lg:hidden">
+        <div className="flex items-center mt-2">
+          <div className="flex-grow h-0.5 bg-black"></div>
+          <span className="px-4 md:text-3xl font-extrabold text-black dark:text-white">
+            Explore more
+          </span>
+          <div className="flex-grow h-0.5 bg-black"></div>
+        </div>
+        <div className="flex gap-2 items-center justify-between mt-2  mx-2 overflow-auto">
+          <StyledButton>
+            <FontAwesomeIcon icon={faUtensils} className="mr-2" />
+            Restaurants
+          </StyledButton>
+          <StyledButton>
+            <FontAwesomeIcon icon={faLandmark} className="mr-2" />
+            Attractions
+          </StyledButton>
+          <StyledButton>
+            <FontAwesomeIcon icon={faCar} className="mr-2" />
+            Taxi
+          </StyledButton>
+          <StyledButton>
+            <FontAwesomeIcon icon={faHotel} className="mr-2" />
+            Hotels
+          </StyledButton>
+        </div>
       </div>
     </>
   );
