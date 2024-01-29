@@ -45,6 +45,7 @@ const index = () => {
       scrollRef.current.scrollBy({ left: -300 * 3, behavior: "smooth" });
     }
   };
+  //potato
   useEffect(() => {
     console.log("useEffect called");
 
