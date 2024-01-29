@@ -1,14 +1,58 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSearch } from "../../Context/SearchContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 const index = () => {
   const { fetchNearbyCities } = useSearch();
   const [nearbyCities, setNearbyCities] = useState(null);
+  const scrollRef = useRef(null);
+  const [showLeftButton, setShowLeftButton] = useState(false);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const isScrolled = scrollRef.current.scrollLeft > 0;
+      setShowLeftButton(isScrolled);
+    }
+  };
 
   useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
+
+  const fetchImage = async (cityName) => {
+    const response = await fetch(
+      `https://mihaelawbs-tripteller-fullstack-dev.onrender.com/api/photos/${cityName}`
+    );
+    const url = await response.json();
+    return url;
+  };
+  const scrollToNext = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 300 * 3, behavior: "smooth" });
+    }
+  };
+  const scrollToPrevious = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -300 * 3, behavior: "smooth" });
+    }
+  };
+  useEffect(() => {
+    console.log("useEffect called");
+
     const fetchData = async () => {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
+          console.log("Location fetched, now fetching cities...");
+
           const { latitude, longitude } = position.coords;
           try {
             const response = await fetchNearbyCities(latitude, longitude);
@@ -30,36 +74,6 @@ const index = () => {
     };
     fetchData();
   }, []);
-
-  const fetchImage = async (cityName) => {
-    const response = await fetch(
-      `https://api.unsplash.com/search/photos?query=${cityName}&client_id=zQzuy7VqeYHfxnqB3JcH8zNW1F2VndGKqTMtft5sy4s`
-    );
-    const data = await response.json();
-    return data.results[0]?.urls.small;
-  };
-  /* const destinations = [
-    {
-      name: "Kuala Lumpur",
-      accommodations: 19902,
-      image: "https://via.placeholder.com/250",
-    },
-    {
-      name: "Manila",
-      accommodations: 13223,
-      image: "https://via.placeholder.com/250",
-    },
-    {
-      name: "Penang",
-      accommodations: 5161,
-      image: "https://via.placeholder.com/250",
-    },
-    {
-      name: "Penang",
-      accommodations: 5161,
-      image: "https://via.placeholder.com/250",
-    },
-  ]; */
   return (
     <>
       {/*  MOBILE */}
@@ -88,28 +102,102 @@ const index = () => {
           ))}
       </div>
       {/* DESKTOP */}
-      <div className="flex flex-col justify-center items-center mt-2 lg:text-2xl font-extrabold xxs:hidden md:flex ">
-        <p className="text-3xl">Nearby cities</p>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4   scrolling-touch">
-          {nearbyCities &&
-            nearbyCities.map((destination, index) => (
-              <div key={index} className="inline-block p-4">
-                <div className="bg-white rounded-lg border shadow-md overflow-hidden">
-                  <img
-                    src={destination.image || "https://via.placeholder.com/150"}
-                    alt={destination.name}
-                    className="w-full h-56 object-cover"
-                  />
-                  <div className="p-4">
-                    <h5 className="text-lg font-semibold">
-                      {destination.name}
-                    </h5>
-                    {/*                     <p className="text-sm text-gray-600">{`${destination.accommodations.toLocaleString()} accommodations`}</p>
-                     */}{" "}
+      <div className="xxs:hidden md:block md:max-w-xl relative lg:max-w-4xl mx-auto overflow-hidden">
+        <div className="flex flex-col   mt-2 lg:text-2xl font-extrabold">
+          <p className="text-3xl text-center">Nearby cities</p>
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex overflow-x-auto scrolling-touch justify-start card-scrollbar-container"
+            style={{
+              scrollbarWidth: "none",
+              "-ms-overflow-style": "none",
+            }}
+          >
+            {nearbyCities &&
+              nearbyCities
+                .filter(
+                  (city) =>
+                    city.image &&
+                    city.image !== "https://via.placeholder.com/300"
+                )
+                .sort((a, b) => (b.image ? 1 : -1))
+                .map((city, index) => (
+                  <div
+                    key={index}
+                    className="flex-initial p-4"
+                    style={{ width: "300px" }}
+                  >
+                    <div className="bg-white rounded-lg border shadow-md overflow-hidden">
+                      <div
+                        style={{
+                          width: "300px",
+                          height: "250px",
+                          margin: "auto",
+                        }}
+                      >
+                        <img
+                          src={city.image}
+                          alt={city.name}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                      <div className="p-4">
+                        <h5 className="text-lg font-semibold">{city.name}</h5>
+                        <p className="text-sm text-gray-600">
+                          500+ accommodations
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                ))}
+          </div>
+          {nearbyCities && nearbyCities.length > 3 && (
+            <>
+              {showLeftButton && (
+                <button
+                  onClick={scrollToPrevious}
+                  className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 p-2 rounded-full bg-white shadow-lg"
+                  aria-label="Scroll left"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6 text-gray-800"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 18l-6-6 6-6"
+                    />
+                  </svg>
+                </button>
+              )}
+              <button
+                onClick={scrollToNext}
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 p-2 rounded-full bg-white shadow-lg"
+                aria-label="Scroll right"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6 text-gray-800"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 6l6 6-6 6"
+                  />
+                </svg>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </>
