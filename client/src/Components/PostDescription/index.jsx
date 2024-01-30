@@ -1,9 +1,9 @@
 import React from 'react'
 
-const BlogDescription = () => {
+const PostDescription = () => {
   return (
     <div>index</div>
   )
 }
 
-export default BlogDescription;
+export default PostDescription;

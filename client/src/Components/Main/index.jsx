@@ -5,8 +5,8 @@ import Home from "../Home";
 import SearchResults from "../SearchResults/SearchResults";
 import HotelDetails from "../HotelDetails/HotelDetails";
 import BlogDashboard from "../BlogDashboard";
-import BlogDescription from "../BlogDescription";
-import BlogForm from "../BlogForm";
+import PostDescription from "../PostDescription";
+import PostForm from "../PostForm";
 import Login from "../auth/Login";
 import Signup from "../auth/Signup";
 
@@ -20,8 +20,8 @@ const Main = () => {
           <Route path="/searchresults" element={<SearchResults />} />
           <Route path="/hotels/:hotelId" element={<HotelDetails />} />
           <Route path="/blog" element={<BlogDashboard />} />
-          <Route path="/blog/post/:id" element={<BlogDescription />} />
-          <Route path="/blog/post/addPost" element={<BlogForm />} />
+          <Route path="/blog/post/:id" element={<PostDescription />} />
+          <Route path="/blog/post/addPost" element={<PostForm />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>
