@@ -34,7 +34,6 @@ app.use("/api/comments", commentRouter);
 app.use("/api/itineraries", itineraryRouter);
 app.use("/api/posts", postRouter);
 app.use("/auth", authRouter);
-app.use("/auth/currentUser", authRouter);
 const hardcodedLatitude = "48.858844";
 const hardcodedLongitude = "2.294351";
 

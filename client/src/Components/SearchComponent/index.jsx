@@ -96,10 +96,10 @@ const index = () => {
         </div>
         <form onSubmit={handleSubmit}>
           <div className="flex items-center justify-around mt-8">
-            <div className=" hidden sm:grid md:max-w-3xl lg:max-w-3xl  dark:bg-gray-800 dark:border-white  dark:border-[0.5px] bg-white shadow-xl p-4 rounded-3xl  ">
-              <div className="flex space-x-8 flex-col sm:flex-row justify-around items-center ">
-                <div className="group relative flex cursor-pointer flex-col gap-1 ">
-                  <div className="flex gap-2 items-center justify-between">
+            <div className=" hidden sm:grid md:max-w-3xl lg:max-w-3xl dark:bg-gray-800 dark:border-white  dark:border-[0.5px] bg-white shadow-xl p-4 rounded-3xl  ">
+              <div className="flex space-x-8 flex-col sm:flex-row justify-around items-center">
+                <div className="group relative flex cursor-pointer flex-col gap-1">
+                  <div className="flex gap-2 items-center justify-between ">
                     <FontAwesomeIcon
                       icon={faEarth}
                       className="text-black dark:text-white  "
