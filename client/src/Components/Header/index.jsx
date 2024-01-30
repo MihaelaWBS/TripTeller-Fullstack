@@ -35,6 +35,8 @@ const index = () => {
             <Dropdown.Item>My profile</Dropdown.Item>
             <Dropdown.Item>My trips</Dropdown.Item>
             <Dropdown.Item>Upcoming trips</Dropdown.Item>
+			<Link to="/blog"><Dropdown.Item> Blog</Dropdown.Item> </Link>
+
             <Dropdown.Divider />
             <Dropdown.Item>Sign out</Dropdown.Item>
           </Dropdown>
@@ -49,6 +51,7 @@ const index = () => {
               <Link to="/category/tujina">Attractions</Link>
 
               <Link to="/category/šport">Taxi</Link>
+			  
             </div>
           </Navbar.Collapse>
         </Navbar.Collapse>

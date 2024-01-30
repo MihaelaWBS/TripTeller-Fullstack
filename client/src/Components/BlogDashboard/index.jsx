@@ -1,12 +1,13 @@
 import React from 'react';
-import axios from '../axiosInstance';
+import axios from '../../axiosInstance';
 import { useState, useEffect } from 'react';
+/*
 import io from 'socket.io-client';
-const socket = io(import.meta.env.VITE_SERVER_BASE_URL, { transports: ['websocket'] });
-import Sidebar from '../Sidebar';
+const socket = io(import.meta.env.VITE_SERVER_BASE_URL, { transports: ['websocket'] }); */
+
 
 const BlogDashboard = () => {
-  const posts = [ posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     axios
@@ -14,22 +15,20 @@ const BlogDashboard = () => {
       .then(res => setPosts(res.data))
       .catch(e => console.error(e));
 
-    socket.on('postCreated', newPost => {
+   /* socket.on('postCreated', newPost => {
       setPosts(posts => [newPost, ...posts]);
     });
     return () => {
       //cleanup
       //disconnect
       socket.disconnect();
-    };
-  }, []);
+    }; */
+  }, []); 
 
   return (
-    <div className="flex">
-      {/* Sidebar goes here */}
-      <Sidebar />
-      {/* Content area for cards */}
-      <div className="flex-grow p-4">
+  <>
+    {/* Content area for cards */}
+    <div className="flex-grow p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {posts.map((post, userId) => (
             <div key={userId} className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
@@ -45,7 +44,7 @@ const BlogDashboard = () => {
                 <div className="flex items-center">
                   <div className="flex flex-col items-center">
                     <span className="text-sm font-semibold text-gray-700 mr-2 mb-2">
-                      {post.userName} {/*Here, we would need the user name instead */}
+                      {post.firstName} {post.lastName} {/*Here, we would need the user name instead */}
                     </span>
                   </div>
                   {/* <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
@@ -61,7 +60,10 @@ const BlogDashboard = () => {
           ))}
         </div>
       </div>
-    </div>
+
+  </>
+    
+    
   );
 };
 

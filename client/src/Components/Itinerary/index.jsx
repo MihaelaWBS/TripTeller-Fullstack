@@ -1,5 +1,5 @@
 import React from "react";
-import { useItinerary } from "./ItineraryContext"; // Import the context hook
+import { useItinerary } from "../../Context/ItineraryContext"; // Import the context hook
 import { useSearch } from "../../Context/SearchContext";
 
 const Itinerary = () => {

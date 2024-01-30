@@ -14,7 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Button, ButtonGroup, Card } from "flowbite-react";
 import { Link } from "react-router-dom";
-import { useItinerary } from "./ItineraryContext"; // Import the context hook
+import { useItinerary } from "../../Context/ItineraryContext"; // Import the context hook
 
 const SearchResults = () => {
 	const { hotels } = useSearch();

@@ -1,11 +1,12 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Itinerary from "../Itinerary";
-import UpcomingTrips from "../UpcomingTrips";
-import Blog from "../Blog";
 import Home from "../Home";
 import SearchResults from "../SearchResults/SearchResults";
 import HotelDetails from "../HotelDetails/HotelDetails";
+import BlogDashboard from "../BlogDashboard";
+import BlogDescription from "../BlogDescription";
+import BlogForm from "../BlogForm";
 
 const Main = () => {
   return (
@@ -14,10 +15,11 @@ const Main = () => {
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/trips/itinerary" element={<Itinerary />} />
-          <Route path="/trips/upcoming" element={<UpcomingTrips />} />
           <Route path="/searchresults" element={<SearchResults />} />
           <Route path="/hotels/:hotelId" element={<HotelDetails />} />
-          <Route path="/trips/blog" element={<Blog />} />
+          <Route path="/blog" element={<BlogDashboard />} />
+          <Route path="/blog/post/:id" element={<BlogDescription />} />
+          <Route path="/blog/post/addPost" element={< BlogForm/>} />
         </Routes>
       </main>
     </>
