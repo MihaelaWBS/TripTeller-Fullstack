@@ -7,8 +7,15 @@ import { SearchProvider } from "./Context/SearchContext";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import BottomNavbar from "./Components/BottomNavbar";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      // Set your state here to indicate that the user is logged in
+    }
+  }, []);
   return (
     <>
       <SearchProvider>
