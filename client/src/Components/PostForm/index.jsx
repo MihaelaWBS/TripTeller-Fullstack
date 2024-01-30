@@ -1,145 +1,91 @@
-import React from 'react'
-import { useState,useEffect } from 'react';
-import axios from 'axios';
-import { Button, Checkbox, Label, TextInput, Textarea, FileInput } from 'flowbite-react';
-import {useNavigate} from 'react-router-dom';
+import React, { useState } from "react";
+import uploadImageToCloudinary from "../Cloudinary/CloudinaryService";
+import QuillEditor from "../RichTextEditor/QuillEditor";
+import parse from "html-react-parser";
+import axiosInstance from "../../axiosInstance";
 
+import { Button } from "flowbite-react";
 const PostForm = () => {
-  const[postUpload,setPostUpload]=useState(false);
-  const [newPost, setNewPost] = useState(null);
-  const navigate = useNavigate();
-  useEffect(() => {newPost&&
-   axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/posts`,newPost).then(()=>{
-    setPostUpload(true);
-    navigate("/");
-
-  }).catch(e=>console.log(e));
-  }, [newPost])
-  
-  const postObject ={
-    title:"",
-    userName:"",
-    likes:0,
-    content:"",
-    imageUrl:"",
-    avatar:""
-  }
-  const handleTitle =(e)=>{
-    postObject.title = e.target.value;
-  }
-
-  const handleUserName = (e)=>{
-    postObject.userName = e.target.value;
-  }
-
-  const handleLikes = (e)=>{
-    postObject.likes =parseInt(e.target.value);
+  const [editorContent, setEditorContent] = useState("");
+  const [postData, setPostData] = useState({ title: "", picture_url: "" });
+  const [file, setFile] = useState(null);
+  const [category, setCategory] = useState("");
+  const handleChange = (e) => {
+    if (e.target.name === "picture_url") {
+      const file = e.target.files[0];
+      setFile(file);
+      handleImageUpload(file);
+    } else if (e.target.name === "isHot") {
+      setPostData({ ...postData, [e.target.name]: e.target.checked });
+    } else {
+      setPostData({ ...postData, [e.target.name]: e.target.value });
     }
+  };
 
-  const handleContent = (e)=>{
-    postObject.description = e.target.value;
-  }
+  const handleImageUpload = async (file) => {
+    try {
+      const imageUrl = await uploadImageToCloudinary(file);
+      setPostData({ ...postData, picture_url: imageUrl });
+    } catch (error) {
+      console.error("Failed to upload image", error);
+    }
+  };
 
-  const handleImageUrl = (e)=>{
-    postObject.poster=e.target.value;
-  }
-
-  const handleAvatar = (e)=>{
-    
-    const url = e.target.value;
-    const urlArray = url.split("/");
-    const id = urlArray[urlArray.length-1];
-    console.log(id);
-    postObject.avatar=id;
-  }
-
-  const handleSubmit = (e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(postObject);
-    setNewPost(postObject);
+    const finalPostData = {
+      title: postData.title,
+      content: editorContent,
+    };
 
-  }
+    try {
+      const response = await axiosInstance.post("/api/posts", finalPostData);
+      console.log("Post added", response.data);
+    } catch (error) {
+      console.error("Failed to submit post", error);
+    }
+  };
+
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <form
-        className="grid grid-cols-1 gap-4 w-full md:w-1/2 lg:w-1/2 xl:w-1/2 px-4"
-        onSubmit={handleSubmit}
-      >
-        <div>
-          <div className="mb-2 mt-5 block">
-            <Label htmlFor="title" value="Post title" />
-          </div>
-          <TextInput
-            id="title"
-            type="text"
-            placeholder="name@flowbite.com"
-            onChange={handleTitle}
-            required
-          />
-        </div>
-        <div>
-          <div className="mb-2 mt-5 block">
-            <Label htmlFor="userName" value="Post username" />
-          </div>
-          <TextInput
-            id="username"
-            type="text"
-            required
-            onChange={handleUsername}
-          />
-        </div>
-        <div>
-          <div className="mb-2 mt-5 block">
-            <Label htmlFor="likes" value="likes" />
-          </div>
-          <TextInput id="likes" type="number" required onChange={handleLikes} />
-        </div>
-      
-        <div className="max-w-md">
-          <div className="mb-2 mt-5 block">
-            <Label htmlFor="content" value="Post content" />
-          </div>
-          <Textarea
-            id="content"
-            placeholder="Add content to your post..."
-            required
-            rows={4}
-            onChange={handlePost}
-          />
-        </div>
-        <div id="imageUrlUpload" className="max-w-md">
-          <div className="mb-2 mt-5 block">
-            <Label htmlFor="imageUrl" value="Upload imageUrl" />
-          </div>
-          <TextInput
-            id="imageUrl"
-            type="text"
-            placeholder="Add a imageUrl for the post"
-            onChange={handleImageUrl}
-            required
-          />
-        </div>
-        <div>
-          <div className="mb-2 mt-5 block">
-            <Label htmlFor="avatar" value="Post avatar" />
-          </div>
-          <TextInput
-            id="avatar"
-            type="text"
-            placeholder="Add user avatar here"
-            onChange={handleAvatar}
-            required
-          />
-        </div>
-        <Button className="mt-5" type="submit">
-          Add Post
-        </Button>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="title"
+          value={postData.title}
+          onChange={handleChange}
+          placeholder="Title"
+        />
+        {/* <input
+          type="text"
+          name="description"
+          value={postData.description}
+          onChange={handleChange}
+          placeholder="description"
+        /> */}
+
+        <input
+          type="file"
+          name="picture_url"
+          onChange={handleChange}
+          placeholder="Upload Image"
+        />
+
+        <QuillEditor
+          value={editorContent}
+          onChange={setEditorContent}
+          handleImageUpload={handleImageUpload}
+        />
+
+        <Button type="submit">SUBMIT</Button>
       </form>
+      <div>
+        <div className="tailwind-editor-content">
+          <div>{parse(editorContent)}</div>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default PostForm;
-
-
-

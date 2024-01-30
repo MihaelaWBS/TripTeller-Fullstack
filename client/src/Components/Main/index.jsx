@@ -20,7 +20,7 @@ const Main = () => {
           <Route path="/searchresults" element={<SearchResults />} />
           <Route path="/hotels/:hotelId" element={<HotelDetails />} />
           <Route path="/blog" element={<BlogDashboard />} />
-          <Route path="/blog/post/:id" element={<PostDescription />} />
+          <Route path="/blog/posts/:postId" element={<PostDescription />} />
           <Route path="/blog/post/addPost" element={<PostForm />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

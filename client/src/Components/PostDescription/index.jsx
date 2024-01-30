@@ -1,13 +1,27 @@
-import React from 'react';
-import {useParams} from "react-router-dom"
-import {useState, useEffect} from "react"
-import axiosInstance from "../../axiosInstance"
+import React, { useEffect, useState } from "react";
+import axiosInstance from "../../axiosInstance";
+import { HiHome } from "react-icons/hi";
+import parse from "html-react-parser";
+import ReactQuill from "react-quill";
+import DOMPurify from "dompurify";
+import { Link, NavLink, useParams, useNavigate } from "react-router-dom";
 
 const PostDescription = () => {
-  // Add any state or functions you need here
-  const [id] = useParams()
-  const [post, setPost] = useState(null);
+  const [post, setPost] = useState({});
+  const { postId } = useParams();
 
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const res = await axiosInstance.get(`/api/posts/${postId}`);
+        setPost(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchPost();
+  }, [postId]);
 
   return (
     <>
@@ -31,10 +45,18 @@ const PostDescription = () => {
           alt="Post"
           className="w-full h-auto mb-4"
         />
-        <p className="text-gray-700 mb-4">
-          {/* Post content text */}
-          Your experience description goes here. This is the text where you can describe your experience.
-        </p>
+        <div>
+          {post.content && typeof post.content === "string" ? (
+            <div className="tailwind-editor-content dark:text-white">
+              {parse(DOMPurify.sanitize(post.content))}
+            </div>
+          ) : (
+            <p>No content available</p>
+          )}
+          {/* <Button onClick={handleEditClick}>Edit Post</Button>
+  <Button onClick={deletePost}>Delete post</Button> */}
+        </div>
+        <div>{post.title}</div>
 
         {/* Action buttons */}
         <div className="flex gap-8">
