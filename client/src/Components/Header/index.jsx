@@ -41,6 +41,9 @@ const index = () => {
               <Dropdown.Item>My profile</Dropdown.Item>
               <Dropdown.Item>My trips</Dropdown.Item>
               <Dropdown.Item>Upcoming trips</Dropdown.Item>
+              <Link to="/blog">
+                <Dropdown.Item>Blog</Dropdown.Item>
+              </Link>
               <Dropdown.Divider />
               <Dropdown.Item onClick={logout}>Sign out</Dropdown.Item>
             </Dropdown>
