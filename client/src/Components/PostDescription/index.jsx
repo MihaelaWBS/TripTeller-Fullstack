@@ -5,10 +5,10 @@ import parse from "html-react-parser";
 import ReactQuill from "react-quill";
 import DOMPurify from "dompurify";
 import { Link, NavLink, useParams, useNavigate } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const PostDescription = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [post, setPost] = useState({});
   const { postId } = useParams();
 
@@ -28,7 +28,7 @@ const PostDescription = () => {
   const handleDelete = async () => {
     try {
       await axiosInstance.delete(`/api/posts/${postId}`);
-      history.push("/"); // Redirect to home page after deleting
+      navigate("/"); // Redirect to home page after deleting
     } catch (error) {
       console.error("Failed to delete post:", error);
     }
