@@ -27,6 +27,20 @@ const BlogDashboard = () => {
 
   return (
   <>
+
+    {/* Banner with a cover picture and overlay text */}
+    <div className="relative h-50rem w-full">
+        <img src="path-to-your-cover-image.jpg" alt="Travel" className="w-full h-full object-cover"/>
+        <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <h1 className="text-white text-5xl font-bold">Travel smarter</h1>
+        </div>
+      </div>
+
+      {/* Title for latest posts */}
+      <div className="my-8 flex justify-center">
+        <h2 className="text-3xl font-bold">Our latest posts</h2>
+      </div>
+      
     {/* Content area for cards */}
     <div className="flex-grow p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
