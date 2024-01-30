@@ -4,10 +4,11 @@ import Main from "./Components/Main";
 import Footer from "./Components/Footer";
 import { SearchProvider } from "./Context/SearchContext";
 
-
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import BottomNavbar from "./Components/BottomNavbar";
 import { useEffect } from "react";
+import TestAddPage from "./Components/TestAddPage";
+import TestShowPosts from "./Components/TestShowPosts";
 
 function App() {
   useEffect(() => {
@@ -21,17 +22,15 @@ function App() {
       <SearchProvider>
         <div className="flex flex-col min-h-screen">
           <Header />
-        
-
           <Main />
-        
+          <TestAddPage />
+
           <BottomNavbar />
           <Footer />
         </div>
       </SearchProvider>
     </>
   );
-
 }
 
 export default App;

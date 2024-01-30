@@ -20,10 +20,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "flowbite-react";
 
-/* import chevronRight from "../../";
-import logoTravel from "./assets/logo-travel-2.png";
-import hamburgerMenu from "./assets/icons8-hamburger-menu-48.png"; */
-
 const index = () => {
   const {
     hotels,
@@ -78,9 +74,9 @@ const index = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const StyledButton = ({ icon, children }) => (
+  const StyledButton = ({ children }) => (
     <Button className="rounded-3xl bg-orange-500">
-      <FontAwesomeIcon icon={icon} className="mr-2" />
+      <FontAwesomeIcon icon={chevronRight} className="mr-2" />
       {children}
     </Button>
   );

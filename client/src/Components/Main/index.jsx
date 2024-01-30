@@ -9,6 +9,7 @@ import BlogDescription from "../BlogDescription";
 import BlogForm from "../BlogForm";
 import Login from "../auth/Login";
 import Signup from "../auth/Signup";
+import TestShowPosts from "../TestShowPosts";
 
 const Main = () => {
   return (
@@ -20,7 +21,8 @@ const Main = () => {
           <Route path="/searchresults" element={<SearchResults />} />
           <Route path="/hotels/:hotelId" element={<HotelDetails />} />
           <Route path="/blog" element={<BlogDashboard />} />
-          <Route path="/blog/post/:id" element={<BlogDescription />} />
+          {/*   <Route path="/blog/post/:id" element={<BlogDescription />} /> */}
+          <Route path="/blog/posts/:postId" element={<TestShowPosts />} />
           <Route path="/blog/post/addPost" element={<BlogForm />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

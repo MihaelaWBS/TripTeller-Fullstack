@@ -18,3 +18,52 @@ body {
 .card-scrollbar-container::-webkit-scrollbar {
   display: none;
 }
+
+.tailwind-editor-content h1 {
+  font-size: 2em !important;
+}
+
+.tailwind-editor-content h2 {
+  font-size: 1.75em !important;
+}
+
+.tailwind-editor-content h3 {
+  font-size: 1.5em !important;
+}
+
+.tailwind-editor-content h4 {
+  font-size: 1.25em !important;
+}
+
+.tailwind-editor-content h5 {
+  font-size: 1em !important;
+}
+
+.tailwind-editor-content h6 {
+  font-size: 0.875em !important;
+}
+
+.tailwind-editor-content ul {
+  list-style-type: disc;
+  padding-left: 1em;
+}
+
+.tailwind-editor-content ol {
+  list-style-type: decimal;
+  padding-left: 1em;
+}
+
+.tailwind-editor-content p {
+  font-family: "Nunito";
+  font-weight: 400;
+  font-size: 1rem;
+}
+.tailwind-editor-content {
+  font-family: "Poppins";
+
+  font-size: 1rem;
+}
+
+.tailwind-editor-content img {
+  border-radius: 15px;
+}
