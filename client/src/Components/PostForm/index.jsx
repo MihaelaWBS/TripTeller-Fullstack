@@ -4,19 +4,19 @@ import axios from 'axios';
 import { Button, Checkbox, Label, TextInput, Textarea, FileInput } from 'flowbite-react';
 import {useNavigate} from 'react-router-dom';
 
-const BlogForm = () => {
-  const[blogUpload,setBlogUpload]=useState(false);
-  const [newBlog, setNewBlog] = useState(null);
+const PostForm = () => {
+  const[postUpload,setPostUpload]=useState(false);
+  const [newPost, setNewPost] = useState(null);
   const navigate = useNavigate();
-  useEffect(() => {newBlog&&
-   axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/posts`,newBlog).then(()=>{
-    setMovieUpload(true);
+  useEffect(() => {newPost&&
+   axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/posts`,newPost).then(()=>{
+    setPostUpload(true);
     navigate("/");
 
   }).catch(e=>console.log(e));
-  }, [newBlog])
+  }, [newPost])
   
-  const blogObject ={
+  const postObject ={
     title:"",
     userName:"",
     likes:0,
@@ -25,23 +25,23 @@ const BlogForm = () => {
     avatar:""
   }
   const handleTitle =(e)=>{
-    blogObject.title = e.target.value;
+    postObject.title = e.target.value;
   }
 
   const handleUserName = (e)=>{
-    blogObject.userName = e.target.value;
+    postObject.userName = e.target.value;
   }
 
   const handleLikes = (e)=>{
-    movieObject.likes =parseInt(e.target.value);
+    postObject.likes =parseInt(e.target.value);
     }
 
   const handleContent = (e)=>{
-    movieObject.description = e.target.value;
+    postObject.description = e.target.value;
   }
 
   const handleImageUrl = (e)=>{
-    movieObject.poster=e.target.value;
+    postObject.poster=e.target.value;
   }
 
   const handleAvatar = (e)=>{
@@ -50,13 +50,13 @@ const BlogForm = () => {
     const urlArray = url.split("/");
     const id = urlArray[urlArray.length-1];
     console.log(id);
-    blogObject.avatar=id;
+    postObject.avatar=id;
   }
 
   const handleSubmit = (e)=>{
     e.preventDefault();
-    console.log(blogObject);
-    setNewBlog(blogObject);
+    console.log(postObject);
+    setNewPost(postObject);
 
   }
   return (
@@ -67,7 +67,7 @@ const BlogForm = () => {
       >
         <div>
           <div className="mb-2 mt-5 block">
-            <Label htmlFor="title" value="Blog title" />
+            <Label htmlFor="title" value="Post title" />
           </div>
           <TextInput
             id="title"
@@ -79,7 +79,7 @@ const BlogForm = () => {
         </div>
         <div>
           <div className="mb-2 mt-5 block">
-            <Label htmlFor="userName" value="Blog username" />
+            <Label htmlFor="userName" value="Post username" />
           </div>
           <TextInput
             id="username"
@@ -97,14 +97,14 @@ const BlogForm = () => {
       
         <div className="max-w-md">
           <div className="mb-2 mt-5 block">
-            <Label htmlFor="content" value="Blog content" />
+            <Label htmlFor="content" value="Post content" />
           </div>
           <Textarea
             id="content"
-            placeholder="Add content to your blog..."
+            placeholder="Add content to your post..."
             required
             rows={4}
-            onChange={handleBlog}
+            onChange={handlePost}
           />
         </div>
         <div id="imageUrlUpload" className="max-w-md">
@@ -114,14 +114,14 @@ const BlogForm = () => {
           <TextInput
             id="imageUrl"
             type="text"
-            placeholder="Add a imageUrl for the blog"
+            placeholder="Add a imageUrl for the post"
             onChange={handleImageUrl}
             required
           />
         </div>
         <div>
           <div className="mb-2 mt-5 block">
-            <Label htmlFor="avatar" value="Blog avatar" />
+            <Label htmlFor="avatar" value="Post avatar" />
           </div>
           <TextInput
             id="avatar"
@@ -132,14 +132,14 @@ const BlogForm = () => {
           />
         </div>
         <Button className="mt-5" type="submit">
-          Add Blog
+          Add Post
         </Button>
       </form>
     </div>
   );
 }
 
-export default BlogForm;
+export default PostForm;
 
 
 
