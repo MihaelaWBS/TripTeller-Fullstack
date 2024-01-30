@@ -14,9 +14,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Button, ButtonGroup, Card } from "flowbite-react";
 import { Link } from "react-router-dom";
+import { useItinerary } from "./ItineraryContext"; // Import the context hook
 
 const SearchResults = () => {
 	const { hotels } = useSearch();
+	const { addToItinerary } = useItinerary(); // Use the context function
 	return (
 		<>
 			<div className="max-w-3xl mx-auto flex flex-col gap-2 mt-4">

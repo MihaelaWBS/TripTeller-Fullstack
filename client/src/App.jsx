@@ -3,6 +3,9 @@ import Header from "./Components/Header";
 import Main from "./Components/Main";
 import Footer from "./Components/Footer";
 import { SearchProvider } from "./Context/SearchContext";
+
+import { ItineraryProvider } from './ItineraryContext';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import BottomNavbar from "./Components/BottomNavbar";
 
 function App() {
@@ -19,6 +22,7 @@ function App() {
       </SearchProvider>
     </>
   );
+
 }
 
 export default App;
