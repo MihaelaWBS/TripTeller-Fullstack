@@ -6,6 +6,8 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const { createServer } = require("node:http");
 const server = createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
 
 const cors = require("cors");
 const connectDB = require("./config/db");
@@ -19,15 +21,7 @@ sdk.auth("fsq3gWIjAcbE/wrnp4cNfACEHCMLyJECcH+Jt14xXBHVGmc=");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  cors({
-    origin: [
-      "https://mihaelawbs-tripteller-fullstack-dev.onrender.com",
-      "http://localhost:5174",
-    ],
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(cookieParser());
 
 app.use("/api/comments", commentRouter);
@@ -75,6 +69,22 @@ app.get("/api/search", async (req, res) => {
       .status(500)
       .json({ message: "An error occurred while searching places." });
   }
+});
+
+io.on('connection', socket => {
+  console.log( `${socket.id} user just connected!`);
+  socket.on('createBook', async payload => {
+    try {
+      const newBook = await Book.create({ ...payload });
+      console.log('PAYLOAAAAD', payload);
+      io.emit('bookCreated', newBook);
+    } catch (error) {
+      io.emit('bookCreationError', error);
+    }
+  });
+  socket.on('disconnect', () => {
+    console.log(': A user disconnected');
+  });
 });
 
 if (process.env.NODE_ENV === "production") {

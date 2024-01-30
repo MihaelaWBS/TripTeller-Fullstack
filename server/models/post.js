@@ -23,10 +23,15 @@ const postSchema = new mongoose.Schema(
 
     /*Here below I added username, imageUrl and avatar so that we use them in the cards rendered in Blogdashboard */
 
-    userName: {
+    firstName: {
       type: String,
-      required: [true, 'Username is required!']
+      required: [true, 'First name is required!']
     }, 
+
+    lastName: {
+      type: String,
+      required: [true, 'Last name is required!']
+    },
 
     imageUrl: {
       type: String,
