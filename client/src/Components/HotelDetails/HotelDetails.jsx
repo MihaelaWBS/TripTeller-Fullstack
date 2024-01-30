@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import MapView from '../MapView/MapView';
+import React, { useState, useEffect } from 'react';
 
 const HotelDetails = () => {
   const [hotelDetails, setHotelDetails] = useState(null);
