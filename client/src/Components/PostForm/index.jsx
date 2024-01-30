@@ -42,7 +42,7 @@ const PostForm = () => {
       const response = await axiosInstance.post("/api/posts", finalPostData);
       console.log("Post added", response.data);
     } catch (error) {
-      console.error("Failed to submit post", error);
+      console.error("Failed to submit post", error.response.data);
     }
   };
 
