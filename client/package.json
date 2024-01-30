@@ -17,6 +17,7 @@
     "axios": "^1.6.7",
     "flowbite": "^2.2.1",
     "flowbite-react": "^0.7.2",
+    "html-react-parser": "^5.1.1",
     "lottie-react": "^2.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
