@@ -97,24 +97,39 @@ const getLoggedInUser = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-
 const addAvatar = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
       res.status(400).json({ message: "User not found" });
     } else {
-      const result = await cloudinary.uploader.upload(req.file.path);
+      // Convert buffer to a readable stream
+      const stream = require("stream");
+      const bufferStream = new stream.PassThrough();
+      bufferStream.end(Buffer.from(req.file.buffer, "binary"));
 
-      // Add this line
-      console.log(result.secure_url);
+      // Upload file to cloudinary
+      const cloudinaryResponse = await new Promise((resolve, reject) => {
+        const cloudinaryStream = cloudinary.uploader.upload_stream(
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
+            }
+          }
+        );
 
-      user.avatar = result.secure_url;
+        bufferStream.pipe(cloudinaryStream);
+      });
+
+      user.avatar = cloudinaryResponse.secure_url;
       await user.save();
-      res.json({ message: "Avatar added successfully", user });
+
+      res.json({ message: "Avatar updated successfully", user });
     }
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
