@@ -27,7 +27,7 @@ const PostDescription = () => {
   const handleDelete = async () => {
     try {
       await axiosInstance.delete(`/api/posts/${postId}`);
-      navigate("/"); // Redirect to home page after deleting
+      navigate("/blog"); // Redirect to blog page after deleting
     } catch (error) {
       console.error("Failed to delete post:", error);
     }

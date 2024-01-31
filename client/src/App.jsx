@@ -3,7 +3,6 @@ import Header from "./Components/Header";
 import Main from "./Components/Main";
 import Footer from "./Components/Footer";
 import { SearchProvider } from "./Context/SearchContext";
-
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import BottomNavbar from "./Components/BottomNavbar";
 import { useEffect } from "react";
@@ -20,6 +19,8 @@ function App() {
   return (
     <>
       <ItineraryProvider>
+
+
         <SearchProvider>
           <div className="flex flex-col min-h-screen">
             <Header />
@@ -30,6 +31,7 @@ function App() {
             <Footer />
           </div>
         </SearchProvider>
+
       </ItineraryProvider>
     </>
   );
