@@ -3,11 +3,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const SECRET = process.env.JWT_SECRET;
 const dayInMilliseconds = 24 * 60 * 60 * 1000;
-const cloudinary = require("../cloudinaryConfig");
+
 const express = require("express");
 const fs = require("fs");
 const router = express.Router();
 const parser = require("../cloudinaryConfig");
+const cloudinary = require("cloudinary").v2;
+
 const register = async (req, res) => {
   try {
     const newUser = await User.create(req.body);
@@ -162,14 +164,36 @@ const testCloudinary = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    user.avatar = req.file.path;
+
+    // Convert buffer to a readable stream
+    const stream = require("stream");
+    const bufferStream = new stream.PassThrough();
+    bufferStream.end(Buffer.from(req.file.buffer, "binary"));
+
+    // Upload file to cloudinary
+    const cloudinaryResponse = await new Promise((resolve, reject) => {
+      const cloudinaryStream = cloudinary.uploader.upload_stream(
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+
+      // Pipe the stream to cloudinary
+      bufferStream.pipe(cloudinaryStream);
+    });
+
+    user.avatar = cloudinaryResponse.secure_url;
     await user.save({ validateBeforeSave: false });
 
     console.log("User:", user);
 
     res.json({
       message: "Image uploaded successfully",
-      url: req.file.path,
+      url: cloudinaryResponse.secure_url,
     });
   } catch (error) {
     console.error("Error:", error);
