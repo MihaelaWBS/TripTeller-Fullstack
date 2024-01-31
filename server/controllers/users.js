@@ -3,6 +3,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const SECRET = process.env.JWT_SECRET;
 const dayInMilliseconds = 24 * 60 * 60 * 1000;
+const cloudinary = require("../cloudinaryConfig");
+const express = require("express");
+const fs = require("fs");
+const router = express.Router();
 const register = async (req, res) => {
   try {
     const newUser = await User.create(req.body);
@@ -29,21 +33,28 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(`Attempting to login with email: ${email}`);
     if (!email || !password) {
+      console.log("Invalid login attempt: Missing email or password");
       res.status(400).json({ message: "Invalid Login Attempt" });
     } else {
       const userDoc = await User.findOne({ email });
       if (!userDoc) {
+        console.log(
+          `Invalid login attempt: No user found with email: ${email}`
+        );
         res.status(400).json({ message: "Invalid Login Attempt" });
       } else {
-        // user doc with email is found!
+        console.log(`User found with email: ${email}`);
         const isPasswordValid = await bcrypt.compare(
           password,
           userDoc.password
         );
         if (!isPasswordValid) {
+          console.log("Invalid login attempt: Incorrect password");
           res.status(400).json({ message: "Invalid Login Attempt" });
         } else {
+          console.log("Password is valid, generating JWT...");
           const userPayload = {
             _id: userDoc._id,
             email: userDoc.email,
@@ -51,8 +62,10 @@ const login = async (req, res) => {
             role: userDoc.role,
             firstName: userDoc.firstName,
             lastName: userDoc.lastName,
+            avatar: userDoc.avatar,
           };
           const userToken = jwt.sign(userPayload, SECRET);
+          console.log("JWT generated, sending response...");
           res
             .cookie("accessToken", userToken, {
               httpOnly: true,
@@ -63,6 +76,7 @@ const login = async (req, res) => {
       }
     }
   } catch (error) {
+    console.log("Error during login:", error.message);
     res.status(400).json({ message: error.message });
   }
 };
@@ -81,9 +95,102 @@ const getLoggedInUser = async (req, res) => {
   }
 };
 
+const addAvatar = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      res.status(400).json({ message: "User not found" });
+    } else {
+      const result = await cloudinary.uploader.upload(req.file.path);
+
+      // Add this line
+      console.log(result.secure_url);
+
+      user.avatar = result.secure_url;
+      await user.save();
+      res.json({ message: "Avatar added successfully", user });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const deleteAvatar = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: `User with id ${id} not found` });
+    }
+
+    user.avatar = null;
+    await user.save();
+    res.json({ message: "Avatar deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateAvatar = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await cloudinary.uploader.upload(req.body.avatar);
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.avatar = result.secure_url;
+    await user.save();
+
+    res.json({ message: "Avatar updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+const testCloudinary = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    console.log("User ID:", userId);
+
+    const path = "./uploads/" + req.files.image.name;
+    await req.files.image.mv(path);
+
+    console.log("Image file:", req.files.image);
+
+    const result = await cloudinary.uploader.upload(path);
+
+    console.log("Cloudinary result:", result);
+
+    fs.unlinkSync(path);
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.avatar = result.secure_url;
+    await user.save({ validateBeforeSave: false });
+
+    console.log("User:", user);
+
+    res.json({
+      message: "Image uploaded successfully",
+      url: result.secure_url,
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   register,
   login,
   logout,
+  deleteAvatar,
+  addAvatar,
+  updateAvatar,
   getLoggedInUser,
+  testCloudinary,
 };

@@ -22,13 +22,7 @@ const index = () => {
             <Dropdown
               arrowIcon={false}
               inline
-              label={
-                <Avatar
-                  alt="User settings"
-                  img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                  rounded
-                />
-              }
+              label={<Avatar alt="User settings" img={user.avatar} rounded />}
             >
               <Dropdown.Header>
                 <span className="block text-sm">
@@ -38,7 +32,9 @@ const index = () => {
                   {user.email}
                 </span>
               </Dropdown.Header>
-              <Dropdown.Item>My profile</Dropdown.Item>
+              <Link to="/myprofile">
+                <Dropdown.Item>My profile</Dropdown.Item>
+              </Link>
               <Dropdown.Item>My trips</Dropdown.Item>
               <Dropdown.Item>Upcoming trips</Dropdown.Item>
               <Link to="/blog">

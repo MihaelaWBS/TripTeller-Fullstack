@@ -23,6 +23,10 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minLength: [8, "Passwords MUST be at least 8 characters"],
     },
+    avatar: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );
@@ -56,20 +60,18 @@ UserSchema.pre("validate", function (next) {
 });
 
 UserSchema.pre("save", async function (next) {
-  console.log("in pre save");
-  //hash the password BEFORE it's saved to the db
-  //Remember, we know they match from middleware above
+  // Only hash the password if it has been modified (or is new)
+  if (!this.isModified("password")) return next();
+
   try {
     const hashedPassword = await bcrypt.hash(this.password, 10);
-    //give our password the value of the returned hash
-    console.log("HASHED", hashedPassword);
     this.password = hashedPassword;
     next();
   } catch (error) {
-    console.log("IS THERE ANY ERROR", error);
+    console.log("Error hashing password", error);
+    next(error);
   }
 });
-
 const User = mongoose.model("User", UserSchema);
 
 module.exports = User;

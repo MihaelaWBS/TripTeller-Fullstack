@@ -18,6 +18,7 @@ function AuthProvider({ children }) {
     axios
       .get("auth/currentUser")
       .then((res) => {
+        console.log(res.data.user);
         setState(res.data.user, false, null);
       })
       .catch((error) => {
@@ -28,8 +29,9 @@ function AuthProvider({ children }) {
 
   const login = (user) => {
     setLoading(true);
+    const { email, password } = user; // Extract only username and password
     axios
-      .post("/auth/login", user)
+      .post("/auth/login", { email, password }) // Send only username and password
       .then((res) => {
         setState(res.data.user, false, null);
         navigate("/");
