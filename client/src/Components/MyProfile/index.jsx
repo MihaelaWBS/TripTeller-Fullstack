@@ -28,13 +28,19 @@ const index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="max-w-7xl w-full mx-auto p-8">
       <div className="flex">
         {/* Sidebar */}
         <div className="w-64 flex flex-col">
           {/* ... iterate over sidebar items */}
-          <button className="text-gray-700 text-md mb-2 hover:bg-gray-200 p-2 rounded">
+          <button className="text-blue-500 text-md mb-2 font-bold bg-blue-100 hover:bg-gray-200 p-2 rounded-3xl">
             My Profile
+          </button>
+          <button className="text-blue-500 text-md mb-2 font-bold hover:bg-gray-200 p-2 rounded-3xl">
+            Security
+          </button>
+          <button className="text-red-500 text-md mb-2 hover:bg-gray-200 p-2 rounded-3xl">
+            Delete account
           </button>
           {/* Add other buttons for the rest of the sidebar items */}
         </div>
@@ -43,20 +49,38 @@ const index = () => {
         <div className="flex-grow bg-white shadow-md rounded-md p-6 ml-6">
           <div className="mb-4">
             <h2 className="text-xl font-semibold mb-2">My Profile</h2>
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-4 space-x-4">
+              {/* Profile Image */}
               <img
-                className="rounded-full h-24 w-24 mr-4"
-                src={user ? user.avatar : ""}
+                className="rounded-full h-24 w-24"
+                src={user && user.avatar ? user.avatar : "default_avatar_path"} // Replace with your default avatar path
                 alt="Profile"
               />
-              <input type="file" onChange={handleFileChange} />
-              <div>
-                <h3 className="font-semibold text-lg">Rafiqur Rahman</h3>
-                <p className="text-gray-600">Team Manager</p>
-                <p className="text-gray-600">Leeds, United Kingdom</p>
+
+              {/* User Info */}
+              <div className="flex-grow">
+                <p className="font-bold text-xl">
+                  {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
+                </p>
               </div>
-              <button className="ml-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Edit
+
+              {/* Edit Button and File Input */}
+              <label
+                htmlFor="fileInput"
+                className="bg-black text-white px-3 py-1 rounded shadow mr-2"
+              >
+                Upload new
+              </label>
+              <input
+                id="fileInput"
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+
+              {/* Remove Button */}
+              <button className="bg-red-500 text-white px-3 py-1 rounded shadow mr-2">
+                Remove
               </button>
             </div>
           </div>
@@ -64,32 +88,21 @@ const index = () => {
           <div className="border-t pt-4">
             <h3 className="text-lg font-semibold mb-2">Personal Information</h3>
             <div className="flex justify-between items-center mb-4">
-              <div>
-                <p>First Name: Rafiqur</p>
-                <p>Email address: rafiqurrahman51@gmail.com</p>
-                <p>Bio: Team Manager</p>
+              <div className="flex gap-16 justify-between">
+                <div className="flex flex-col">
+                  <p className="text-gray-500">First Name</p>
+                  {user ? user.firstName : "Loading..."}
+                </div>
+                <div className="flex flex-col ">
+                  <p className="text-gray-500">Last Name</p>
+                  {user ? user.lastName : "Loading"}
+                </div>
+                <div className="flex flex-col">
+                  <p className="text-gray-500">Email address</p>
+                  {user ? user.email : "Loading"}
+                </div>
               </div>
-              <div>
-                <p>Last Name: Rahman</p>
-                <p>Phone: +09 345 346 46</p>
-              </div>
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Edit
-              </button>
-            </div>
-          </div>
 
-          <div className="border-t pt-4">
-            <h3 className="text-lg font-semibold mb-2">Address</h3>
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <p>Country: United Kingdom</p>
-                <p>Postal Code: ERT 2354</p>
-              </div>
-              <div>
-                <p>City/State: Leeds, East London</p>
-                <p>TAX ID: AS45645756</p>
-              </div>
               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Edit
               </button>
