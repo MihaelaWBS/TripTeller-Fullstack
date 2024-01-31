@@ -8,8 +8,10 @@ const { createServer } = require("node:http");
 const server = createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-
+const cloudinary = require("cloudinary").v2;
 const cors = require("cors");
+const { testCloudinary } = require("./controllers/users");
+
 const connectDB = require("./config/db");
 const postRouter = require("./routes/posts");
 const commentRouter = require("./routes/comments");
@@ -21,6 +23,8 @@ sdk.auth("fsq3gWIjAcbE/wrnp4cNfACEHCMLyJECcH+Jt14xXBHVGmc=");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const fileUpload = require("express-fileupload");
+app.use(fileUpload());
 app.use(
   cors({
     origin: [
@@ -32,7 +36,8 @@ app.use(
   })
 );
 app.use(cookieParser());
-
+app.post("/test-cloudinary", testCloudinary);
+app.post("/test-cloudinary/:userId", testCloudinary);
 app.use("/api/comments", commentRouter);
 app.use("/api/itineraries", itineraryRouter);
 app.use("/api/posts", postRouter);
