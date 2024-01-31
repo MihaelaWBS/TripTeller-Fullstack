@@ -11,7 +11,7 @@ const io = new Server(server);
 const cloudinary = require("cloudinary").v2;
 const cors = require("cors");
 const { testCloudinary } = require("./controllers/users");
-
+const parser = require("./cloudinaryConfig");
 const connectDB = require("./config/db");
 const postRouter = require("./routes/posts");
 const commentRouter = require("./routes/comments");
@@ -36,8 +36,8 @@ app.use(
   })
 );
 app.use(cookieParser());
-app.post("/test-cloudinary", testCloudinary);
-app.post("/test-cloudinary/:userId", testCloudinary);
+app.post("/test-cloudinary", parser.single("image"), testCloudinary);
+app.post("/test-cloudinary/:userId", parser.single("image"), testCloudinary);
 app.use("/api/comments", commentRouter);
 app.use("/api/itineraries", itineraryRouter);
 app.use("/api/posts", postRouter);
