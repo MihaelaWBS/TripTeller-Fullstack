@@ -28,8 +28,8 @@ const index = () => {
   };
 
   return (
-    <div className="max-w-7xl w-full mx-auto p-8">
-      <div className="flex">
+    <div className="xxs:max-w-sm md:max-w-7xl w-full mx-auto p-8 ">
+      <div className="flex xxs:flex-col md:flex-row">
         {/* Sidebar */}
         <div className="w-64 flex flex-col">
           {/* ... iterate over sidebar items */}
@@ -46,10 +46,10 @@ const index = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-grow bg-white shadow-md rounded-md p-6 ml-6">
+        <div className="flex-grow bg-white shadow-2xl rounded-md p-6 ml-6">
           <div className="mb-4">
             <h2 className="text-xl font-semibold mb-2">My Profile</h2>
-            <div className="flex items-center mb-4 space-x-4">
+            <div className="flex flex-wrap items-center mb-4 space-x-4">
               {/* Profile Image */}
               <img
                 className="rounded-full h-24 w-24"
@@ -87,13 +87,13 @@ const index = () => {
 
           <div className="border-t pt-4">
             <h3 className="text-lg font-semibold mb-2">Personal Information</h3>
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex gap-16 justify-between">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-4">
+              <div className="flex flex-col w-full md:w-auto md:flex-row gap-4 md:gap-16 justify-between">
                 <div className="flex flex-col">
                   <p className="text-gray-500">First Name</p>
                   {user ? user.firstName : "Loading..."}
                 </div>
-                <div className="flex flex-col ">
+                <div className="flex flex-col">
                   <p className="text-gray-500">Last Name</p>
                   {user ? user.lastName : "Loading"}
                 </div>
@@ -103,7 +103,7 @@ const index = () => {
                 </div>
               </div>
 
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 md:mt-0">
                 Edit
               </button>
             </div>
