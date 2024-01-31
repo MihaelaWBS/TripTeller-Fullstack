@@ -7,6 +7,7 @@ const cloudinary = require("../cloudinaryConfig");
 const express = require("express");
 const fs = require("fs");
 const router = express.Router();
+const parser = require("../cloudinaryConfig");
 const register = async (req, res) => {
   try {
     const newUser = await User.create(req.body);
@@ -155,29 +156,20 @@ const testCloudinary = async (req, res) => {
     const userId = req.params.userId;
     console.log("User ID:", userId);
 
-    const path = "./uploads/" + req.files.image.name;
-    await req.files.image.mv(path);
-
-    console.log("Image file:", req.files.image);
-
-    const result = await cloudinary.uploader.upload(path);
-
-    console.log("Cloudinary result:", result);
-
-    fs.unlinkSync(path);
+    console.log("Image file:", req.file);
 
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    user.avatar = result.secure_url;
+    user.avatar = req.file.path;
     await user.save({ validateBeforeSave: false });
 
     console.log("User:", user);
 
     res.json({
       message: "Image uploaded successfully",
-      url: result.secure_url,
+      url: req.file.path,
     });
   } catch (error) {
     console.error("Error:", error);
