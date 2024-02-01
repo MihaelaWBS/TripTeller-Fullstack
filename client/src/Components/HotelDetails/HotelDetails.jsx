@@ -2,13 +2,16 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import MapView from '../MapView/MapView';
 import React, { useState, useEffect } from 'react';
+import { Button, Card } from 'flowbite-react';
+
+
 
 const HotelDetails = () => {
   const [hotelDetails, setHotelDetails] = useState(null);
   const [activeImage, setActiveImage] = useState('');
   const [error, setError] = useState(null);
   const { hotelId } = useParams();
-
+  const [readMore, setReadMore] = useState(null); 
   useEffect(() => {
     const fetchHotelDetails = async () => {
       try {
@@ -82,13 +85,19 @@ const HotelDetails = () => {
     <li key={index}>{effort.title}: {effort.steps.join(", ")}</li>
   )) || <p>No sustainability data available.</p>;
 
+  const toggleReadMore = (section) => {
+    setReadMore(readMore === section ? null : section);
+  };
+
   return (
      <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-4xl font-bold text-gray-800 mb-6">{hotelDetails.hotel_name}</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div className="lg:col-span-2 max-w-2xl max-h-900px overflow-hidden">
-          <img className="w-full h-auto rounded-lg shadow" src={activeImage} alt="Active Room" style={{ maxWidth: '700px', maxHeight: '470px' }} />
+          <img className="w-full h-auto rounded-lg shadow" src={activeImage} alt="Active Room"
+
+         style={{ maxWidth: '700px', maxHeight: '470px' }} />
         </div>
         <div className="h-72 lg:h-auto" style={{ height: '400px', width: '400px' }}>
           {hotelDetails && <MapView latitude={hotelDetails.latitude} longitude={hotelDetails.longitude} />}
@@ -107,34 +116,71 @@ const HotelDetails = () => {
         ))}
       </div>
 
-      {/* Hotel Information */}
-      <div className="hotel-info mb-8 p-6 bg-blue-100 rounded-lg">
+     {/* Cards Container */}
+     <div className="flex flex-wrap -mx-2">
+  {/* Hotel Information Card */}
+  <div className="px-2 mb-4 w-full md:w-1/3">
+    <Card className="flex flex-col h-full">
+      <div className="p-6 bg-blue-100 rounded-lg flex-grow">
         <h2 className="text-xl font-semibold mb-4">Hotel Information</h2>
         <p className="mb-2">{hotelDetails?.address}, {hotelDetails?.city}, {hotelDetails?.country_trans}</p>
         <p className="mb-2">Latitude: {hotelDetails?.latitude}, Longitude: {hotelDetails?.longitude}</p>
         <p className="mb-4">Check-in: {hotelDetails?.arrival_date}, Check-out: {hotelDetails?.departure_date}</p>
         <a href={hotelDetails?.url} className="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">Visit Hotel Website</a>
-        <p>Facilities: {hotelDetails?.family_facilities?.join(", ")}</p>
+        {readMore === 'hotelInfo' && (
+          <p>Facilities: {hotelDetails?.family_facilities?.join(", ")}</p>
+        )}
+        <button onClick={() => toggleReadMore('hotelInfo')} className="mt-auto text-blue-600 hover:text-blue-800 ml-6">
+          {readMore === 'hotelInfo' ? 'Read Less' : 'Read More'}
+        </button>
       </div>
+    </Card>
+  </div>
 
-      {/* Sustainability Efforts */}
-      <div className="sustainability-info mb-8 p-6 bg-green-100 rounded-lg">
+  {/* Sustainability Efforts Card */}
+  <div className="px-2 mb-4 w-full md:w-1/3">
+    <Card className="flex flex-col h-full">
+      <div className="p-6 bg-green-100 rounded-lg flex-grow">
         <h2 className="text-xl font-semibold mb-4">Sustainability Efforts</h2>
-        <ul className="list-disc list-inside">
-          {sustainabilitySteps}
-        </ul>
+        {readMore === 'sustainability' ? (
+          <ul className="list-disc list-inside mb-4">
+            {hotelDetails.sustainability?.sustainability_page?.efforts?.map((effort, index) => (
+              <li key={index}>{effort.title}: {effort.steps.join(", ")}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>{hotelDetails.sustainability?.sustainability_page?.efforts?.[0]?.title || "Details on sustainability efforts"}</p>
+        )}
+        <button onClick={() => toggleReadMore('sustainability')} className="mt-auto text-green-600 hover:text-green-800">
+          {readMore === 'sustainability' ? 'Read Less' : 'Read More'}
+        </button>
       </div>
+    </Card>
+  </div>
 
-      {/* COVID-19 Support */}
-      <div className="covid-info mb-8 p-6 bg-red-100 rounded-lg">
+  {/* COVID-19 Support Card */}
+  <div className="px-2 mb-4 w-full md:w-1/3">
+    <Card className="flex flex-col h-full">
+      <div className="p-6 bg-red-100 rounded-lg flex-grow">
         <h2 className="text-xl font-semibold mb-4">COVID-19 Support</h2>
-        {hotelDetails?.info_banners?.map((banner, index) => (
-          <div key={index} className="mb-4">
-            <p className="font-semibold">{banner.title}</p>
-            <p>{banner.messages.join(" ")}</p>
-          </div>
-        )) || <p>No COVID-19 support information available.</p>}
+        {readMore === 'covid' ? (
+          hotelDetails.info_banners?.map((banner, index) => (
+            <div key={index} className="mb-4">
+              <p className="font-semibold">{banner.title}</p>
+              <p>{banner.messages.join(" ")}</p>
+            </div>
+          ))
+        ) : (
+          <p>{hotelDetails.info_banners?.[0]?.title || "COVID-19 support information not available"}</p>
+        )}
+        <button onClick={() => toggleReadMore('covid')} className="mt-auto text-red-600 hover:text-red-800">
+          {readMore === 'covid' ? 'Read Less' : 'Read More'}
+        </button>
       </div>
+    </Card>
+  </div>
+</div>
+
     </div>
   );
 };
