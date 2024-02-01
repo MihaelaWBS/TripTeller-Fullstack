@@ -89,7 +89,6 @@ const logout = (req, res) => {
 };
 const getLoggedInUser = async (req, res) => {
   try {
-    // req.user is created in the auth middleware
     const user = await User.findOne({ _id: req.user._id }).select("-password");
 
     res.json({ user });
@@ -103,12 +102,10 @@ const addAvatar = async (req, res) => {
     if (!user) {
       res.status(400).json({ message: "User not found" });
     } else {
-      // Convert buffer to a readable stream
       const stream = require("stream");
       const bufferStream = new stream.PassThrough();
       bufferStream.end(Buffer.from(req.file.buffer, "binary"));
 
-      // Upload file to cloudinary
       const cloudinaryResponse = await new Promise((resolve, reject) => {
         const cloudinaryStream = cloudinary.uploader.upload_stream(
           (error, result) => {

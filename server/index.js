@@ -23,8 +23,6 @@ sdk.auth("fsq3gWIjAcbE/wrnp4cNfACEHCMLyJECcH+Jt14xXBHVGmc=");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const fileUpload = require("express-fileupload");
-app.use(fileUpload());
 app.use(
   cors({
     origin: [
