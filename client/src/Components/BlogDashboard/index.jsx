@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "../../axiosInstance";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -10,6 +10,8 @@ import io from 'socket.io-client';
 const socket = io(import.meta.env.VITE_SERVER_BASE_URL, { transports: ['websocket'] }); */
 
 const BlogDashboard = () => {
+  const [user, setUser] = useState(null);
+
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
