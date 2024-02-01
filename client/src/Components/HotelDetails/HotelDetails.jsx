@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import MapView from '../MapView/MapView';
-import { useSearch } from '../context/SearchContext'; // Import the useSearch hook
+import React, { useState, useEffect } from 'react';
 
 const HotelDetails = () => {
   const [hotelDetails, setHotelDetails] = useState(null);
   const [activeImage, setActiveImage] = useState('');
   const [error, setError] = useState(null);
   const { hotelId } = useParams();
-
-  // Use the useSearch hook to access data from the context
-  const { hotels } = useSearch();
 
   useEffect(() => {
     const fetchHotelDetails = async () => {
@@ -30,8 +26,7 @@ const HotelDetails = () => {
             currency_code: "EUR",
           },
           headers: {
-            "X-RapidAPI-Key":
-              "67e6b85d33mshd5e8a69a6d26d50p140b38jsn02c7a8bf3e37",
+            "X-RapidAPI-Key": "67e6b85d33mshd5e8a69a6d26d50p140b38jsn02c7a8bf3e37",
             "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
           },
         };
@@ -39,46 +34,63 @@ const HotelDetails = () => {
         const response = await axios.request(options);
         if (response.data.status && response.data.data) {
           setHotelDetails(response.data.data);
-          const initialImage = response.data.data.rooms[0]?.photos[0]?.url_original || '';
+          const initialImage = response.data.data.rooms && response.data.data.rooms[0]?.photos[0]?.url_original || null;
           setActiveImage(initialImage);
         } else {
           setError('Failed to fetch hotel details');
         }
       } catch (error) {
-        setError(error);
+        setError(error.toString());
       }
     };
 
     fetchHotelDetails();
   }, [hotelId]);
 
+  useEffect(() => {
+    if (hotelDetails && hotelDetails.rooms) {
+      const roomsArray = Object.values(hotelDetails.rooms);
+      const allPhotos = roomsArray.flatMap(room => {
+        // Debugging: Log to see if rooms have photos and what the structure looks like
+        console.log("Room photos:", room.photos);
+        return room.photos.map(photo => photo.url_original);
+      });
+      const initialImage = allPhotos.length > 0 ? allPhotos[0] : null;
+      setActiveImage(initialImage);
+  
+      // Debugging: Log all found photos
+      console.log("All photos URLs:", allPhotos);
+    }
+  }, [hotelDetails]);
+
   if (error) {
-    return <div className="text-center text-red-600">Error loading hotel details.</div>;
+    return <div className="text-center text-red-600">Error loading hotel details: {error}</div>;
   }
 
   if (!hotelDetails) {
     return <div className="text-center">Loading...</div>;
   }
 
-  const roomsArray = Object.values(hotelDetails.rooms);
-  const allPhotos = roomsArray.flatMap(room => room.photos.map(photo => photo.url_original));
+  let roomsArray = [];
+  let allPhotos = [];
+  if (hotelDetails && hotelDetails.rooms) {
+    roomsArray = Object.values(hotelDetails.rooms);
+    allPhotos = roomsArray.flatMap(room => room.photos.map(photo => photo.url_original));
+  }
 
   const sustainabilitySteps = hotelDetails.sustainability?.sustainability_page?.efforts?.map((effort, index) => (
     <li key={index}>{effort.title}: {effort.steps.join(", ")}</li>
   )) || <p>No sustainability data available.</p>;
 
-  // Find the selected hotel from the hotels array using hotelId
-  const selectedHotel = hotels.find(hotel => hotel.hotelId === hotelId);
-
   return (
-    <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
+     <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-4xl font-bold text-gray-800 mb-6">{hotelDetails.hotel_name}</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div className="lg:col-span-2 max-w-2xl max-h-900px overflow-hidden">
-          <img className="w-full h-auto rounded-lg shadow" src={activeImage} alt="Active Room" style={{ maxWidth: '900px', maxHeight: '900px' }} />
+          <img className="w-full h-auto rounded-lg shadow" src={activeImage} alt="Active Room" style={{ maxWidth: '700px', maxHeight: '470px' }} />
         </div>
-        <div className="h-72 lg:h-auto">
+        <div className="h-72 lg:h-auto" style={{ height: '400px', width: '400px' }}>
           {hotelDetails && <MapView latitude={hotelDetails.latitude} longitude={hotelDetails.longitude} />}
         </div>
       </div>
@@ -108,7 +120,9 @@ const HotelDetails = () => {
       {/* Sustainability Efforts */}
       <div className="sustainability-info mb-8 p-6 bg-green-100 rounded-lg">
         <h2 className="text-xl font-semibold mb-4">Sustainability Efforts</h2>
-        <ul className="list-disc list-inside">{sustainabilitySteps}</ul>
+        <ul className="list-disc list-inside">
+          {sustainabilitySteps}
+        </ul>
       </div>
 
       {/* COVID-19 Support */}
@@ -121,17 +135,9 @@ const HotelDetails = () => {
           </div>
         )) || <p>No COVID-19 support information available.</p>}
       </div>
-
-      {/* Price and Rating */}
-      {selectedHotel && (
-        <div className="price-and-rating-info mb-8 p-6 bg-yellow-100 rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">Price and Rating</h2>
-          <p>Price: {selectedHotel.price}</p>
-          <p>Rating: {selectedHotel.rating}</p>
-        </div>
-      )}
     </div>
   );
 };
 
 export default HotelDetails;
+

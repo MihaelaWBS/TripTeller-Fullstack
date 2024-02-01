@@ -1,27 +1,35 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Itinerary from "../Itinerary";
-import UpcomingTrips from "../UpcomingTrips";
-import Blog from "../Blog";
 import Home from "../Home";
 import SearchResults from "../SearchResults/SearchResults";
 import HotelDetails from "../HotelDetails/HotelDetails";
+import BlogDashboard from "../BlogDashboard";
+import PostDescription from "../PostDescription";
+import PostForm from "../PostForm";
+import Login from "../auth/Login";
+import Signup from "../auth/Signup";
+import MyProfile from "../MyProfile";
 
 const Main = () => {
-	return (
-		<>
-			<main>
-				<Routes>
-					<Route exact path="/" element={<Home />} />
-					<Route path="/trips/itinerary" element={<Itinerary />} />
-					<Route path="/trips/upcoming" element={<UpcomingTrips />} />
-					<Route path="/searchresults" element={<SearchResults />} />
-					<Route path="/hotels/:hotelId" element={< HotelDetails/>} />
-					<Route path="/trips/blog" element={<Blog />} />
-				</Routes>
-			</main>
-		</>
-	);
+  return (
+    <>
+      <main className="flex flex-col flex-grow ">
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/trips/itinerary" element={<Itinerary />} />
+          <Route path="/searchresults" element={<SearchResults />} />
+          <Route path="/hotels/:hotelId" element={<HotelDetails />} />
+          <Route path="/blog" element={<BlogDashboard />} />
+          <Route path="/blog/posts/:postId" element={<PostDescription />} />
+          <Route path="/blog/post/addPost" element={<PostForm />} />
+          <Route path="/myprofile" element={<MyProfile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </main>
+    </>
+  );
 };
 
 export default Main;

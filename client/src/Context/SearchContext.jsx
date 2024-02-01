@@ -1,7 +1,8 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import LoadingComponent from "../Components/LoadingComponent/LoadingComponent";
+
 
 const SearchContext = createContext();
 
@@ -81,7 +82,7 @@ export const SearchProvider = ({ children }) => {
 
   const fetchData = async () => {
     setIsLoading(true);
-    console.log("fetchData called");
+
     const currencyCode = await getCurrencyCode();
     try {
       const response = await axios.get(
@@ -156,6 +157,61 @@ export const SearchProvider = ({ children }) => {
     return <div>Error: {error.message}</div>;
   }
 
+  // NEARBY CITIES API! //
+
+  const fetchNearbyCities = async (latitude, longitude) => {
+    console.log("Fetching data...");
+    const options = {
+      method: "GET",
+      url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getNearbyCities",
+      params: {
+        latitude: latitude,
+        longitude: longitude,
+        languagecode: "en-us",
+      },
+      headers: {
+        "X-RapidAPI-Key": "67e6b85d33mshd5e8a69a6d26d50p140b38jsn02c7a8bf3e37",
+        "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
+      },
+    };
+
+    const response = await axios.request(options);
+    return response.data;
+  };
+
+  /*   ACTIVATE THIS WHEN THE SITE IS FINISHED!
+   */ /*  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      fetchNearbyCities(position.coords.latitude, position.coords.longitude);
+    });
+  }, []); */
+  // NEARBY CITIES API! //
+  // ATTRACTIONS API! //
+  const fetchAttractions = async () => {
+    const options = {
+      method: "GET",
+      url: "https://booking-com15.p.rapidapi.com/api/v1/attraction/searchAttractions?sort=",
+      params: {
+        id: "eyJ1ZmkiOi0yMDkyMTc0fQ==",
+        page: "1",
+        currency_code: "INR",
+        languagecode: "en-us",
+      },
+      headers: {
+        "X-RapidAPI-Key": "67e6b85d33mshd5e8a69a6d26d50p140b38jsn02c7a8bf3e37",
+        "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
+      },
+    };
+
+    try {
+      const response = await axios.request(options);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  // ATTRACTIONS API! //
+
   const value = {
     hotels,
     setHotels,
@@ -185,9 +241,10 @@ export const SearchProvider = ({ children }) => {
     handleSubmit,
     displayLocation,
     fetchCoordinates,
+    fetchNearbyCities,
+    fetchAttractions,
   };
   return (
     <SearchContext.Provider value={value}>{children}</SearchContext.Provider>
-
   );
 };
