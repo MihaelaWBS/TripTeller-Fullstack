@@ -78,7 +78,6 @@ const PostDescription = () => {
     }
   };
 
-  console.log(post.userId);
   return (
     <>
       {/* Banner with overlay */}
