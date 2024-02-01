@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axiosInstance from "../../axiosInstance";
 import { HiHome } from "react-icons/hi";
 import parse from "html-react-parser";
@@ -6,8 +6,9 @@ import ReactQuill from "react-quill";
 import DOMPurify from "dompurify";
 import { Link, NavLink, useParams, useNavigate } from "react-router-dom";
 import { Button } from "flowbite-react";
-
+import { AuthContext } from "../../Context/Auth";
 const PostDescription = () => {
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [post, setPost] = useState({});
   const { postId } = useParams();
@@ -77,6 +78,7 @@ const PostDescription = () => {
     }
   };
 
+  console.log(post.userId);
   return (
     <>
       {/* Banner with overlay */}
@@ -127,18 +129,22 @@ const PostDescription = () => {
               />
             )}
             <div className="flex gap-8 mt-4">
-              <button
-                className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-                onClick={handleEditClick}
-              >
-                Edit Post
-              </button>
-              <button
-                className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
-                onClick={handleDelete}
-              >
-                Delete Post
-              </button>
+              {user && user._id === post.userId?._id && (
+                <>
+                  <button
+                    className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+                    onClick={handleEditClick}
+                  >
+                    Edit Post
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
+                    onClick={handleDelete}
+                  >
+                    Delete Post
+                  </button>
+                </>
+              )}
             </div>
           </>
         )}
