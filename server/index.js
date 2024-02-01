@@ -6,99 +6,24 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const { createServer } = require("node:http");
 const server = createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
-const cloudinary = require("cloudinary").v2;
+
 const cors = require("cors");
-const { testCloudinary } = require("./controllers/users");
-const parser = require("./cloudinaryConfig");
 const connectDB = require("./config/db");
 const postRouter = require("./routes/posts");
 const commentRouter = require("./routes/comments");
 const itineraryRouter = require("./routes/itineraries");
 const authRouter = require("./routes/users");
-const api = require("api");
-const sdk = api("@fsq-developer/v1.0#18rps1flohmmndw");
-sdk.auth("fsq3gWIjAcbE/wrnp4cNfACEHCMLyJECcH+Jt14xXBHVGmc=");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const fileUpload = require("express-fileupload");
-app.use(fileUpload());
-app.use(
-  cors({
-    origin: [
-      "https://mihaelawbs-tripteller-fullstack-dev.onrender.com",
-      "http://localhost:5174",
-      "http://localhost:5173",
-    ],
-    credentials: true,
-  })
-);
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(cookieParser());
-app.post("/test-cloudinary", parser.single("image"), testCloudinary);
-app.post("/test-cloudinary/:userId", parser.single("image"), testCloudinary);
+
 app.use("/api/comments", commentRouter);
 app.use("/api/itineraries", itineraryRouter);
 app.use("/api/posts", postRouter);
 app.use("/auth", authRouter);
-const hardcodedLatitude = "48.858844";
-const hardcodedLongitude = "2.294351";
-
-app.get("/api/photos/:cityName", async (req, res) => {
-  const { cityName } = req.params;
-  try {
-    const response = await fetch(
-      `https://api.unsplash.com/search/photos?query=${cityName}&client_id=${process.env.UNSPLASH_API_KEY}`
-    );
-    const data = await response.json();
-    if (!data.results[0]?.urls.small) {
-      console.log("No image found for city:", cityName);
-      return res.status(404).json({ error: "No image found" });
-    }
-    res.json(data.results[0]?.urls.small);
-  } catch (error) {
-    console.error("Error fetching image:", error);
-    res.status(500).json({ error: "Error fetching image" });
-  }
-});
-
-app.get("/api/search", async (req, res) => {
-  console.log("Received request at /api/search");
-
-  sdk.auth("fsq3gWIjAcbE/wrnp4cNfACEHCMLyJECcH+Jt14xXBHVGmc=");
-
-  try {
-    const { data } = await sdk.placeSearch({
-      ll: `${hardcodedLatitude},${hardcodedLongitude}`,
-    });
-
-    console.log(data);
-
-    res.json(data);
-  } catch (err) {
-    console.error(err);
-    res
-      .status(500)
-      .json({ message: "An error occurred while searching places." });
-  }
-});
-
-io.on("connection", (socket) => {
-  console.log(`${socket.id} user just connected!`);
-  socket.on("createBook", async (payload) => {
-    try {
-      const newBook = await Book.create({ ...payload });
-      console.log("PAYLOAAAAD", payload);
-      io.emit("bookCreated", newBook);
-    } catch (error) {
-      io.emit("bookCreationError", error);
-    }
-  });
-  socket.on("disconnect", () => {
-    console.log(": A user disconnected");
-  });
-});
+app.use("/auth/currentUser", authRouter);
 
 if (process.env.NODE_ENV === "production") {
   const buildPath = path.join(__dirname, "../client/dist");
@@ -106,6 +31,62 @@ if (process.env.NODE_ENV === "production") {
 
   app.get("*", (req, res) => res.sendFile(path.join(buildPath, "index.html")));
 }
+
 connectDB().then(() => {
   app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 });
+
+/*
+require('dotenv/config');
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const connectDB = require('./config/db');
+const booksRouter = require('./routes/books');
+const authRouter = require('./routes/users');
+const adminRouter = require('./routes/admin');
+const PORT = process.env.PORT || 4000;
+const app = express();
+const { createServer } = require('node:http');
+const server = createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
+const Book = require('./models/book');
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+app.use(cookieParser());
+app.use(express.json());
+// all routes should be registered after the global middlewares cors and express.json()
+app.use('/api/books', booksRouter);
+app.use('/auth', authRouter);
+app.use('/admin', adminRouter);
+io.on('connection', socket => {
+  console.log(`⚡: ${socket.id} user just connected!`);
+  socket.on('createBook', async payload => {
+    try {
+      const newBook = await Book.create({ ...payload });
+      io.emit('bookCreated', newBook);
+    } catch (error) {
+      io.emit('bookCreationError', error);
+    }
+  });
+  socket.on('disconnect', () => {
+    console.log('🔥: A user disconnected');
+  });
+});
+// THE FOLLOWING BLOCK NEED TO BE AFTER ALL THE BACKEND ROUTES!!!!!!!!!!
+if (process.env.NODE_ENV === 'production') {
+  //*Set static folder up in production
+  const buildPath = path.join(__dirname, '../client/dist');
+  app.use(express.static(buildPath));
+
+  app.get('*', (req, res) => res.sendFile(path.join(buildPath, 'index.html')));
+}
+
+connectDB().then(() => {
+  server.listen(PORT, () => {
+    console.log(`server is up on port ${PORT}`);
+  });
+});
+
+*/
