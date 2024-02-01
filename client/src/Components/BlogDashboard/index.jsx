@@ -2,6 +2,7 @@ import React from "react";
 import axios from "../../axiosInstance";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import c4 from "../../assets/c4.jpg"
 
 /*
 import io from 'socket.io-client';
@@ -29,20 +30,20 @@ const BlogDashboard = () => {
   return (
     <>
       {/* Banner with a cover picture and overlay text */}
-      <div className="relative h-50rem w-full">
+      <div className="relative h-96 w-full overflow-hidden">
         <img
-          src="path-to-your-cover-image.jpg"
+          src={c4}
           alt="Travel"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-c"
         />
-        <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <h1 className="text-white text-5xl font-bold">Travel smarter</h1>
+        <div className="absolute top-0 left-0 right-0 bottom-0 h-100 bg-black bg-opacity-30 flex items-center justify-center">
+          <h1 className="text-white text-6xl font-bold mt-36">Travel smarter</h1>
         </div>
       </div>
 
       {/* Title for latest posts */}
-      <div className="my-8 flex justify-center">
-        <h2 className="text-3xl font-bold">Our latest posts</h2>
+      <div className="my-8 flex justify-center ">
+        <h2 className="text-4xl font-bold">Our latest posts</h2>
       </div>
 
       {/* Content area for cards */}
