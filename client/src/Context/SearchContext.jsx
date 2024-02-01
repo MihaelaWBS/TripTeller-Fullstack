@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import LoadingComponent from "../Components/LoadingComponent/LoadingComponent";
 
+
 const SearchContext = createContext();
 
 export const useSearch = () => useContext(SearchContext);

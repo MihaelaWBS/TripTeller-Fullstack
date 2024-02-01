@@ -30,7 +30,7 @@ const HotelDetails = () => {
               "67e6b85d33mshd5e8a69a6d26d50p140b38jsn02c7a8bf3e37",
             "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
           },
-          // ... your axios request options
+// ... your axios request options
         };
 
         const response = await axios.request(options);
@@ -38,7 +38,7 @@ const HotelDetails = () => {
           setHotelDetails(response.data.data);
           // Set initial active image, ensure this matches your data structure
           const initialImage = response.data.data.rooms[0]?.photos[0]?.url_original || '';
-          setActiveImage(initialImage);
+            setActiveImage(initialImage);
         } else {
           setError('Failed to fetch hotel details');
         }
@@ -49,7 +49,17 @@ const HotelDetails = () => {
 
     fetchHotelDetails();
   }, [hotelId]);
-
+  useEffect(() => {
+    if (hotelDetails) {
+      let roomsArray = [];
+      if (hotelDetails && hotelDetails.rooms) {
+        roomsArray = Object.values(hotelDetails.rooms);
+      }
+        const allPhotos = roomsArray.flatMap(room => room.photos.map(photo => photo.url_original));
+        const initialImage = allPhotos.length > 0 ? allPhotos[0] : null;
+        setActiveImage(initialImage);
+    }
+}, [hotelDetails]);
   if (error) {
     return <div className="text-center text-red-600">Error loading hotel details.</div>;
   }
@@ -74,8 +84,8 @@ const HotelDetails = () => {
           <img className="w-full h-auto rounded-lg shadow" src={activeImage} alt="Active Room" style={{ maxWidth: '900px', maxHeight: '900px' }} />
         </div>
         <div className="h-72 lg:h-auto">
-          {hotelDetails && <MapView latitude={hotelDetails.latitude} longitude={hotelDetails.longitude} />}
-        </div>
+    {hotelDetails && <MapView latitude={hotelDetails.latitude} longitude={hotelDetails.longitude} />}
+</div>
       </div>
 
       <div className="flex flex-wrap gap-4 mb-8">
