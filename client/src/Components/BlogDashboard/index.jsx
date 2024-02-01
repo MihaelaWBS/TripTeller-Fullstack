@@ -60,16 +60,13 @@ const BlogDashboard = () => {
                 {" "}
                 {/* Key is moved here */}
                 <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
-                  <img className="w-full" src={post.imageUrl} alt="Blog post" />
+                  <img
+                    className="h-60 w-full"
+                    src={post.imageUrl}
+                    alt="Blog post"
+                  />
                   <div className="px-6 py-4">
                     <div className="font-bold text-xl mb-2">{post.title}</div>
-                    {post.content && typeof post.content === "string" ? (
-                      <div className="tailwind-editor-content dark:text-white">
-                        {parse(DOMPurify.sanitize(post.content))}
-                      </div>
-                    ) : (
-                      <p>No content available</p>
-                    )}
                   </div>
                   <div className="px-6 pt-4 pb-2">
                     {post.avatar && (
@@ -81,14 +78,27 @@ const BlogDashboard = () => {
                     )}
                     <div className="flex items-center">
                       <div className="flex flex-col items-center">
-                        <div className="flex items-center">
+                        <div className="flex items-center gap-6">
                           <img
                             src={post.userId.avatar}
                             alt="profile-avatar"
-                            style={{ width: "30px" }}
+                            style={{ width: "40px" }}
                           />
-
-                          <p>{new Date(post.createdAt).toLocaleDateString()}</p>
+                          <div className="flex flex-col">
+                            <p className="font-bold text-center">
+                              {post.userId.firstName} {post.userId.lastName}
+                            </p>
+                          </div>
+                          <p className="px-2 border rounded-3xl bg-blue-200">
+                            {new Date(post.createdAt).toLocaleDateString(
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              }
+                            )}
+                          </p>
                         </div>
                       </div>
                     </div>
