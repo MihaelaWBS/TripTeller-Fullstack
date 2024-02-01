@@ -10,7 +10,7 @@ const MapView = ({ latitude, longitude }) => {
       style={{ height: "400px", width: "100%" }}
     >
       <TileLayer
-        url="https://%7Bs%7D.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
       <Marker position={[latitude, longitude]}>
