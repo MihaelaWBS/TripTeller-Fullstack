@@ -94,7 +94,7 @@ const SearchResults = () => {
         {/* MOBILE FILTER */}
 
         {hotels &&
-          hotels.slice(0, 2).map((hotel) => (
+          hotels.slice(0, 5).map((hotel) => (
             <Link to={`/hotels/${hotel.hotel_id}`} key={hotel.hotel_id}>
               <div className="max-w-2xl mx-auto mt-4 bg-white shadow-md rounded-lg overflow-hidden mb-4 flex xxs:hidden md:flex">
                 {" "}
