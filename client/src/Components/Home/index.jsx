@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import SearchComponent from "../SearchComponent/index";
+import NearbyCities from "../NearbyCities/index";
+import Attractions from "../Attractions/index";
+import PostForm from "../PostForm";
 
 const index = () => {
-  return <div>index</div>;
+  return (
+    <>
+      <SearchComponent />
+      <PostForm />
+      
+      {/*    <NearbyCities /> */}
+
+      {/*  <Attractions /> */}
+    </>
+  );
 };
 
 export default index;
