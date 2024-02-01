@@ -23,7 +23,7 @@ const Main = () => {
           <Route path="/blog" element={<BlogDashboard />} />
           <Route path="/blog/posts/:postId" element={<PostDescription />} />
           <Route path="/blog/post/addPost" element={<PostForm />} />
-          <Route path="/myprofile" element={<MyProfile />} />
+          <Route path="/myprofile/:userId" element={<MyProfile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>

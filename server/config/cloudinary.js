@@ -1,5 +1,7 @@
-const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
+
+const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
+  process.env;
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -7,5 +9,4 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET_KEY,
 });
 
-const parser = multer({ storage: multer.memoryStorage() });
-module.exports = parser;
+module.exports = cloudinary;
