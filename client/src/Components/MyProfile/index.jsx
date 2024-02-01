@@ -1,29 +1,26 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../Context/Auth";
 import axiosInstance from "../../axiosInstance";
+import { useParams } from "react-router-dom";
+
 const index = () => {
   const { user, setUser } = useContext(AuthContext);
   const [imageUrl, setImageUrl] = useState(null);
+  const { userId } = useParams();
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+
     try {
-      const formData = new FormData();
-
-      formData.append("image", e.target.files[0]);
-
       const response = await axiosInstance.post(
-        `/test-cloudinary/${user._id}`,
+        `/auth/users/${user._id}/avatar`,
         formData
       );
-
-      setImageUrl(response.data.url);
-
-      setUser((prevUser) => ({
-        ...prevUser,
-        avatar: response.data.url ? response.data.url : prevUser.avatar,
-      }));
+      console.log(response.data);
     } catch (error) {
-      console.error("A problem occurred with the axios operation: ", error);
+      console.log("Error uploading avatar:", error);
     }
   };
 

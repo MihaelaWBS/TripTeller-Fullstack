@@ -3,8 +3,10 @@ import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { AuthContext } from "../../Context/Auth";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import { useParams } from "react-router-dom";
 
 const index = () => {
+  const { userId } = useParams();
   const { user, logout } = useContext(AuthContext);
   console.log(user);
 
@@ -32,7 +34,8 @@ const index = () => {
                   {user.email}
                 </span>
               </Dropdown.Header>
-              <Link to="/myprofile">
+              <Link to={`/myprofile/${user._id}`}>
+                {" "}
                 <Dropdown.Item>My profile</Dropdown.Item>
               </Link>
               <Dropdown.Item>My trips</Dropdown.Item>
