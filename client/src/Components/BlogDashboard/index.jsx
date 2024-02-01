@@ -81,9 +81,15 @@ const BlogDashboard = () => {
                     )}
                     <div className="flex items-center">
                       <div className="flex flex-col items-center">
-                        <span className="text-sm font-semibold text-gray-700 mr-2 mb-2">
-                          {post.firstName} {post.lastName}
-                        </span>
+                        <div className="flex items-center">
+                          <img
+                            src={post.userId.avatar}
+                            alt="profile-avatar"
+                            style={{ width: "30px" }}
+                          />
+
+                          <p>{new Date(post.createdAt).toLocaleDateString()}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
