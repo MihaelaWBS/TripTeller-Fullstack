@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 const index = () => {
   return (
     <>
-      <div className="fixed inset-x-0 bottom-0 bg-white shadow-lg md:hidden">
+      <div className="fixed inset-x-0 bottom-0 bg-white shadow-lg md:hidden py-2">
         <div className="flex justify-between items-center text-xs">
           <Link
             to="/trips/itinerary"

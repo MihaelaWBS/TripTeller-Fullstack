@@ -6,8 +6,12 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const { createServer } = require("node:http");
 const server = createServer(app);
-
+const { Server } = require("socket.io");
+const io = new Server(server);
+const cloudinary = require("cloudinary").v2;
 const cors = require("cors");
+const { testCloudinary } = require("./controllers/users");
+const parser = require("./cloudinaryConfig");
 const connectDB = require("./config/db");
 const postRouter = require("./routes/posts");
 const commentRouter = require("./routes/comments");
@@ -19,22 +23,25 @@ sdk.auth("fsq3gWIjAcbE/wrnp4cNfACEHCMLyJECcH+Jt14xXBHVGmc=");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const fileUpload = require("express-fileupload");
+app.use(fileUpload());
 app.use(
   cors({
     origin: [
       "https://mihaelawbs-tripteller-fullstack-dev.onrender.com",
       "http://localhost:5174",
+      "http://localhost:5173",
     ],
     credentials: true,
   })
 );
 app.use(cookieParser());
-
+app.post("/test-cloudinary", parser.single("image"), testCloudinary);
+app.post("/test-cloudinary/:userId", parser.single("image"), testCloudinary);
 app.use("/api/comments", commentRouter);
 app.use("/api/itineraries", itineraryRouter);
 app.use("/api/posts", postRouter);
 app.use("/auth", authRouter);
-app.use("/auth/currentUser", authRouter);
 const hardcodedLatitude = "48.858844";
 const hardcodedLongitude = "2.294351";
 
@@ -75,6 +82,22 @@ app.get("/api/search", async (req, res) => {
       .status(500)
       .json({ message: "An error occurred while searching places." });
   }
+});
+
+io.on("connection", (socket) => {
+  console.log(`${socket.id} user just connected!`);
+  socket.on("createBook", async (payload) => {
+    try {
+      const newBook = await Book.create({ ...payload });
+      console.log("PAYLOAAAAD", payload);
+      io.emit("bookCreated", newBook);
+    } catch (error) {
+      io.emit("bookCreationError", error);
+    }
+  });
+  socket.on("disconnect", () => {
+    console.log(": A user disconnected");
+  });
 });
 
 if (process.env.NODE_ENV === "production") {
