@@ -58,7 +58,7 @@ const Itinerary = () => {
 							{hotel.hotel_name}
 							</h2>
 							<p>{hotel.city}</p>
-							<div className="d-flex">
+							<div className="flex items-center space-x-2">
 								<p className="text-lg font-extrabold  text-blue-700 dark:text-gray-700">
 								{hotel.review_score}
 								</p>
