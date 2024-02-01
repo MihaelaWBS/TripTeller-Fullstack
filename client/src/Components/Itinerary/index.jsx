@@ -15,63 +15,55 @@ const Itinerary = () => {
 	console.log("API Response or Itinerary Data:", itinerary); // Add this line to log the data
 
 	return (
-		<div>
-			<h1>My Itinerary</h1>
-			<div>
+		<div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg" >
+			<h1 className="text-4xl font-bold text-gray-800 mb-10 text-center">My Itinerary</h1>
+			<div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-10 ">
 				{itinerary.length > 0 ? (
 					itinerary.map((hotel, index) => (
-						/*
-						<div key={index}>
-							<img
-								className="w-1/3 object-cover"
-								src={hotel.main_photo_url}
-								style={{ width: "100px" }}
-								alt="Hotel"
-							/>
-							<h2>{hotel.hotel_name}</h2>
-							<h2>{hotel.city}</h2>
-							<h2>{hotel.review_score}</h2>
-							<div>
-								<p className="text-xs text-gray-600">After tax & fees</p>
-								<p className="text-lg font-extrabold text-red-500">
-									{hotel.composite_price_breakdown.all_inclusive_amount.value}{" "}
-									{
-										hotel.composite_price_breakdown.all_inclusive_amount
-											.currency
-									}
-								</p>
-							</div>
+					
+						
+						<div  >
+							<Card
+								
+								className="mb-5 w-full sm:w-auto"
+								imgAlt="Property picture"
+								imgSrc={hotel.main_photo_url}
+								key={index}
+								
+								>
+								<h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+								{hotel.hotel_name}
+								</h2>
+								<p>{hotel.city}</p>
+								<div className="flex items-center space-x-2">
+									<p className="text-lg font-extrabold  text-blue-700 dark:text-gray-700">
+									{hotel.review_score}
+									</p>
+									<p className="text-lg font-extrabold  text-blue-700 dark:text-gray-700">{hotel.review_score_word}</p>
+									<p>{hotel.review_nr} reviews</p>
 
-							<h2>
-								{" "}
-								from {hotel.checkin.from} until {hotel.checkin.until}
-							</h2>
-						</div> */
+								</div>
+								<div className="flex items-center space-x-2">
+									<p className="font-extrabold text-red-500">
+										{" "}
+										from {hotel.checkin.from} until {hotel.checkin.until}
+									</p>
+									<div className="flex mt-2 flex-wrap">
+										{hotel.hotel_include_breakfast === 0 && (
+											<span className="bg-green-200 rounded-full px-3 py-1 ml-4 mr-2">
+											Breakfast
+											</span>
+										)}
+										{hotel.has_free_parking && (
+											<span className="bg-gray-200 rounded-full px-3 py-1 ml-4 mr-2">
+											Free parking
+											</span>
+										)}
+									</div>
+								</div>
 
-						<Card
-							className="max-w-sm"
-							imgAlt="Property picture"
-							imgSrc={hotel.main_photo_url}
-							key={index}
-							>
-							<h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-							{hotel.hotel_name}
-							</h2>
-							<p>{hotel.city}</p>
-							<div className="flex items-center space-x-2">
-								<p className="text-lg font-extrabold  text-blue-700 dark:text-gray-700">
-								{hotel.review_score}
-								</p>
-								<p className="text-lg font-extrabold  text-blue-700 dark:text-gray-700">{hotel.review_score_word}</p>
-								<p>{hotel.review_nr} reviews</p>
-
-							</div>
-							
-							<p className="font-extrabold text-red-500">
-								{" "}
-								from {hotel.checkin.from} until {hotel.checkin.until}
-							</p>
-    					</Card>
+							</Card>
+						</div>
 
 
 					))
