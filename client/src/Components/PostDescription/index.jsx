@@ -119,13 +119,12 @@ const PostDescription = () => {
         ) : (
           <>
             <h2 className="text-3xl font-bold my-4">{post.title}</h2>
-            {post.content && (
-              <div
-                className="tailwind-editor-content dark:text-white"
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(post.content),
-                }}
-              />
+            {post.content && typeof post.content === "string" ? (
+              <div className="tailwind-editor-content dark:text-white">
+                {parse(DOMPurify.sanitize(post.content))}
+              </div>
+            ) : (
+              <p>No content available</p>
             )}
             <div className="flex gap-8 mt-4">
               {user && user._id === post.userId?._id && (

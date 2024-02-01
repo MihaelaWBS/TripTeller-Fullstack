@@ -2,6 +2,8 @@ import React from "react";
 import axios from "../../axiosInstance";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import DOMPurify from "dompurify";
+import parse from "html-react-parser";
 
 /*
 import io from 'socket.io-client';
@@ -59,7 +61,13 @@ const BlogDashboard = () => {
                   <img className="w-full" src={post.imageUrl} alt="Blog post" />
                   <div className="px-6 py-4">
                     <div className="font-bold text-xl mb-2">{post.title}</div>
-                    <p className="text-gray-700 text-base">{post.content}</p>
+                    {post.content && typeof post.content === "string" ? (
+                      <div className="tailwind-editor-content dark:text-white">
+                        {parse(DOMPurify.sanitize(post.content))}
+                      </div>
+                    ) : (
+                      <p>No content available</p>
+                    )}
                   </div>
                   <div className="px-6 pt-4 pb-2">
                     {post.avatar && (
