@@ -1,13 +1,15 @@
 import "./App.css";
 import Header from "./Components/Header";
 import Main from "./Components/Main";
-import Footer from "./Components/Footer";
+import Footer from "./Components/Footer1";
 import { SearchProvider } from "./Context/SearchContext";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import BottomNavbar from "./Components/BottomNavbar";
 import { useEffect } from "react";
 import Itinerary from "./Components/Itinerary";
 import { ItineraryProvider } from "./Context/ItineraryContext";
+import Footer1 from "./Components/Footer1";
+
 
 function App() {
   useEffect(() => {
@@ -28,7 +30,7 @@ function App() {
             <Main />
 
             <BottomNavbar />
-            <Footer />
+            <Footer1 />
           </div>
         </SearchProvider>
 

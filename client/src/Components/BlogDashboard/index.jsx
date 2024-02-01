@@ -36,8 +36,8 @@ const BlogDashboard = () => {
           alt="Travel"
           className="w-full h-full object-c"
         />
-        <div className="absolute top-0 left-0 right-0 bottom-0 h-100 bg-black bg-opacity-30 flex items-center justify-center">
-          <h1 className="text-white text-6xl font-bold mt-36">Travel smarter</h1>
+        <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-40 flex items-center justify-center">
+          <h1 className="text-white text-6xl font-bold">Travel smarter</h1>
         </div>
       </div>
 
