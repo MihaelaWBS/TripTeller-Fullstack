@@ -7,7 +7,10 @@ import DOMPurify from "dompurify";
 import { Link, NavLink, useParams, useNavigate } from "react-router-dom";
 import { Button } from "flowbite-react";
 import { AuthContext } from "../../Context/Auth";
+import CommentSection from "../CommentSection";
 const PostDescription = () => {
+  const [openComment, setOpenComment] = useState(false);
+
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [post, setPost] = useState({});
@@ -76,6 +79,10 @@ const PostDescription = () => {
     } catch (error) {
       console.error("Error updating post:", error);
     }
+  };
+
+  const toggleCommentSection = () => {
+    setOpenComment(!openComment);
   };
 
   return (
@@ -147,6 +154,15 @@ const PostDescription = () => {
           </>
         )}
       </div>
+      <div className="flex items-center justify-center">
+        <button
+          onClick={toggleCommentSection}
+          className=" px-4 mt-6 py-1 rounded-md text-white bg-blue-500"
+        >
+          Show Comments
+        </button>
+      </div>
+      <div className="w-full">{openComment && <CommentSection />}</div>
     </>
   );
 };
