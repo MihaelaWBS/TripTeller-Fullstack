@@ -123,7 +123,9 @@ const index = () => {
 
                     <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                   </div>
-                  <p className="text-gray-500">{displayLocation()}</p>
+                  <p className="text-gray-500 text-center">
+                    {displayLocation()}
+                  </p>
                 </div>
                 <div className="w-px bg-gray-300 h-full  dark:bg-blue-500"></div>
                 <div className="group relative flex cursor-pointer gap-1 flex-col">
