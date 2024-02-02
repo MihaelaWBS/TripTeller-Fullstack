@@ -65,7 +65,7 @@ const BlogDashboard = () => {
                     src={post.imageUrl}
                     alt="Blog post"
                   />
-                  <div className="px-6 py-4">
+                  <div className="px-4 py-2">
                     <div className="font-bold text-xl mb-2">{post.title}</div>
                   </div>
                   <div className="px-6 pt-4 pb-2">
@@ -76,15 +76,15 @@ const BlogDashboard = () => {
                         className="w-20 rounded-full"
                       />
                     )}
-                    <div className="flex items-center">
-                      <div className="flex flex-col items-center">
-                        <div className="flex items-center gap-6">
+                    <div className="flex border-t-2  items-center">
+                      <div className="flex flex-col  items-center">
+                        <div className="flex  items-center gap-6">
                           <img
                             src={post.userId.avatar}
                             alt="profile-avatar"
                             style={{ width: "40px" }}
                           />
-                          <div className="flex flex-col">
+                          <div className="flex  flex-col">
                             <p className="font-bold text-center">
                               {post.userId.firstName} {post.userId.lastName}
                             </p>
