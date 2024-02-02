@@ -5,6 +5,7 @@ import { useItinerary } from "../../Context/ItineraryContext";
 import { useParams } from "react-router-dom";
 import { Card } from 'flowbite-react';
 import c1 from "../../assets/c1.jpg";
+import { Link } from 'react-router-dom'
 
 
 const Itinerary = () => {
@@ -32,16 +33,15 @@ const Itinerary = () => {
 			<h1 className="text-4xl font-bold text-gray-800 mb-10 text-center">My Itinerary</h1>
 			<div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-10 ">
 				{itinerary.length > 0 ? (
-					itinerary.map((hotel, index) => (
+					itinerary.map((hotel) => (
 					
 						
-						<div  >
+						<div key={hotel.hotel_id} >
 							<Card
 								
 								className="mb-5 w-full sm:w-auto"
 								imgAlt="Property picture"
 								imgSrc={hotel.main_photo_url}
-								key={index}
 								
 								>
 								<h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -77,15 +77,14 @@ const Itinerary = () => {
 								</div>
 								<div className="flex mt-2 flex-wrap justify-around" >
 									
-										<a
-	
+										<Link
+										to={`/hotels/${hotel.hotel_id}`}
 										className="text-blue-600 hover:text-blue-800 font-bold text-lg cursor-pointer"
-										target="_blank"
-										rel="noopener noreferrer"
+									
 										>
 										See Details
-										</a>
-										
+										</Link>
+
 										<a
 										className=" text-green-600 hover:text-green-800 font-bold text-lg cursor-pointer"
 										target="_blank"
@@ -94,7 +93,6 @@ const Itinerary = () => {
 										Add to Incoming trips
 										</a>
 							
-
 								</div>
 
 							</Card>

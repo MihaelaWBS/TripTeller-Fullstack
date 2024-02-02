@@ -1,18 +1,21 @@
-import React, { createContext, useContext, useState,useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const ItineraryContext = createContext();
 
 export const useItinerary = () => useContext(ItineraryContext);
 
 export const ItineraryProvider = ({ children }) => {
+	/*
   const [itinerary, setItinerary] = useState(() => {
     const localData = localStorage.getItem('itinerary');
     return localData ? JSON.parse(localData) : [];
-  });
+  }); */
+  const [itinerary, setItinerary] = useState([]);
 
+  /*
   useEffect(() => {
     localStorage.setItem('itinerary', JSON.stringify(itinerary));
-  }, [itinerary]);
+  }, [itinerary]); */
 
 
 
@@ -38,7 +41,7 @@ export const ItineraryProvider = ({ children }) => {
   
 
 	return (
-		<ItineraryContext.Provider value={{ itinerary, addToItinerary ,removeFromItinerary}}>
+		<ItineraryContext.Provider value={{ itinerary, setItinerary, addToItinerary ,removeFromItinerary}}>
 			{children}
 		</ItineraryContext.Provider>
 	);
