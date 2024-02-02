@@ -5,6 +5,7 @@ import { Button, Card } from "flowbite-react";
 import MapView from "../MapView/MapView";
 
 const HotelDetails = () => {
+
   const [hotelDetails, setHotelDetails] = useState(null);
   const [activeImage, setActiveImage] = useState("");
   const [error, setError] = useState(null);
@@ -49,8 +50,9 @@ const HotelDetails = () => {
       }
     };
 
-    fetchHotelDetails();
-  }, [hotelId]);
+
+		fetchHotelDetails();
+	}, [hotelId]);
 
   useEffect(() => {
     if (hotelDetails && hotelDetails.rooms) {
@@ -246,6 +248,7 @@ const HotelDetails = () => {
       </div>
     </div>
   );
+
 };
 
 export default HotelDetails;
