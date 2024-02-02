@@ -3,6 +3,7 @@ import SearchComponent from "../SearchComponent/index";
 import NearbyCities from "../NearbyCities/index";
 import Attractions from "../Attractions/index";
 import PostForm from "../PostForm";
+import Itinerary from "../Itinerary";
 
 const index = () => {
   return (
@@ -11,10 +12,9 @@ const index = () => {
       <PostForm />
 
       {/*    <NearbyCities /> */}
-
-      {/*  <Attractions /> */}
-    </>
-  );
+			{/*  <Attractions /> */}
+		</>
+	);
 };
 
 export default index;

@@ -14,6 +14,7 @@ import LocationNotification from "../LocationNotification";
 import AddPost from "../AddPost";
 
 const Main = () => {
+
   return (
     <>
       <LocationNotification />
