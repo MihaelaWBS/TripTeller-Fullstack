@@ -81,7 +81,7 @@ const PostForm = () => {
         <Button type="submit">SUBMIT</Button>
       </form>
       <div>
-        <div className="tailwind-editor-content">
+        <div className="tailwind-editor-content ">
           <div>{parse(editorContent)}</div>
         </div>
       </div>

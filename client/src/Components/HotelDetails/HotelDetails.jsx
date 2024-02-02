@@ -19,8 +19,8 @@ const HotelDetails = () => {
           url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
           params: {
             hotel_id: hotelId,
-            arrival_date: "2024-01-31",
-            departure_date: "2024-02-02",
+            arrival_date: "2024-02-04",
+            departure_date: "2024-02-11",
             adults: "1",
             children_age: "0",
             room_qty: "1",
@@ -35,6 +35,7 @@ const HotelDetails = () => {
         };
 
         const response = await axios.request(options);
+        console.log(response.data);
         if (response.data.status && response.data.data) {
           setHotelDetails(response.data.data);
           const initialImage =

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import c4 from "../../assets/c4.jpg"
 import DOMPurify from "dompurify";
 import parse from "html-react-parser";
+import { Button } from "flowbite-react";
 
 
 /*
@@ -50,7 +51,9 @@ const BlogDashboard = () => {
       <div className="my-8 flex justify-center ">
         <h2 className="text-4xl font-bold">Our latest posts</h2>
       </div>
-
+      <Link to="/addPost">
+        <Button className="bg-orange-500 rounded-3xl">Create a post</Button>
+      </Link>
       {/* Content area for cards */}
       <div className="flex-grow p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
