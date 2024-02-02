@@ -15,7 +15,7 @@ const PostForm = () => {
       const file = e.target.files[0];
       setFile(file);
       handleImageUpload(file);
-    } else if (e.target.name === "isHot") {
+
       setPostData({ ...postData, [e.target.name]: e.target.checked });
     } else {
       setPostData({ ...postData, [e.target.name]: e.target.value });
@@ -36,6 +36,7 @@ const PostForm = () => {
     const finalPostData = {
       title: postData.title,
       content: editorContent,
+      imageUrl: postData.picture_url,
     };
 
     try {
