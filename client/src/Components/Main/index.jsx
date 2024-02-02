@@ -10,10 +10,12 @@ import PostForm from "../PostForm";
 import Login from "../auth/Login";
 import Signup from "../auth/Signup";
 import MyProfile from "../MyProfile";
+import LocationNotification from "../LocationNotification";
 
 const Main = () => {
   return (
     <>
+      <LocationNotification />
       <main className="flex flex-col flex-grow ">
         <Routes>
           <Route exact path="/" element={<Home />} />
@@ -24,6 +26,7 @@ const Main = () => {
           <Route path="/blog/posts/:postId" element={<PostDescription />} />
           <Route path="/blog/post/addPost" element={<PostForm />} />
           <Route path="/myprofile/:userId" element={<MyProfile />} />
+
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>

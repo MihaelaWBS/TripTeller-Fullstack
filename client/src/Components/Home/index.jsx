@@ -9,7 +9,7 @@ const index = () => {
     <>
       <SearchComponent />
       <PostForm />
-      
+
       {/*    <NearbyCities /> */}
 
       {/*  <Attractions /> */}
