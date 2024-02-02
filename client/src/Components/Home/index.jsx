@@ -9,12 +9,12 @@ const index = () => {
   return (
     <>
       <SearchComponent />
-      <PostForm />
+      {/* <PostForm /> */}
 
-      {/*    <NearbyCities /> */}
-			{/*  <Attractions /> */}
-		</>
-	);
+      <NearbyCities />
+      {/*  <Attractions /> */}
+    </>
+  );
 };
 
 export default index;

@@ -8,6 +8,7 @@ const index = () => {
   const [nearbyCities, setNearbyCities] = useState(null);
   const scrollRef = useRef(null);
   const [showLeftButton, setShowLeftButton] = useState(false);
+  const [brokenImage, setBrokenImage] = useState(false);
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -33,6 +34,12 @@ const index = () => {
       `https://mihaelawbs-tripteller-fullstack-dev.onrender.com/api/photos/${cityName}`
     );
     const url = await response.json();
+
+    // If the url is empty, return null
+    if (!url || url === "") {
+      return null;
+    }
+
     return url;
   };
   const scrollToNext = () => {
@@ -117,12 +124,13 @@ const index = () => {
           >
             {nearbyCities &&
               nearbyCities
-                .filter(
-                  (city) =>
-                    city.image &&
-                    city.image !== "https://via.placeholder.com/300"
+                .sort((a, b) =>
+                  a.usesPlaceholder === b.usesPlaceholder
+                    ? 0
+                    : a.usesPlaceholder
+                    ? 1
+                    : -1
                 )
-                .sort((a, b) => (b.image ? 1 : -1))
                 .map((city, index) => (
                   <div
                     key={index}
@@ -141,6 +149,12 @@ const index = () => {
                           src={city.image}
                           alt={city.name}
                           className="object-cover w-full h-full"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://via.placeholder.com/300";
+                            city.usesPlaceholder = true;
+                            setBrokenImage(true); // Force a re-render
+                          }}
                         />
                       </div>
                       <div className="p-4">
