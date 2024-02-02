@@ -15,6 +15,10 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: [true, "Post content is required!"],
     },
+    imageUrl: {
+      type: String,
+      required: false,
+    },
     likes: {
       type: Number,
       default: 0,
