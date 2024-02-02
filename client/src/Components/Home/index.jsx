@@ -6,14 +6,12 @@ import PostForm from "../PostForm";
 import Itinerary from "../Itinerary";
 
 const index = () => {
-	return (
-		<>
-			<SearchComponent />
-			{/*  <PostForm /> */}
-			{/* 	<Itinerary /> */}
+  return (
+    <>
+      <SearchComponent />
+      <PostForm />
 
-			{/*    <NearbyCities /> */}
-
+      {/*    <NearbyCities /> */}
 			{/*  <Attractions /> */}
 		</>
 	);
