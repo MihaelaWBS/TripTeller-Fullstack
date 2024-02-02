@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "../../axiosInstance";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import c4 from "../../assets/c4.jpg"
+import DOMPurify from "dompurify";
+import parse from "html-react-parser";
 
 /*
 import io from 'socket.io-client';
 const socket = io(import.meta.env.VITE_SERVER_BASE_URL, { transports: ['websocket'] }); */
 
 const BlogDashboard = () => {
+  const [user, setUser] = useState(null);
+
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -49,44 +53,61 @@ const BlogDashboard = () => {
       {/* Content area for cards */}
       <div className="flex-grow p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {posts.map((post, userId) => (
-            <Link to={`/blog/posts/${post._id}`}>
-              <div
-                key={userId}
-                className="max-w-sm rounded overflow-hidden shadow-lg bg-white"
-              >
-                <img className="w-full" src={post.imageUrl} alt="Blog post" />
-                <div className="px-6 py-4">
-                  <div className="font-bold text-xl mb-2">{post.title}</div>
-                  <p className="text-gray-700 text-base">{post.content}</p>
-                </div>
-                <div className="px-6 pt-4 pb-2">
-                  {post.avatar && (
-                    <img
-                      src={post.avatar}
-                      alt="Avatar"
-                      className="w-20 rounded-full"
-                    />
-                  )}
-                  <div className="flex items-center">
-                    <div className="flex flex-col items-center">
-                      <span className="text-sm font-semibold text-gray-700 mr-2 mb-2">
-                        {post.firstName} {post.lastName}{" "}
-                        {/*Here, we would need the user name instead */}
-                      </span>
-                    </div>
-                    {/* <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                    {post.date}
-                  </span> */}
+          {posts.map(
+            (
+              post // Removed incorrect usage of `userId` here
+            ) => (
+              <Link to={`/blog/posts/${post._id}`} key={post._id}>
+                {" "}
+                {/* Key is moved here */}
+                <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
+                  <img
+                    className="h-60 w-full"
+                    src={post.imageUrl}
+                    alt="Blog post"
+                  />
+                  <div className="px-4 py-2">
+                    <div className="font-bold text-xl mb-2">{post.title}</div>
                   </div>
-                  {/*
-                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-                  {post.readTime}
-                </span> */}
+                  <div className="px-6 pt-4 pb-2">
+                    {post.avatar && (
+                      <img
+                        src={post.avatar}
+                        alt="Avatar"
+                        className="w-20 rounded-full"
+                      />
+                    )}
+                    <div className="flex border-t-2  items-center">
+                      <div className="flex flex-col  items-center">
+                        <div className="flex  items-center gap-6">
+                          <img
+                            src={post.userId.avatar}
+                            alt="profile-avatar"
+                            style={{ width: "40px" }}
+                          />
+                          <div className="flex  flex-col">
+                            <p className="font-bold text-center">
+                              {post.userId.firstName} {post.userId.lastName}
+                            </p>
+                          </div>
+                          <p className="px-2 border rounded-3xl bg-blue-200">
+                            {new Date(post.createdAt).toLocaleDateString(
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              }
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            )
+          )}
         </div>
       </div>
     </>
