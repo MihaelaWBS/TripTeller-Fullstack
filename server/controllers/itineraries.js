@@ -3,9 +3,10 @@ const Itinerary = require("../models/itinerary");
 const createItinerary = async (req, res) => {
   try {
     const newItinerary = await Itinerary.create({
-      ...req.body,
       userId: req.user._id,
+      hotelDetails: req.body.hotel, // Save the hotel details
     });
+    console.log(newItinerary); // Add this line
     res.status(201).json(newItinerary);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -17,6 +18,7 @@ const getAllItineraries = async (req, res) => {
       "userId",
       "username email"
     );
+    console.log(itinerary); // Add this line
     res.json(itinerary);
   } catch (error) {
     res.status(500).json({ message: error.message });

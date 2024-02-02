@@ -9,7 +9,7 @@ const {
   deleteItinerary,
 } = require("../controllers/itineraries");
 itineraryRouter.use(authenticate);
-itineraryRouter.post("/", createItinerary);
+itineraryRouter.post("/add", createItinerary);
 itineraryRouter.get("/", getAllItineraries);
 itineraryRouter.get("/:id", getItineraryById);
 itineraryRouter.put("/:id", updateItinerary);
