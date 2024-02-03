@@ -7,37 +7,33 @@ import { Card } from "flowbite-react";
 import c1 from "../../assets/c1.jpg";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../axiosInstance";
+import { AuthContext } from "../../Context/Auth";
 const Itinerary = () => {
-  console.log("Component is rendering");
-
+  const { user } = useContext(AuthContext);
   const { hotels } = useSearch();
   const [hotelDetails, setHotelDetails] = useState(null);
   const [error, setError] = useState(null);
   const { hotelId } = useParams();
 
   const { itinerary, setItinerary } = useItinerary();
-  console.log("API Response or Itinerary Data:", itinerary);
 
   useEffect(() => {
-    console.log("Fetching itinerary data...");
-
     const fetchItinerary = async () => {
-      try {
-        const response = await axiosInstance.get(`/api/itineraries/`);
-        console.log("Data fetched:", response.data);
-        setItinerary(response.data);
-      } catch (error) {
-        console.log("Error fetching itinerary:", error);
+      if (user && user._id) {
+        // Assuming `user` is the authenticated user object with an `_id` property
+        try {
+          const response = await axiosInstance.get(
+            `/api/itineraries/user/${user._id}`
+          );
+          setItinerary(response.data);
+        } catch (error) {
+          console.log("Error fetching itinerary:", error);
+        }
       }
     };
 
     fetchItinerary();
-
-    // This will log when the component is about to unmount or re-render
-    return () => {
-      console.log("Cleaning up...");
-    };
-  }, []);
+  }, [user]);
   return (
     <>
       <div className="relative h-96 w-full overflow-hidden">
@@ -53,7 +49,12 @@ const Itinerary = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-10 ">
           {itinerary.length > 0 ? (
             itinerary.map((hotel) => {
-              let imgSrc = hotel.hotelDetails.main_photo_url;
+              let imgSrc = hotel.hotelDetails?.main_photo_url;
+              if (imgSrc) {
+                imgSrc = imgSrc.replace("square60", "square500");
+              } else {
+                imgSrc = "default_image_url"; // replace with your default image URL
+              }
               imgSrc = imgSrc.replace("square60", "square500");
               return (
                 <div key={hotel.hotel_id}>
