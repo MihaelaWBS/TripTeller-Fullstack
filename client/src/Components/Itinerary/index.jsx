@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSearch } from "../../Context/SearchContext";
 import { useItinerary } from "../../Context/ItineraryContext";
 import { useParams } from "react-router-dom";
-import { Card } from "flowbite-react";
+import { Button, Card } from "flowbite-react";
 import c1 from "../../assets/c1.jpg";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../axiosInstance";
@@ -20,7 +20,6 @@ const Itinerary = () => {
   useEffect(() => {
     const fetchItinerary = async () => {
       if (user && user._id) {
-        // Assuming `user` is the authenticated user object with an `_id` property
         try {
           const response = await axiosInstance.get(
             `/api/itineraries/user/${user._id}`
@@ -34,6 +33,20 @@ const Itinerary = () => {
 
     fetchItinerary();
   }, [user]);
+
+  const removeFromItinerary = async (id) => {
+    try {
+      console.log("Removing itinerary with ID:", id);
+      await axiosInstance.delete(`/api/itineraries/${id}`);
+      // Update the state to reflect the removal
+      setItinerary((currentItineraries) =>
+        currentItineraries.filter((item) => item._id !== id)
+      ); // Adjust the property path as needed
+    } catch (error) {
+      console.log("Error removing item from itinerary:", error);
+    }
+  };
+
   return (
     <>
       <div className="relative h-96 w-full overflow-hidden">
@@ -122,6 +135,12 @@ const Itinerary = () => {
                           hotel.hotelDetails.data.departure_date}
                       </h2>
                     </div>
+                    <Button
+                      onClick={() => removeFromItinerary(hotel._id)}
+                      className="bg-orange-500 rounded-3xl"
+                    >
+                      Remove from itinerary
+                    </Button>
                   </Card>
                 </div>
               );
