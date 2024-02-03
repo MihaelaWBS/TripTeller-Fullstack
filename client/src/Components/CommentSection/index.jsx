@@ -11,7 +11,7 @@ const index = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/comments?postId=${postId}`)
+      .get(`/api/comments/post/${postId}`)
       .then((response) => {
         setComments(response.data);
       })
