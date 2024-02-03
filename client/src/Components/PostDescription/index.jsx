@@ -155,14 +155,13 @@ const PostDescription = () => {
           </>
         )}
         <div className="flex items-center justify-center">
-          <button
+          {/*  <button
             onClick={toggleCommentSection}
             className=" px-4 mt-6 py-1 rounded-md text-white bg-blue-500"
           >
             Show Comments
-          </button>
+          </button> */}
         </div>
-        <div className="w-full">{openComment && <CommentSection />}</div>
       </div>
       <IconBar />
     </>
