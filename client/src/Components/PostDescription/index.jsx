@@ -8,6 +8,7 @@ import { Link, NavLink, useParams, useNavigate } from "react-router-dom";
 import { Button } from "flowbite-react";
 import { AuthContext } from "../../Context/Auth";
 import CommentSection from "../CommentSection";
+import IconBar from "../IconBar";
 const PostDescription = () => {
   const [openComment, setOpenComment] = useState(false);
 
@@ -163,6 +164,7 @@ const PostDescription = () => {
         </div>
         <div className="w-full">{openComment && <CommentSection />}</div>
       </div>
+      <IconBar />
     </>
   );
 };
