@@ -10,6 +10,7 @@ const ItinerarySchema = new mongoose.Schema({
     type: Object, // This field should be able to hold an object
     required: true,
   },
+
   // ... any other fields your itinerary might have
 });
 

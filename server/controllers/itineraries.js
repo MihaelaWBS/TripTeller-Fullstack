@@ -9,6 +9,7 @@ const createItinerary = async (req, res) => {
     console.log(newItinerary); // Add this line
     res.status(201).json(newItinerary);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };

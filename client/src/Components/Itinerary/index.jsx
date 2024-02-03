@@ -52,64 +52,67 @@ const Itinerary = () => {
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-10 ">
           {itinerary.length > 0 ? (
-            itinerary.map((hotel) => (
-              <div key={hotel.hotel_id}>
-                <Card
-                  className="mb-5 w-full sm:w-auto"
-                  imgAlt="Property picture"
-                  imgSrc={hotel.hotelDetails.main_photo_url}
-                >
-                  <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    {hotel.hotelDetails.hotel_name}
-                  </h2>
-                  <p>{hotel.hotelDetails.city}</p>
-                  <div className="flex items-center space-x-2">
-                    <p className="text-lg font-extrabold  text-blue-600 dark:text-gray-700">
-                      {hotel.hotelDetails.review_score}
-                    </p>
-                    <p className="text-lg font-extrabold  text-blue-600 dark:text-gray-700">
-                      {hotel.hotelDetails.review_score_word}
-                    </p>
-                    <p>{hotel.hotelDetails.review_nr} reviews</p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <p className="font-extrabold text-red-500">
-                      {" "}
-                      from {hotel.hotelDetails.checkin.from} until{" "}
-                      {hotel.hotelDetails.checkin.until}
-                    </p>
-                    <div className="flex mt-2 flex-wrap">
-                      {hotel.hotelDetails.hotel_include_breakfast === 0 && (
-                        <span className="bg-green-200 rounded-full px-3 py-1 ml-4 mr-2">
-                          Breakfast
-                        </span>
-                      )}
-                      {hotel.hotelDetails.has_free_parking && (
-                        <span className="bg-gray-200 rounded-full px-3 py-1 ml-4 mr-2">
-                          Free parking
-                        </span>
-                      )}
+            itinerary.map((hotel) => {
+              let imgSrc = hotel.hotelDetails.main_photo_url;
+              imgSrc = imgSrc.replace("square60", "square500");
+              return (
+                <div key={hotel.hotel_id}>
+                  <Card
+                    className="mb-5 w-full sm:w-auto"
+                    imgAlt="Property picture"
+                    imgSrc={imgSrc}
+                  >
+                    <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                      {hotel.hotelDetails.hotel_name}
+                    </h2>
+                    <p>{hotel.hotelDetails.city}</p>
+                    <div className="flex items-center space-x-2">
+                      <p className="text-lg font-extrabold  text-blue-600 dark:text-gray-700">
+                        {hotel.hotelDetails.review_score}
+                      </p>
+                      <p className="text-lg font-extrabold  text-blue-600 dark:text-gray-700">
+                        {hotel.hotelDetails.review_score_word}
+                      </p>
+                      <p>{hotel.hotelDetails.review_nr} reviews</p>
                     </div>
-                  </div>
-                  <div className="flex mt-2 flex-wrap justify-around">
-                    <Link
-                      to={`/hotels/${hotel.hotelDetails.hotel_id}`}
-                      className="text-blue-600 hover:text-blue-800 font-bold text-lg cursor-pointer"
-                    >
-                      See Details
-                    </Link>
-
-                    <a
-                      className=" text-green-600 hover:text-green-800 font-bold text-lg cursor-pointer"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Add to Incoming trips
-                    </a>
-                  </div>
-                </Card>
-              </div>
-            ))
+                    <div className="flex items-center space-x-2">
+                      <p className="font-extrabold text-red-500">
+                        {" "}
+                        from {hotel.hotelDetails.checkin.from} until{" "}
+                        {hotel.hotelDetails.checkin.until}
+                      </p>
+                      <div className="flex mt-2 flex-wrap">
+                        {hotel.hotelDetails.hotel_include_breakfast === 0 && (
+                          <span className="bg-green-200 rounded-full px-3 py-1 ml-4 mr-2">
+                            Breakfast
+                          </span>
+                        )}
+                        {hotel.hotelDetails.has_free_parking && (
+                          <span className="bg-gray-200 rounded-full px-3 py-1 ml-4 mr-2">
+                            Free parking
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex mt-2 flex-wrap justify-around">
+                      <Link
+                        to={`/hotels/${hotel.hotelDetails.hotel_id}`}
+                        className="text-blue-600 hover:text-blue-800 font-bold text-lg cursor-pointer"
+                      >
+                        See Details
+                      </Link>
+                      <a
+                        className=" text-green-600 hover:text-green-800 font-bold text-lg cursor-pointer"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Add to Incoming trips
+                      </a>
+                    </div>
+                  </Card>
+                </div>
+              );
+            })
           ) : (
             <p>Your itinerary is empty.</p>
           )}
