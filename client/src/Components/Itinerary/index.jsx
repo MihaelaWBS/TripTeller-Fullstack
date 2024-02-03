@@ -108,6 +108,18 @@ const Itinerary = () => {
                       >
                         Add to Incoming trips
                       </a>
+                      <h2>
+                        FOR ADDING ARRIVAL AND DEPARTURE DATE IN THE FUTURE SO
+                        THAT THE USER CAN PLAN
+                      </h2>
+                      <h2>
+                        {hotel.hotelDetails.data &&
+                          hotel.hotelDetails.data.arrival_date}
+                      </h2>
+                      <h2>
+                        {hotel.hotelDetails.data &&
+                          hotel.hotelDetails.data.departure_date}
+                      </h2>
                     </div>
                   </Card>
                 </div>
