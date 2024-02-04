@@ -23,14 +23,16 @@ const index = () => {
             <Dropdown
               arrowIcon={false}
               inline
-              label={<Avatar alt="User settings" img={user?.avatar} rounded />}
+              label={
+                <Avatar alt="User settings" img={user && user.avatar} rounded />
+              }
             >
               <Dropdown.Header>
                 <span className="block text-sm">
-                  {user?.firstName} {user?.lastName}
+                  {user && `${user.firstName} ${user.lastName}`}
                 </span>
                 <span className="block truncate text-sm font-medium">
-                  {user?.email}
+                  {user && user.email}
                 </span>
               </Dropdown.Header>
               <Link to={`/myprofile/${user._id}`}>
