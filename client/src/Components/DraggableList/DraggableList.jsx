@@ -17,6 +17,13 @@ const DraggableList = () => {
     setActivities(newActivities);
   };
 
+  const startEditing = (id) => {
+    setActivities((prevActivities) =>
+      prevActivities.map((activity) =>
+        activity.id === id ? { ...activity, isEditing: true } : activity
+      )
+    );
+  };
   const addActivity = (e) => {
     e.preventDefault(); // Prevent form submission from refreshing the page
     if (newActivity.content.trim()) {
@@ -29,44 +36,38 @@ const DraggableList = () => {
     const { name, value } = e.target;
     setNewActivity({ ...newActivity, [name]: value });
   };
+
+  const updateActivity = (event, id) => {
+    event.preventDefault();
+
+    const { day, time, content } = event.target.elements;
+
+    setActivities((prevActivities) =>
+      prevActivities.map((activity) =>
+        activity.id === id
+          ? {
+              ...activity,
+              day: day.value,
+              time: time.value,
+              content: content.value,
+              isEditing: false,
+            }
+          : activity
+      )
+    );
+  };
   return (
     <>
       <div className="flex mx-auto w-full max-w-3xl">
-        {/* <form onSubmit={addActivity}>
-          <input
-            name="day"
-            value={newActivity.day}
-            onChange={handleInputChange}
-            placeholder="Day"
-            type="number"
-            min="1"
-          />
-          <input
-            name="time"
-            type="time"
-            value={newActivity.time}
-            onChange={handleInputChange}
-          />
-          <input
-            name="content"
-            value={newActivity.content}
-            onChange={handleInputChange}
-            placeholder="Activity description"
-          />
-          <button type="submit">Add Activity</button>
-        </form> */}
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="droppable">
             {(provided, snapshot) => (
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                style={{
-                  minWidth: "500px",
-                  backgroundColor: snapshot.isDraggingOver ? "blue" : "grey",
-                  padding: "16px",
-                  width: "250px",
-                }}
+                className={`min-w-[800px] ${
+                  snapshot.isDraggingOver ? "bg-blue-500" : "bg-orange-100"
+                } p-4 w-64`}
               >
                 {activities.map((activity, index) => (
                   <Draggable
@@ -79,21 +80,65 @@ const DraggableList = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        style={{
-                          userSelect: "none",
-                          padding: "16px",
-                          margin: "0 0 8px 0",
-                          minHeight: "50px",
-                          backgroundColor: snapshot.isDragging
-                            ? "lightgreen"
-                            : "grey",
-                          color: "white",
-                          ...provided.draggableProps.style,
-                        }}
+                        className={`select-none p-4 mb-2 min-h-[50px] ${
+                          snapshot.isDragging
+                            ? "bg-green-300"
+                            : "bg-transparent"
+                        } text-white flex justify-around`}
+                        style={provided.draggableProps.style}
                       >
-                        <span>Day {activity.day}</span>
-                        <span>{activity.time}</span>
-                        <span>{activity.content}</span>
+                        {activity.isEditing ? (
+                          <form
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className={`select-none p-4 mb-2 min-h-[50px] ${
+                              snapshot.isDragging
+                                ? "bg-green-300"
+                                : "bg-gray-500"
+                            } ${
+                              activity.isEditing ? "text-black" : "text-white"
+                            } flex justify-around`}
+                            style={provided.draggableProps.style}
+                            onSubmit={(event) =>
+                              updateActivity(event, activity.id)
+                            }
+                          >
+                            <input
+                              name="day"
+                              defaultValue={activity.day}
+                              type="number"
+                              min="1"
+                            />
+                            <input
+                              name="time"
+                              type="time"
+                              defaultValue={activity.time}
+                            />
+                            <input
+                              name="content"
+                              defaultValue={activity.content}
+                              placeholder="Activity description"
+                            />
+                            <button type="submit">Save</button>
+                          </form>
+                        ) : (
+                          <>
+                            <span className="px-6 font-bold py-2  bg-red-400 rounded-3xl">
+                              Day {activity.day}
+                            </span>
+                            <span className="text-black">{activity.time}</span>
+                            <span className="text-black">
+                              {activity.content}
+                            </span>
+                            <button
+                              className="text-black"
+                              onClick={() => startEditing(activity.id)}
+                            >
+                              Edit
+                            </button>
+                          </>
+                        )}
                       </div>
                     )}
                   </Draggable>
@@ -101,12 +146,7 @@ const DraggableList = () => {
                 {provided.placeholder}
                 <form
                   onSubmit={addActivity}
-                  style={{
-                    width: "100%",
-                    display: "flex",
-
-                    gap: "10px",
-                  }}
+                  className="w-full flex items-center justify-center  space-x-2"
                 >
                   <input
                     name="day"
@@ -115,26 +155,24 @@ const DraggableList = () => {
                     placeholder="Day"
                     type="number"
                     min="1"
-                    style={{ padding: "10px", fontSize: "16px" }}
+                    className="px-4 py-2 text-lg rounded-lg"
                   />
+
                   <input
                     name="time"
                     type="time"
                     value={newActivity.time}
                     onChange={handleInputChange}
-                    style={{ padding: "10px", fontSize: "16px" }}
+                    className="p-2 text-lg"
                   />
                   <input
                     name="content"
                     value={newActivity.content}
                     onChange={handleInputChange}
                     placeholder="Activity description"
-                    style={{ padding: "10px", fontSize: "16px" }}
+                    className="p-2 text-lg"
                   />
-                  <button
-                    type="submit"
-                    style={{ padding: "10px", fontSize: "16px" }}
-                  >
+                  <button type="submit" className="p-2 text-lg">
                     Add Activity
                   </button>
                 </form>
