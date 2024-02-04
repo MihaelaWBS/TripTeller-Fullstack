@@ -88,7 +88,8 @@ const BlogDashboard = () => {
                           />
                           <div className="flex  flex-col">
                             <p className="font-bold text-center">
-                              {post.userId?.firstName} {post.userId?.lastName}
+                              {post.userId &&
+                                `${post.userId.firstName} ${post.userId.lastName}`}
                             </p>
                           </div>
                           <p className="px-2 border rounded-3xl bg-blue-200">
