@@ -81,14 +81,14 @@ const BlogDashboard = () => {
                       <div className="flex flex-col  items-center">
                         <div className="flex  items-center gap-6">
                           <img
-                            src={post.userId.avatar}
+                            src={post.userId?.avatar}
                             alt="profile-avatar"
                             className="rounded-3xl"
                             style={{ width: "40px" }}
                           />
                           <div className="flex  flex-col">
                             <p className="font-bold text-center">
-                              {post.userId.firstName} {post.userId.lastName}
+                              {post.userId?.firstName} {post.userId?.lastName}
                             </p>
                           </div>
                           <p className="px-2 border rounded-3xl bg-blue-200">
