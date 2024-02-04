@@ -12,6 +12,7 @@ const index = () => {
       {/* <PostForm /> */}
 
       <NearbyCities />
+
       {/*  <Attractions /> */}
     </>
   );
