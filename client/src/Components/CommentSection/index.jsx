@@ -11,7 +11,7 @@ const index = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/comments?postId=${postId}`)
+      .get(`/api/comments/post/${postId}`)
       .then((response) => {
         setComments(response.data);
       })
@@ -114,7 +114,7 @@ const index = () => {
             >
               <div className="flex flex-row ">
                 <img
-                  className="object-cover w-12 h-12 border-gray-300 dark:hidden"
+                  className="object-cover w-12 h-12 rounded-3xl border-gray-300 dark:hidden"
                   alt="User avatar"
                   src={comment.userId.avatar}
                 />
@@ -128,8 +128,7 @@ const index = () => {
                     </span>
                   </div>
                   <div className="flex-1 mt-2 px-2 ml-2 text-sm font-medium leading-loose text-gray-600 dark:text-white">
-                    {comment.content}{" "}
-                    {/* Here's the fix, render comment.content instead of comment */}
+                    {comment.content}
                   </div>
                   <button className="inline-flex items-center px-1 pt-2 ml-1 flex-column">
                     {/* Reply button icon */}

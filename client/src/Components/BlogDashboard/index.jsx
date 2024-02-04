@@ -2,11 +2,10 @@ import React, { useContext } from "react";
 import axios from "../../axiosInstance";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import c4 from "../../assets/c4.jpg"
+import c4 from "../../assets/c4.jpg";
 import DOMPurify from "dompurify";
 import parse from "html-react-parser";
 import { Button } from "flowbite-react";
-
 
 /*
 import io from 'socket.io-client';
@@ -37,11 +36,7 @@ const BlogDashboard = () => {
     <>
       {/* Banner with a cover picture and overlay text */}
       <div className="relative h-96 w-full overflow-hidden">
-        <img
-          src={c4}
-          alt="Travel"
-          className="w-full h-full object-c"
-        />
+        <img src={c4} alt="Travel" className="w-full h-full object-c" />
         <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-40 flex items-center justify-center">
           <h1 className="text-white text-6xl font-bold">Travel smarter</h1>
         </div>
@@ -73,7 +68,8 @@ const BlogDashboard = () => {
                   <div className="px-4 py-2">
                     <div className="font-bold text-xl mb-2">{post.title}</div>
                   </div>
-                  <div className="px-6 pt-4 pb-2">
+                  <div className="w-full border-t-2"></div>
+                  <div className=" flex p-2 justify-between">
                     {post.avatar && (
                       <img
                         src={post.avatar}
@@ -81,12 +77,13 @@ const BlogDashboard = () => {
                         className="w-20 rounded-full"
                       />
                     )}
-                    <div className="flex border-t-2  items-center">
+                    <div className="flex  items-center">
                       <div className="flex flex-col  items-center">
                         <div className="flex  items-center gap-6">
                           <img
                             src={post.userId.avatar}
                             alt="profile-avatar"
+                            className="rounded-3xl"
                             style={{ width: "40px" }}
                           />
                           <div className="flex  flex-col">

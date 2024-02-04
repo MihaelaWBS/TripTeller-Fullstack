@@ -20,13 +20,11 @@ const LocationNotification = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         () => {
-          console.log("Location access granted");
           setPermissionGranted(true);
           setVisible(false);
         },
         (error) => {
           console.error("Location permission denied:", error);
-          // Don't automatically hide the modal here as it gives a chance to explain why the location is needed
         }
       );
     } else {
