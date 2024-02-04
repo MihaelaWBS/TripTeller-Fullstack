@@ -53,11 +53,13 @@ const index = () => {
               </div>
               <div>
                 <Tooltip content="Comment" placement="left">
-                  <img
-                    onClick={() => setOpenComment(true)}
-                    src={comment}
-                    className="h-10 w-10 text-blue-500  rounded-3xl border-2 p-1.5 border-gray-300 cursor-pointer "
-                  />
+                  <a href="#comments">
+                    <img
+                      onClick={() => setOpenComment(true)}
+                      src={comment}
+                      className="h-10 w-10 text-blue-500  rounded-3xl border-2 p-1.5 border-gray-300 cursor-pointer "
+                    />
+                  </a>
                 </Tooltip>
               </div>
               <div>
@@ -72,7 +74,12 @@ const index = () => {
           </div>
         </>
       )}
-      {openComment && <CommentSection />}
+      <div
+        id="comments"
+        className="flex items-center mx-auto justify-center max-w-2xl w-full"
+      >
+        <CommentSection />
+      </div>
     </>
   );
 };

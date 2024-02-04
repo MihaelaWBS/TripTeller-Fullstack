@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { Button, Card } from "flowbite-react";
 import MapView from "../MapView/MapView";
+import LoadingComponent from "../LoadingComponent/LoadingComponent";
 
 const HotelDetails = () => {
-
   const [hotelDetails, setHotelDetails] = useState(null);
   const [activeImage, setActiveImage] = useState("");
   const [error, setError] = useState(null);
@@ -51,9 +51,8 @@ const HotelDetails = () => {
       }
     };
 
-
-		fetchHotelDetails();
-	}, [hotelId]);
+    fetchHotelDetails();
+  }, [hotelId]);
 
   useEffect(() => {
     if (hotelDetails && hotelDetails.rooms) {
@@ -80,7 +79,12 @@ const HotelDetails = () => {
   }
 
   if (!hotelDetails) {
-    return <div className="text-center">Loading...</div>;
+    return (
+      <>
+        {" "}
+        <LoadingComponent />
+      </>
+    );
   }
 
   let roomsArray = [];
@@ -249,7 +253,6 @@ const HotelDetails = () => {
       </div>
     </div>
   );
-
 };
 
 export default HotelDetails;

@@ -88,7 +88,7 @@ const index = () => {
     <>
       <div className="flex items-center flex-col justify-center div-test ">
         <div className="flex items-center justify-center mt-6 gap-2">
-          <h2 className="mt- text-black font-bold xxs:text-base md:text-xl">
+          <h2 className=" text-black font-bold xxs:text-base md:text-3xl">
             Book your trip and plan with us!
           </h2>
           <FontAwesomeIcon icon={faPlane} color="orange" />

@@ -23,6 +23,10 @@ module.exports = {
         "2xl": "1536px",
         xxxl: "2560px",
       },
+      colors: {
+        "custom-gray": "#F6F6F6",
+        "custom-gray-2": "#F8F9FA",
+      },
     },
   },
   variants: {

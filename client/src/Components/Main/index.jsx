@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Itinerary from "../Itinerary";
 import Home from "../Home";
@@ -14,7 +14,6 @@ import LocationNotification from "../LocationNotification";
 import AddPost from "../AddPost";
 
 const Main = () => {
-
   return (
     <>
       <LocationNotification />

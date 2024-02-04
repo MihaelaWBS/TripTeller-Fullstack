@@ -8,6 +8,7 @@ import c1 from "../../assets/c1.jpg";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../axiosInstance";
 import { AuthContext } from "../../Context/Auth";
+import emptyItineraryBackground from "../../assets/empty_itinerary_background.png";
 const Itinerary = () => {
   const { user } = useContext(AuthContext);
   const { hotels } = useSearch();
@@ -38,10 +39,10 @@ const Itinerary = () => {
     try {
       console.log("Removing itinerary with ID:", id);
       await axiosInstance.delete(`/api/itineraries/${id}`);
-      // Update the state to reflect the removal
+
       setItinerary((currentItineraries) =>
         currentItineraries.filter((item) => item._id !== id)
-      ); // Adjust the property path as needed
+      );
     } catch (error) {
       console.log("Error removing item from itinerary:", error);
     }
@@ -66,7 +67,7 @@ const Itinerary = () => {
               if (imgSrc) {
                 imgSrc = imgSrc.replace("square60", "square500");
               } else {
-                imgSrc = "default_image_url"; // replace with your default image URL
+                imgSrc = "default_image_url";
               }
               imgSrc = imgSrc.replace("square60", "square500");
               return (
@@ -146,7 +147,14 @@ const Itinerary = () => {
               );
             })
           ) : (
-            <p>Your itinerary is empty.</p>
+            <div className="col-span-full">
+              <div className="flex flex-col items-center justify-center gap-4">
+                <p className="md:text-2xl">
+                  {user?.firstName}, your itinerary is empty!
+                </p>
+                <img src={emptyItineraryBackground} />
+              </div>
+            </div>
           )}
         </div>
       </div>
