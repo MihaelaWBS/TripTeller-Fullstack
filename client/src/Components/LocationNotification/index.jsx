@@ -5,22 +5,18 @@ import { faEarth, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 const LocationNotification = () => {
   const [permissionGranted, setPermissionGranted] = useState(false);
   const [visible, setVisible] = useState(true);
-
+  const [isCheckComplete, setIsCheckComplete] = useState(false);
   useEffect(() => {
-    // Check if the user has previously decided to block location permission
     const locationPermissionBlocked =
       localStorage.getItem("locationPermission") === "blocked";
 
-    // If permission is blocked, don't show the modal and exit early
     if (locationPermissionBlocked) {
       setVisible(false);
-      return;
     }
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         () => {
-          setPermissionGranted(true);
           setVisible(false);
         },
         (error) => {
@@ -30,6 +26,8 @@ const LocationNotification = () => {
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
+
+    setIsCheckComplete(true);
   }, []);
 
   const handleBlock = () => {
@@ -37,6 +35,10 @@ const LocationNotification = () => {
     localStorage.setItem("locationPermission", "blocked");
     setVisible(false);
   };
+
+  if (!isCheckComplete) {
+    return null;
+  }
 
   return visible ? (
     <div className="fixed top-0 left-0  w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
