@@ -4,6 +4,7 @@ import NearbyCities from "../NearbyCities/index";
 import Attractions from "../Attractions/index";
 import PostForm from "../PostForm";
 import Itinerary from "../Itinerary";
+import TellerAI from "../TellerAI";
 
 const index = () => {
   return (
@@ -12,6 +13,7 @@ const index = () => {
       {/* <PostForm /> */}
 
       <NearbyCities />
+      <TellerAI />
 
       {/*  <Attractions /> */}
     </>
