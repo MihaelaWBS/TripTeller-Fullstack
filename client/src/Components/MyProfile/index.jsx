@@ -57,7 +57,7 @@ const index = () => {
               {/* User Info */}
               <div className="flex-grow">
                 <p className="font-bold text-xl">
-                  {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
+                  {user ? `${user?.firstName} ${user?.lastName}` : "Loading..."}
                 </p>
               </div>
 
@@ -88,15 +88,15 @@ const index = () => {
               <div className="flex flex-col w-full md:w-auto md:flex-row gap-4 md:gap-16 justify-between">
                 <div className="flex flex-col">
                   <p className="text-gray-500">First Name</p>
-                  {user ? user.firstName : "Loading..."}
+                  {user ? user?.firstName : "Loading..."}
                 </div>
                 <div className="flex flex-col">
                   <p className="text-gray-500">Last Name</p>
-                  {user ? user.lastName : "Loading"}
+                  {user ? user?.lastName : "Loading"}
                 </div>
                 <div className="flex flex-col">
                   <p className="text-gray-500">Email address</p>
-                  {user ? user.email : "Loading"}
+                  {user ? user?.email : "Loading"}
                 </div>
               </div>
 
