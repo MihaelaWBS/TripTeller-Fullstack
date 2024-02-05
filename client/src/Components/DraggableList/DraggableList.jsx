@@ -3,33 +3,73 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 
 const DraggableList = () => {
-  const [activities, setActivities] = useState([]);
-  const [newActivity, setNewActivity] = useState("");
+  const [activities, setActivities] = useState({});
+  const [newActivity, setNewActivity] = useState({
+    day: "",
+    time: "",
+    content: "",
+  });
+
   const onDragEnd = (result) => {
-    if (!result.destination) {
-      return;
+    if (!result.destination) return;
+
+    const { source, destination } = result;
+    const sourceDay = source.droppableId;
+    const destDay = destination.droppableId;
+
+    if (sourceDay === destDay) {
+      const items = Array.from(activities[sourceDay]);
+      const [reorderedItem] = items.splice(source.index, 1);
+      items.splice(destination.index, 0, reorderedItem);
+
+      setActivities({
+        ...activities,
+        [sourceDay]: items,
+      });
     }
-
-    const newActivities = Array.from(activities);
-    const [reorderedItem] = newActivities.splice(result.source.index, 1);
-    newActivities.splice(result.destination.index, 0, reorderedItem);
-
-    setActivities(newActivities);
   };
 
-  const startEditing = (id) => {
-    setActivities((prevActivities) =>
-      prevActivities.map((activity) =>
-        activity.id === id ? { ...activity, isEditing: true } : activity
-      )
-    );
+  const startEditing = (day, id) => {
+    setActivities({
+      ...activities,
+      [day]: activities[day].map((item) =>
+        item.id === id ? { ...item, isEditing: true } : item
+      ),
+    });
   };
+
+  const updateActivity = (event, day, id) => {
+    event.preventDefault();
+    const { time, content } = event.target.elements;
+    setActivities({
+      ...activities,
+      [day]: activities[day].map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              time: time.value,
+              content: content.value,
+              isEditing: false,
+            }
+          : item
+      ),
+    });
+  };
+
   const addActivity = (e) => {
-    e.preventDefault(); // Prevent form submission from refreshing the page
-    if (newActivity.content.trim()) {
-      setActivities([...activities, { ...newActivity, id: uuidv4() }]);
-      setNewActivity({ day: "", time: "", content: "" }); // Reset the new activity input
-    }
+    e.preventDefault();
+
+    const dayKey = newActivity.day.toString();
+    const activityWithId = { ...newActivity, id: uuidv4(), isEditing: false };
+
+    setActivities({
+      ...activities,
+      [dayKey]: activities[dayKey]
+        ? [...activities[dayKey], activityWithId]
+        : [activityWithId],
+    });
+
+    setNewActivity({ day: "", time: "", content: "" });
   };
 
   const handleInputChange = (e) => {
@@ -37,151 +77,140 @@ const DraggableList = () => {
     setNewActivity({ ...newActivity, [name]: value });
   };
 
-  const updateActivity = (event, id) => {
-    event.preventDefault();
-
-    const { day, time, content } = event.target.elements;
-
-    setActivities((prevActivities) =>
-      prevActivities.map((activity) =>
-        activity.id === id
-          ? {
-              ...activity,
-              day: day.value,
-              time: time.value,
-              content: content.value,
-              isEditing: false,
-            }
-          : activity
-      )
-    );
+  const deleteActivity = (day, id) => {
+    setActivities((prevActivities) => ({
+      ...prevActivities,
+      [day]: prevActivities[day].filter((activity) => activity.id !== id),
+    }));
   };
   return (
-    <>
-      <div className="flex mx-auto w-full max-w-3xl">
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable">
-            {(provided, snapshot) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className={`min-w-[800px] ${
-                  snapshot.isDraggingOver ? "bg-blue-500" : "bg-orange-100"
-                } p-4 w-64`}
-              >
-                {activities.map((activity, index) => (
-                  <Draggable
-                    key={activity.id}
-                    draggableId={activity.id}
-                    index={index}
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className={`select-none p-4 mb-2 min-h-[50px] ${
-                          snapshot.isDragging
-                            ? "bg-green-300"
-                            : "bg-transparent"
-                        } text-white flex justify-around`}
-                        style={provided.draggableProps.style}
-                      >
-                        {activity.isEditing ? (
-                          <form
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={`select-none p-4 mb-2 min-h-[50px] ${
-                              snapshot.isDragging
-                                ? "bg-green-300"
-                                : "bg-gray-500"
-                            } ${
-                              activity.isEditing ? "text-black" : "text-white"
-                            } flex justify-around`}
-                            style={provided.draggableProps.style}
-                            onSubmit={(event) =>
-                              updateActivity(event, activity.id)
-                            }
-                          >
-                            <input
-                              name="day"
-                              defaultValue={activity.day}
-                              type="number"
-                              min="1"
-                            />
-                            <input
-                              name="time"
-                              type="time"
-                              defaultValue={activity.time}
-                            />
-                            <input
-                              name="content"
-                              defaultValue={activity.content}
-                              placeholder="Activity description"
-                            />
-                            <button type="submit">Save</button>
-                          </form>
-                        ) : (
-                          <>
-                            <span className="px-6 font-bold py-2  bg-red-400 rounded-3xl">
-                              Day {activity.day}
-                            </span>
-                            <span className="text-black">{activity.time}</span>
-                            <span className="text-black">
-                              {activity.content}
-                            </span>
-                            <button
-                              className="text-black"
-                              onClick={() => startEditing(activity.id)}
-                            >
-                              Edit
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-                <form
-                  onSubmit={addActivity}
-                  className="w-full flex items-center justify-center  space-x-2"
+    <div className="mx-auto w-full max-w-3xl">
+      <DragDropContext onDragEnd={onDragEnd}>
+        {Object.entries(activities)
+          .sort()
+          .map(([day, dayActivities], idx) => (
+            <Droppable key={day} droppableId={day}>
+              {(provided, snapshot) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className="mb-6"
                 >
-                  <input
-                    name="day"
-                    value={newActivity.day}
-                    onChange={handleInputChange}
-                    placeholder="Day"
-                    type="number"
-                    min="1"
-                    className="px-4 py-2 text-lg rounded-lg"
-                  />
-
-                  <input
-                    name="time"
-                    type="time"
-                    value={newActivity.time}
-                    onChange={handleInputChange}
-                    className="p-2 text-lg"
-                  />
-                  <input
-                    name="content"
-                    value={newActivity.content}
-                    onChange={handleInputChange}
-                    placeholder="Activity description"
-                    className="p-2 text-lg"
-                  />
-                  <button type="submit" className="p-2 text-lg">
-                    Add Activity
-                  </button>
-                </form>
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
-    </>
+                  <div className="grid grid-cols-3 gap-4 items-center mb-4">
+                    <div className="font-bold px-2 bg-pink-300 italic rounded-3xl col-span-3">{`Day ${day}`}</div>
+                  </div>
+                  {dayActivities.map((activity, index) => (
+                    <Draggable
+                      key={activity.id}
+                      draggableId={activity.id}
+                      index={index}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="grid grid-cols-3 gap-4 items-center p-4 mb-2 bg-transparent rounded-xl"
+                        >
+                          {activity.isEditing ? (
+                            <form
+                              onSubmit={(event) =>
+                                updateActivity(event, day, activity.id)
+                              }
+                              className="col-span-3 grid grid-cols-3 gap-4 items-center"
+                            >
+                              <input
+                                name="time"
+                                defaultValue={activity.time}
+                                type="time"
+                                required
+                                className="p-2 text-lg rounded-lg border"
+                              />
+                              <input
+                                name="content"
+                                required
+                                defaultValue={activity.content}
+                                className="p-2 text-lg rounded-lg border col-span-2"
+                              />
+                              <button
+                                type="submit"
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full"
+                              >
+                                Save
+                              </button>
+                            </form>
+                          ) : (
+                            <>
+                              <span className="font-bold">{activity.time}</span>
+                              <div className="col-span-2 flex justify-between">
+                                {activity.content}
+                                <div>
+                                  <button
+                                    onClick={() =>
+                                      startEditing(day, activity.id)
+                                    }
+                                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded-full mr-2"
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      deleteActivity(day, activity.id)
+                                    }
+                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          ))}
+      </DragDropContext>
+      <form
+        onSubmit={addActivity}
+        className="grid grid-cols-3 gap-4 items-center mt-4"
+      >
+        <input
+          name="day"
+          value={newActivity.day}
+          onChange={handleInputChange}
+          type="number"
+          min="1"
+          required
+          className="px-4 py-2 text-lg rounded-lg border"
+        />
+        <input
+          name="time"
+          type="time"
+          required
+          value={newActivity.time}
+          onChange={handleInputChange}
+          className="p-2 text-lg rounded-lg border"
+        />
+        <input
+          name="content"
+          required
+          value={newActivity.content}
+          onChange={handleInputChange}
+          className="p-2 text-lg rounded-lg border col-span-2"
+        />
+        <button
+          type="submit"
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full col-span-3"
+        >
+          Add Activity
+        </button>
+      </form>
+    </div>
   );
 };
 
