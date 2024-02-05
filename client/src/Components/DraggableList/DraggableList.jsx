@@ -1,6 +1,8 @@
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const DraggableList = () => {
   const [activities, setActivities] = useState({});
@@ -70,6 +72,21 @@ const DraggableList = () => {
     });
 
     setNewActivity({ day: "", time: "", content: "" });
+
+    // Calculate the time until the activity starts
+    const now = new Date();
+    const activityTime = new Date();
+    activityTime.setHours(newActivity.time.split(":")[0]);
+    activityTime.setMinutes(newActivity.time.split(":")[1]);
+    const timeUntilActivityStarts = activityTime.getTime() - now.getTime();
+
+    // Subtract 5 minutes (in milliseconds) from the time until the activity starts
+    const notificationTime = timeUntilActivityStarts - 5 * 60 * 1000;
+
+    // Set a timer to show a notification 5 minutes before the activity starts
+    setTimeout(() => {
+      alert(`Activity "${newActivity.content}" is starting in 5 minutes!`);
+    }, notificationTime);
   };
 
   const handleInputChange = (e) => {
@@ -97,7 +114,7 @@ const DraggableList = () => {
                   className="mb-6"
                 >
                   <div className="grid grid-cols-3 gap-4 items-center mb-4">
-                    <div className="font-bold px-2 bg-pink-300 italic rounded-3xl col-span-3">{`Day ${day}`}</div>
+                    <div className="font-bold px-2 bg-pink-300 rounded-3xl col-span-3">{`Day ${day}`}</div>
                   </div>
                   {dayActivities.map((activity, index) => (
                     <Draggable
@@ -149,9 +166,9 @@ const DraggableList = () => {
                                     onClick={() =>
                                       startEditing(day, activity.id)
                                     }
-                                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded-full mr-2"
+                                    className="bg-orange-500 text-white font-bold py-1 px-2 rounded-full mr-2"
                                   >
-                                    Edit
+                                    <FontAwesomeIcon icon={faEdit} />
                                   </button>
                                   <button
                                     onClick={() =>
@@ -159,7 +176,7 @@ const DraggableList = () => {
                                     }
                                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
                                   >
-                                    Delete
+                                    <FontAwesomeIcon icon={faTrash} />
                                   </button>
                                 </div>
                               </div>
