@@ -73,20 +73,24 @@ const DraggableList = () => {
 
     setNewActivity({ day: "", time: "", content: "" });
 
+    // Notification code starts here
+    /*
     // Calculate the time until the activity starts
     const now = new Date();
     const activityTime = new Date();
     activityTime.setHours(newActivity.time.split(":")[0]);
     activityTime.setMinutes(newActivity.time.split(":")[1]);
     const timeUntilActivityStarts = activityTime.getTime() - now.getTime();
-
+  
     // Subtract 5 minutes (in milliseconds) from the time until the activity starts
     const notificationTime = timeUntilActivityStarts - 5 * 60 * 1000;
-
+  
     // Set a timer to show a notification 5 minutes before the activity starts
     setTimeout(() => {
       alert(`Activity "${newActivity.content}" is starting in 5 minutes!`);
     }, notificationTime);
+    */
+    // Notification code ends here
   };
 
   const handleInputChange = (e) => {
@@ -104,7 +108,7 @@ const DraggableList = () => {
     <div className="mx-auto w-full max-w-3xl">
       <DragDropContext onDragEnd={onDragEnd}>
         {Object.entries(activities)
-          .sort()
+          .sort((a, b) => Number(a) - Number(b))
           .map(([day, dayActivities], idx) => (
             <Droppable key={day} droppableId={day}>
               {(provided, snapshot) => (
