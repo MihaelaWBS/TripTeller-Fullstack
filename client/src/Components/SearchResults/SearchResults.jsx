@@ -102,7 +102,7 @@ const SearchResults = () => {
               <Link to={`/hotels/${hotel.hotel_id}`} className="flex w-3/4">
                 <img
                   className="w-1/3 object-cover"
-                  src={hotel.main_photo_url}
+                  src={hotel.main_photo_url.replace("square60", "square500")}
                   alt="Hotel"
                 />
                 <div className="w-2/3 p-4 flex flex-col">

@@ -88,15 +88,15 @@ const index = () => {
               <div className="flex flex-col w-full md:w-auto md:flex-row gap-4 md:gap-16 justify-between">
                 <div className="flex flex-col">
                   <p className="text-gray-500">First Name</p>
-                  {user ? user.firstName : "Loading..."}
+                  <p>{user ? user.firstName : "Loading..."}</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="text-gray-500">Last Name</p>
-                  {user ? user.lastName : "Loading"}
+                  <p>{user ? user.lastName : "Loading"}</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="text-gray-500">Email address</p>
-                  {user ? user.email : "Loading"}
+                  <p>{user ? user.email : "Loading"}</p>
                 </div>
               </div>
 

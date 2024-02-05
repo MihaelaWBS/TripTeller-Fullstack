@@ -3,11 +3,13 @@ const Itinerary = require("../models/itinerary");
 const createItinerary = async (req, res) => {
   try {
     const newItinerary = await Itinerary.create({
-      ...req.body,
       userId: req.user._id,
+      hotelDetails: req.body.hotel, // Save the hotel details
     });
+    console.log(newItinerary); // Add this line
     res.status(201).json(newItinerary);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -17,8 +19,10 @@ const getAllItineraries = async (req, res) => {
       "userId",
       "username email"
     );
+    console.log(itinerary); // Add this line
     res.json(itinerary);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -70,7 +74,30 @@ const deleteItinerary = async (req, res) => {
       res.json(deletedItinerary);
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
+  }
+};
+
+const getItinerariesByUserId = async (req, res) => {
+  const { userId } = req.params;
+  // Ensure the request is made by an authenticated user and they are requesting their own itineraries
+  if (req.user && req.user._id.toString() === userId) {
+    try {
+      const itineraries = await Itinerary.find({ userId: userId });
+      if (itineraries.length === 0) {
+        return res
+          .status(404)
+          .json({ message: `No itineraries found for user ${userId}` });
+      }
+      res.json(itineraries);
+    } catch (error) {
+      console.log({ error: error.message });
+      res.status(500).json({ message: error.message });
+    }
+  } else {
+    // If the user is not authenticated or is trying to access someone else's itineraries
+    return res.status(403).json({ message: "Unauthorized access" });
   }
 };
 
@@ -78,6 +105,7 @@ module.exports = {
   createItinerary,
   getAllItineraries,
   getItineraryById,
+  getItinerariesByUserId,
   updateItinerary,
   deleteItinerary,
 };

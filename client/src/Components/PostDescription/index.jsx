@@ -8,6 +8,7 @@ import { Link, NavLink, useParams, useNavigate } from "react-router-dom";
 import { Button } from "flowbite-react";
 import { AuthContext } from "../../Context/Auth";
 import CommentSection from "../CommentSection";
+import IconBar from "../IconBar";
 const PostDescription = () => {
   const [openComment, setOpenComment] = useState(false);
 
@@ -100,7 +101,7 @@ const PostDescription = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className=" mx-auto px-4 py-8 flex flex-col max-w-4xl">
         {editMode ? (
           <>
             <input
@@ -153,16 +154,16 @@ const PostDescription = () => {
             </div>
           </>
         )}
+        <div className="flex items-center justify-center">
+          {/*  <button
+            onClick={toggleCommentSection}
+            className=" px-4 mt-6 py-1 rounded-md text-white bg-blue-500"
+          >
+            Show Comments
+          </button> */}
+        </div>
       </div>
-      <div className="flex items-center justify-center">
-        <button
-          onClick={toggleCommentSection}
-          className=" px-4 mt-6 py-1 rounded-md text-white bg-blue-500"
-        >
-          Show Comments
-        </button>
-      </div>
-      <div className="w-full">{openComment && <CommentSection />}</div>
+      <IconBar />
     </>
   );
 };
