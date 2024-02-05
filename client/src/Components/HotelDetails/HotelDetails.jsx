@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Card } from "flowbite-react";
 import MapView from "../MapView/MapView";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
+import WeatherComponent from "../WeatherComponent/WeatherComponent";
 
 const HotelDetails = () => {
   const [hotelDetails, setHotelDetails] = useState(null);
@@ -193,7 +194,13 @@ const HotelDetails = () => {
           />
         ))}
       </div>
-
+{/* Weather Component */}
+{hotelDetails && (
+  <WeatherComponent
+    latitude={hotelDetails.latitude}
+    longitude={hotelDetails.longitude}
+  />
+)}
       {/* Cards Container */}
       <div className="flex flex-wrap -mx-2">
         {/* Hotel Information Card */}
