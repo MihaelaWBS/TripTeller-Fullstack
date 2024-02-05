@@ -11,6 +11,50 @@ const HotelDetails = () => {
   const [error, setError] = useState(null);
   const { hotelId } = useParams();
   const [readMore, setReadMore] = useState(null);
+  const [faqs, setFaqs] = useState([
+    {
+      question: "What time is check-in and check-out?",
+      answer: "Check-in is from 3 PM, and check-out is until 11 AM.",
+    },
+    {
+      question: "Is parking available at the hotel?",
+      answer: "Yes, the hotel offers free parking for guests.",
+    },
+    {
+      question: "Do you offer free Wi-Fi?",
+      answer: "Yes, free Wi-Fi is available throughout the hotel.",
+    },
+    {
+      question: "Can I bring my pet?",
+      answer: "Pets are welcome, with some restrictions. Please contact us for more details.",
+    },
+    {
+      question: "Do you have a fitness center?",
+      answer: "Yes, our fitness center is open to all guests 24/7.",
+    },
+    {
+      question: "How can I cancel or modify my booking?",
+      answer: "Please contact our customer service for cancellation or modification inquiries.",
+    },
+    {
+      question: "Do you offer airport shuttle service?",
+      answer: "Yes, we offer shuttle services to and from the airport. Additional charges may apply.",
+    },
+    {
+      question: "Are there any restaurants on site?",
+      answer: "Yes, we have multiple dining options available, ranging from casual to fine dining.",
+    },
+    {
+      question: "Is breakfast included in the room rate?",
+      answer: "Breakfast inclusion depends on the booking option selected. Please verify at the time of booking.",
+    },
+    {
+      question: "What safety and hygiene measures are in place due to COVID-19?",
+      answer: "We follow strict safety protocols, including enhanced cleaning, social distancing, and mandatory face masks in public areas.",
+    },
+    // Add more FAQs as needed
+  ]);
+  
   useEffect(() => {
     const fetchHotelDetails = async () => {
       try {
@@ -108,6 +152,7 @@ const HotelDetails = () => {
   const toggleReadMore = (section) => {
     setReadMore(readMore === section ? null : section);
   };
+  
 
   return (
     <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
@@ -251,6 +296,28 @@ const HotelDetails = () => {
           </Card>
         </div>
       </div>
+      <div className="px-2 mb-4 w-full md:w-2/3">
+  <Card className="flex flex-col h-full">
+    <div className="p-6 bg-gray-100 rounded-lg flex-grow">
+      <h2 className="text-xl font-semibold mb-4">Frequently Asked Questions</h2>
+      <div className="space-y-4">
+        {faqs.map((faq, index) => (
+          <div key={index}>
+            <button
+              className="text-left w-full font-semibold text-gray-800"
+              onClick={() => toggleReadMore(`faq-${index}`)}
+            >
+              {faq.question}
+            </button>
+            {readMore === `faq-${index}` && (
+              <p className="text-gray-600 mt-2">{faq.answer}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </Card>
+</div>
     </div>
   );
 };
