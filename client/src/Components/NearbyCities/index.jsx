@@ -2,12 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSearch } from "../../Context/SearchContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import LoadingComponentNearbyCities from "../LoadingComponent/LoadingComponentNearbyCities";
 
 const index = () => {
   const { fetchNearbyCities } = useSearch();
   const [nearbyCities, setNearbyCities] = useState(null);
   const scrollRef = useRef(null);
   const [showLeftButton, setShowLeftButton] = useState(false);
+  const [brokenImage, setBrokenImage] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -29,11 +32,24 @@ const index = () => {
   }, []);
 
   const fetchImage = async (cityName) => {
-    const response = await fetch(
-      `https://mihaelawbs-tripteller-fullstack-dev.onrender.com/api/photos/${cityName}`
-    );
-    const url = await response.json();
-    return url;
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `https://mihaelawbs-tripteller-fullstack-dev.onrender.com/api/photos/${cityName}`
+      );
+      const url = await response.json();
+      if (!url || url === "") {
+        return null;
+      }
+      return url;
+    } catch (error) {
+      console.error("Failed to fetch image", error);
+      return null;
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    }
   };
   const scrollToNext = () => {
     if (scrollRef.current) {
@@ -45,10 +61,8 @@ const index = () => {
       scrollRef.current.scrollBy({ left: -300 * 3, behavior: "smooth" });
     }
   };
-  //potato
-  useEffect(() => {
-    console.log("useEffect called");
 
+  useEffect(() => {
     const fetchData = async () => {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -80,7 +94,10 @@ const index = () => {
       {/*  MOBILE */}
       <div className="flex flex-col   mt-2 mx-2  font-extrabold sm:flex md:hidden">
         <p className="text-xl">Nearby cities</p>
-        {nearbyCities &&
+        {isLoading ? (
+          <LoadingComponentNearbyCities />
+        ) : (
+          nearbyCities &&
           nearbyCities.map((destination) => (
             <div className="max-w-xl w-full mx-auto mt-4 bg-white shadow-md rounded-lg  mb-4 flex  ">
               <div className="flex w-3/4">
@@ -100,11 +117,12 @@ const index = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ))
+        )}
       </div>
       {/* DESKTOP */}
       <div className="xxs:hidden md:block md:max-w-xl relative lg:max-w-4xl mx-auto overflow-hidden">
-        <div className="flex flex-col   mt-2 lg:text-2xl font-extrabold">
+        <div className="flex flex-col   mt-8 lg:text-2xl font-extrabold">
           <p className="text-3xl text-center">Nearby cities</p>
           <div
             ref={scrollRef}
@@ -115,14 +133,18 @@ const index = () => {
               "msoverflowstyle": "none",
             }}
           >
-            {nearbyCities &&
+            {isLoading ? (
+              <LoadingComponentNearbyCities />
+            ) : (
+              nearbyCities &&
               nearbyCities
-                .filter(
-                  (city) =>
-                    city.image &&
-                    city.image !== "https://via.placeholder.com/300"
+                .sort((a, b) =>
+                  a.usesPlaceholder === b.usesPlaceholder
+                    ? 0
+                    : a.usesPlaceholder
+                    ? 1
+                    : -1
                 )
-                .sort((a, b) => (b.image ? 1 : -1))
                 .map((city, index) => (
                   <div
                     key={index}
@@ -141,6 +163,12 @@ const index = () => {
                           src={city.image}
                           alt={city.name}
                           className="object-cover w-full h-full"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://via.placeholder.com/300";
+                            city.usesPlaceholder = true;
+                            setBrokenImage(true); // Force a re-render
+                          }}
                         />
                       </div>
                       <div className="p-4">
@@ -151,8 +179,10 @@ const index = () => {
                       </div>
                     </div>
                   </div>
-                ))}
+                ))
+            )}
           </div>
+
           {nearbyCities && nearbyCities.length > 3 && (
             <>
               {showLeftButton && (

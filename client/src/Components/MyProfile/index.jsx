@@ -1,29 +1,26 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../Context/Auth";
 import axiosInstance from "../../axiosInstance";
+import { useParams } from "react-router-dom";
+
 const index = () => {
   const { user, setUser } = useContext(AuthContext);
   const [imageUrl, setImageUrl] = useState(null);
+  const { userId } = useParams();
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+
     try {
-      const formData = new FormData();
-
-      formData.append("image", e.target.files[0]);
-
       const response = await axiosInstance.post(
-        `/test-cloudinary/${user._id}`,
+        `/auth/users/${user._id}/avatar`,
         formData
       );
-
-      setImageUrl(response.data.url);
-
-      setUser((prevUser) => ({
-        ...prevUser,
-        avatar: response.data.url ? response.data.url : prevUser.avatar,
-      }));
+      console.log(response.data);
     } catch (error) {
-      console.error("A problem occurred with the axios operation: ", error);
+      console.log("Error uploading avatar:", error);
     }
   };
 
@@ -91,15 +88,15 @@ const index = () => {
               <div className="flex flex-col w-full md:w-auto md:flex-row gap-4 md:gap-16 justify-between">
                 <div className="flex flex-col">
                   <p className="text-gray-500">First Name</p>
-                  {user ? user.firstName : "Loading..."}
+                  <p>{user ? user.firstName : "Loading..."}</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="text-gray-500">Last Name</p>
-                  {user ? user.lastName : "Loading"}
+                  <p>{user ? user.lastName : "Loading"}</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="text-gray-500">Email address</p>
-                  {user ? user.email : "Loading"}
+                  <p>{user ? user.email : "Loading"}</p>
                 </div>
               </div>
 

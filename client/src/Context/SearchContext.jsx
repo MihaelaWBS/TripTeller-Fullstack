@@ -21,6 +21,7 @@ export const SearchProvider = ({ children }) => {
   const [rooms, setRooms] = useState(1);
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+  const [locationSetByGeo, setLocationSetByGeo] = useState(false);
 
   /*  const sortedHotels = hotels?.data?.hotels?.slice(0, 5).sort((a, b) => {
   const priceA = a.property.priceBreakdown.grossPrice.value;
@@ -127,8 +128,10 @@ export const SearchProvider = ({ children }) => {
   };
 
   const displayLocation = () => {
-    if (latitude && longitude) {
-      return `Lat: ${latitude.toFixed(3)}, Long: ${longitude.toFixed(3)}`;
+    if (locationSetByGeo && latitude && longitude) {
+      return "Near me"; // Change the return value to "Near me" when location is set by geolocation
+    } else if (latitude && longitude) {
+      return `Lat: ${latitude.toFixed(3)}, Long: ${longitude.toFixed(3)}`; // Retain this for cases where lat/long might be set manually or by other means
     }
     return "Where are you going?";
   };
@@ -139,6 +142,7 @@ export const SearchProvider = ({ children }) => {
         (position) => {
           setLatitude(position.coords.latitude);
           setLongitude(position.coords.longitude);
+          setLocationSetByGeo(true); // Indicate that location is set via geolocation
         },
         (error) => {
           console.error("Error Code = " + error.code + " - " + error.message);
@@ -148,7 +152,6 @@ export const SearchProvider = ({ children }) => {
       console.error("Geolocation is not supported by this browser.");
     }
   };
-
   if (isLoading) {
     return <LoadingComponent />;
   }

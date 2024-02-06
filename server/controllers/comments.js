@@ -14,7 +14,10 @@ const createComment = async (req, res) => {
 
 const getAllComments = async (req, res) => {
   try {
-    const comments = await Comment.find().populate("userId", "username email");
+    const comments = await Comment.find().populate(
+      "userId",
+      "username email avatar firstName lastName"
+    );
     res.json(comments);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -68,8 +71,22 @@ const deleteComment = async (req, res) => {
   }
 };
 
+const getCommentsByPostId = async (req, res) => {
+  const { postId } = req.params;
+  try {
+    const comments = await Comment.find({ postId: postId }).populate(
+      "userId",
+      "username email avatar firstName lastName"
+    );
+    res.json(comments);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createComment,
+  getCommentsByPostId,
   getAllComments,
   getCommentById,
   updateComment,

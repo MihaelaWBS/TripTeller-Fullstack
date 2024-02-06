@@ -86,9 +86,9 @@ const index = () => {
   );
   return (
     <>
-      <div className="flex items-center flex-col justify-center div-test pb-12">
+      <div className="flex items-center flex-col justify-center div-test ">
         <div className="flex items-center justify-center mt-6 gap-2">
-          <h2 className="mt- text-white font-bold xxs:text-base md:text-xl">
+          <h2 className=" text-black font-bold xxs:text-base md:text-3xl">
             Book your trip and plan with us!
           </h2>
           <FontAwesomeIcon icon={faPlane} color="orange" />
@@ -123,7 +123,9 @@ const index = () => {
 
                     <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                   </div>
-                  <p className="text-gray-500">{displayLocation()}</p>
+                  <p className="text-gray-500 text-center">
+                    {displayLocation()}
+                  </p>
                 </div>
                 <div className="w-px bg-gray-300 h-full  dark:bg-blue-500"></div>
                 <div className="group relative flex cursor-pointer gap-1 flex-col">
