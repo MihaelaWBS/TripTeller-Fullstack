@@ -1,18 +1,48 @@
 const Itinerary = require("../models/itinerary");
-
+const axios = require("axios");
 const createItinerary = async (req, res) => {
+  const { hotelId, checkInDate, checkOutDate, hotel } = req.body; // Ensure you're destructuring hotel here if it's part of the body
+
+  // Define the external API request options
+  const options = {
+    method: "GET",
+    url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
+    params: {
+      hotel_id: hotelId,
+      arrival_date: checkInDate,
+      departure_date: checkOutDate,
+    },
+    headers: {
+      "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
+      "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
+    },
+  };
+
   try {
+    // Fetching hotel details from external API
+    const response = await axios.request(options);
+    console.log("Hotel details fetched successfully:", response.data);
+
+    // Combining fetched hotel details with existing hotel data from the request body
+    const combinedHotelDetails = { ...hotel, ...response.data };
+
+    // Creating a new itinerary in the database with combined hotel details
     const newItinerary = await Itinerary.create({
-      userId: req.user._id,
-      hotelDetails: req.body.hotel, // Save the hotel details
+      userId: req.user._id, // Make sure req.user is populated correctly by your authentication middleware
+      hotelDetails: combinedHotelDetails,
     });
-    console.log(newItinerary); // Add this line
+
+    console.log("New itinerary created successfully:", newItinerary);
     res.status(201).json(newItinerary);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: error.message });
+    console.error("Failed to fetch hotel details or create itinerary:", error);
+    res.status(500).json({
+      message: "Failed to fetch hotel details or create itinerary",
+      error: error.message,
+    });
   }
 };
+
 const getAllItineraries = async (req, res) => {
   try {
     const itinerary = await Itinerary.find().populate(
