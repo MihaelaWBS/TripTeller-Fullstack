@@ -71,9 +71,9 @@ const Itinerary = () => {
               }
               imgSrc = imgSrc.replace("square60", "square500");
               return (
-                <div key={hotel?.hotel_id}>
+                <div key={hotel?.hotel_id} className="flex flex-col h-full">
                   <Card
-                    className="mb-5 w-full sm:w-auto"
+                    className="mb-5 w-full  h-full flex flex-col"
                     imgAlt="Property picture"
                     imgSrc={imgSrc}
                   >
@@ -90,13 +90,14 @@ const Itinerary = () => {
                       </p>
                       <p>{hotel?.hotelDetails?.review_nr} reviews</p>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <p className="font-extrabold text-red-500">
+                    <div className="flex  space-x-2">
+                      {/*
+                      <p className="font-bold text-red-500">
                         {" "}
-                        from {hotel?.hotelDetails?.checkin?.from} until{" "}
+                        Arrival {hotel?.hotelDetails?.checkin?.from} - {" "}
                         {hotel?.hotelDetails?.checkin?.until}
-                      </p>
-                      <div className="flex mt-2 flex-wrap">
+                      </p> */}
+                      <div className="flex mt-2">
                         {hotel?.hotelDetails?.hotel_include_breakfast === 0 && (
                           <span className="bg-green-200 rounded-full px-3 py-1 ml-4 mr-2">
                             Breakfast
@@ -109,33 +110,39 @@ const Itinerary = () => {
                         )}
                       </div>
                     </div>
-                    <div className="flex mt-2 flex-wrap justify-around">
-                      <Link
-                        to={`/hotels/${hotel?.hotelDetails?.hotel_id}`}
-                        className="text-blue-600 hover:text-blue-800 font-bold text-lg cursor-pointer"
+                    <div className="mt-auto">
+                      <div className="flex mt-2 flex-wrap justify-around">
+                        <Link
+                          to={`/hotels/${hotel?.hotelDetails?.hotel_id}`}
+                          className="text-blue-600 hover:text-blue-800 font-bold text-lg cursor-pointer mb-2"
+                        >
+                          See Details
+                        </Link>
+                        <a
+                          className=" text-green-600 hover:text-green-800 font-bold text-lg cursor-pointer mb-2"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Add to Incoming trips
+                        </a>
+                        {/*
+                        <h2>
+                          FOR ADDING ARRIVAL AND DEPARTURE DATE IN THE FUTURE SO
+                          THAT THE USER CAN PLAN
+                        </h2> */}
+                        <h2 className="mb-2"> Arrival: {hotel?.hotelDetails?.data?.arrival_date}</h2>
+                        <h2 className="mb-2">Departure: {hotel?.hotelDetails?.data?.departure_date}</h2>
+                      </div>
+                      <div className="mt-auto flex justify-center w-full">
+                      <Button
+                        onClick={() => removeFromItinerary(hotel._id)}
+                        className="bg-orange-500 rounded-3xl mt-2"
                       >
-                        See Details
-                      </Link>
-                      <a
-                        className=" text-green-600 hover:text-green-800 font-bold text-lg cursor-pointer"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Add to Incoming trips
-                      </a>
-                      <h2>
-                        FOR ADDING ARRIVAL AND DEPARTURE DATE IN THE FUTURE SO
-                        THAT THE USER CAN PLAN
-                      </h2>
-                      <h2>{hotel?.hotelDetails?.data?.arrival_date}</h2>
-                      <h2>{hotel?.hotelDetails?.data?.departure_date}</h2>
+                        Remove from itinerary
+                      </Button>
+                      </div>     
                     </div>
-                    <Button
-                      onClick={() => removeFromItinerary(hotel._id)}
-                      className="bg-orange-500 rounded-3xl"
-                    >
-                      Remove from itinerary
-                    </Button>
+                    
                   </Card>
                 </div>
               );
