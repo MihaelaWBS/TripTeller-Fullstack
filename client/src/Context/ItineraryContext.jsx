@@ -2,10 +2,12 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import axiosInstance from "../axiosInstance";
 const ItineraryContext = createContext();
 import { AuthContext } from "./Auth";
-
+import { useSearch } from "./SearchContext";
 export const useItinerary = () => useContext(ItineraryContext);
 
 export const ItineraryProvider = ({ children }) => {
+  const { checkInDate, checkOutDate } = useSearch();
+
   const { userId } = useContext(AuthContext);
   /*
   const [itinerary, setItinerary] = useState(() => {
@@ -38,8 +40,8 @@ export const ItineraryProvider = ({ children }) => {
         url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
         params: {
           hotel_id: hotel.hotel_id,
-          arrival_date: "2024-02-13",
-          departure_date: "2024-02-14",
+          arrival_date: checkInDate,
+          departure_date: checkOutDate,
           adults: "1",
           children_age: "0",
           room_qty: "1",
