@@ -1,13 +1,14 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const cloudinary = require("../config/cloudinary");
 const SECRET = process.env.JWT_SECRET;
 const dayInMilliseconds = 24 * 60 * 60 * 1000;
 
 const express = require("express");
 const fs = require("fs");
 const router = express.Router();
+const parser = require("../cloudinaryConfig");
+const cloudinary = require("cloudinary").v2;
 
 const register = async (req, res) => {
   try {
@@ -88,6 +89,7 @@ const logout = (req, res) => {
 };
 const getLoggedInUser = async (req, res) => {
   try {
+    // req.user is created in the auth middleware
     const user = await User.findOne({ _id: req.user._id }).select("-password");
 
     res.json({ user });
@@ -97,30 +99,129 @@ const getLoggedInUser = async (req, res) => {
 };
 const addAvatar = async (req, res) => {
   try {
-    console.log("req.user:", req.user);
-    console.log("req.file:", req.file);
-    if (!req.file || !req.file.path) {
-      return res.status(400).json({ message: "No file uploaded." });
-    }
-    const result = await cloudinary.uploader.upload(req.file.path);
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      res.status(400).json({ message: "User not found" });
+    } else {
+      // Convert buffer to a readable stream
+      const stream = require("stream");
+      const bufferStream = new stream.PassThrough();
+      bufferStream.end(Buffer.from(req.file.buffer, "binary"));
 
-    const user = await User.findByIdAndUpdate(req.user._id, {
-      avatar: result.secure_url,
+      // Upload file to cloudinary
+      const cloudinaryResponse = await new Promise((resolve, reject) => {
+        const cloudinaryStream = cloudinary.uploader.upload_stream(
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
+            }
+          }
+        );
+
+        bufferStream.pipe(cloudinaryStream);
+      });
+
+      user.avatar = cloudinaryResponse.secure_url;
+      await user.save();
+
+      res.json({ message: "Avatar updated successfully", user });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const deleteAvatar = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: `User with id ${id} not found` });
+    }
+
+    user.avatar = null;
+    await user.save();
+    res.json({ message: "Avatar deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateAvatar = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await cloudinary.uploader.upload(req.body.avatar);
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.avatar = result.secure_url;
+    await user.save();
+
+    res.json({ message: "Avatar updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+const testCloudinary = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    console.log("User ID:", userId);
+
+    console.log("Image file:", req.file);
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Convert buffer to a readable stream
+    const stream = require("stream");
+    const bufferStream = new stream.PassThrough();
+    bufferStream.end(Buffer.from(req.file.buffer, "binary"));
+
+    // Upload file to cloudinary
+    const cloudinaryResponse = await new Promise((resolve, reject) => {
+      const cloudinaryStream = cloudinary.uploader.upload_stream(
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+
+      // Pipe the stream to cloudinary
+      bufferStream.pipe(cloudinaryStream);
     });
 
-    res.status(200).json({ avatar: user.avatar });
+    user.avatar = cloudinaryResponse.secure_url;
+    await user.save({ validateBeforeSave: false });
+
+    console.log("User:", user);
+
+    res.json({
+      message: "Image uploaded successfully",
+      url: cloudinaryResponse.secure_url,
+    });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ message: error.message });
   }
 };
-
 module.exports = {
   register,
   login,
   logout,
-
+  deleteAvatar,
   addAvatar,
-
+  updateAvatar,
   getLoggedInUser,
+  testCloudinary,
 };

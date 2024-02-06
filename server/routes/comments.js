@@ -6,11 +6,9 @@ const {
   getAllComments,
   getCommentById,
   updateComment,
-  getCommentsByPostId,
   deleteComment,
 } = require("../controllers/comments");
 commentRouter.use(authenticate);
-commentRouter.get("/post/:postId", getCommentsByPostId);
 commentRouter.post("/", createComment);
 commentRouter.get("/", getAllComments);
 commentRouter.get("/:id", getCommentById);

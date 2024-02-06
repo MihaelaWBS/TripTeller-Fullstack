@@ -10,11 +10,9 @@ body {
 }
 
 .div-test {
-  background-image: url("../src/assets/vector_background.jpg");
+  background-image: url("../src/assets/main-background-2.jpg");
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center;
-  height: 18rem;
 }
 
 .card-scrollbar-container::-webkit-scrollbar {
@@ -23,8 +21,4 @@ body {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
-}
-
-html {
-  scroll-behavior: smooth;
 }

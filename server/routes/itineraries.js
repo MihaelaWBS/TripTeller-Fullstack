@@ -6,12 +6,10 @@ const {
   getAllItineraries,
   getItineraryById,
   updateItinerary,
-  getItinerariesByUserId,
   deleteItinerary,
 } = require("../controllers/itineraries");
 itineraryRouter.use(authenticate);
-itineraryRouter.post("/add", createItinerary);
-itineraryRouter.get("/user/:userId", getItinerariesByUserId);
+itineraryRouter.post("/", createItinerary);
 itineraryRouter.get("/", getAllItineraries);
 itineraryRouter.get("/:id", getItineraryById);
 itineraryRouter.put("/:id", updateItinerary);

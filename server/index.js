@@ -1,11 +1,8 @@
 require("dotenv/config");
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 4000;
 const path = require("path");
-const eventsRouter = require("./routes/events");
 const cookieParser = require("cookie-parser");
 const { createServer } = require("node:http");
 const server = createServer(app);
@@ -13,19 +10,21 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const cloudinary = require("cloudinary").v2;
 const cors = require("cors");
-
+const { testCloudinary } = require("./controllers/users");
+const parser = require("./cloudinaryConfig");
 const connectDB = require("./config/db");
 const postRouter = require("./routes/posts");
 const commentRouter = require("./routes/comments");
 const itineraryRouter = require("./routes/itineraries");
 const authRouter = require("./routes/users");
 const api = require("api");
-const { addAvatar } = require("./controllers/users");
 const sdk = api("@fsq-developer/v1.0#18rps1flohmmndw");
 sdk.auth("fsq3gWIjAcbE/wrnp4cNfACEHCMLyJECcH+Jt14xXBHVGmc=");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const fileUpload = require("express-fileupload");
+app.use(fileUpload());
 app.use(
   cors({
     origin: [
@@ -37,15 +36,12 @@ app.use(
   })
 );
 app.use(cookieParser());
-
-app.use("/auth", authRouter);
-
-/* app.post("/api/avatar/:userId", upload.single("image"), addAvatar); */
-
-app.use("/api/events", eventsRouter);
+app.post("/test-cloudinary", parser.single("image"), testCloudinary);
+app.post("/test-cloudinary/:userId", parser.single("image"), testCloudinary);
 app.use("/api/comments", commentRouter);
 app.use("/api/itineraries", itineraryRouter);
 app.use("/api/posts", postRouter);
+app.use("/auth", authRouter);
 const hardcodedLatitude = "48.858844";
 const hardcodedLongitude = "2.294351";
 

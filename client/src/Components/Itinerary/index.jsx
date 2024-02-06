@@ -1,158 +1,209 @@
-import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
+import chevronRight from "../../assets/icons8-right-50.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSearch } from "../../Context/SearchContext";
-import { useItinerary } from "../../Context/ItineraryContext";
-import { useParams } from "react-router-dom";
-import { Button, Card } from "flowbite-react";
-import c1 from "../../assets/c1.jpg";
-import { Link } from "react-router-dom";
-import axiosInstance from "../../axiosInstance";
-import { AuthContext } from "../../Context/Auth";
-import emptyItineraryBackground from "../../assets/empty_itinerary_background.png";
+import { useItinerary } from "../../Context/ItineraryContext"; // Import the context hook
+import { useNavigate, Link } from "react-router-dom";
+
+
+
 const Itinerary = () => {
-  const { user } = useContext(AuthContext);
-  const { hotels } = useSearch();
-  const [hotelDetails, setHotelDetails] = useState(null);
-  const [error, setError] = useState(null);
-  const { hotelId } = useParams();
+  const { itinerary } = useItinerary(); // Use the context state
+  const { hotels, attractions, restaurants } = useSearch();
+  const [filter, setFilter] = useState('all'); // 'all', 'hotels', 'restaurants', 'attractions'
 
-  const { itinerary, setItinerary } = useItinerary();
-
-  useEffect(() => {
-    const fetchItinerary = async () => {
-      if (user && user._id) {
-        try {
-          const response = await axiosInstance.get(
-            `/api/itineraries/user/${user._id}`
-          );
-          setItinerary(response.data);
-        } catch (error) {
-          console.log("Error fetching itinerary:", error);
-        }
-      }
-    };
-
-    fetchItinerary();
-  }, [user]);
-
-  const removeFromItinerary = async (id) => {
-    try {
-      console.log("Removing itinerary with ID:", id);
-      await axiosInstance.delete(`/api/itineraries/${id}`);
-
-      setItinerary((currentItineraries) =>
-        currentItineraries.filter((item) => item._id !== id)
-      );
-    } catch (error) {
-      console.log("Error removing item from itinerary:", error);
-    }
+   // Filter change handler (2)
+   const handleFilterChange = (e) => {
+    setFilter(e.target.value);
   };
 
-  return (
-    <>
-      <div className="relative h-96 w-full overflow-hidden">
-        <img src={c1} alt="Travel" className="w-full h-full" />
-        <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-50 flex items-center justify-center">
-          <h1 className="text-white text-6xl font-bold">Travel smarter</h1>
-        </div>
-      </div>
-      <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
-        <h1 className="text-4xl font-bold text-gray-800 mb-10 text-center">
-          My Itinerary
-        </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-10 ">
-          {itinerary.length > 0 ? (
-            itinerary.map((hotel) => {
-              let imgSrc = hotel.hotelDetails?.main_photo_url;
-              if (imgSrc) {
-                imgSrc = imgSrc.replace("square60", "square500");
-              } else {
-                imgSrc = "default_image_url";
-              }
-              imgSrc = imgSrc.replace("square60", "square500");
-              return (
-                <div key={hotel?.hotel_id}>
-                  <Card
-                    className="mb-5 w-full sm:w-auto"
-                    imgAlt="Property picture"
-                    imgSrc={imgSrc}
-                  >
-                    <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                      {hotel?.hotelDetails?.hotel_name}
-                    </h2>
-                    <p>{hotel?.hotelDetails?.city}</p>
-                    <div className="flex items-center space-x-2">
-                      <p className="text-lg font-extrabold  text-blue-600 dark:text-gray-700">
-                        {hotel?.hotelDetails?.review_score}
-                      </p>
-                      <p className="text-lg font-extrabold  text-blue-600 dark:text-gray-700">
-                        {hotel?.hotelDetails?.review_score_word}
-                      </p>
-                      <p>{hotel?.hotelDetails?.review_nr} reviews</p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <p className="font-extrabold text-red-500">
-                        {" "}
-                        from {hotel?.hotelDetails?.checkin?.from} until{" "}
-                        {hotel?.hotelDetails?.checkin?.until}
-                      </p>
-                      <div className="flex mt-2 flex-wrap">
-                        {hotel?.hotelDetails?.hotel_include_breakfast === 0 && (
-                          <span className="bg-green-200 rounded-full px-3 py-1 ml-4 mr-2">
-                            Breakfast
-                          </span>
-                        )}
-                        {hotel?.hotelDetails?.has_free_parking && (
-                          <span className="bg-gray-200 rounded-full px-3 py-1 ml-4 mr-2">
-                            Free parking
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex mt-2 flex-wrap justify-around">
-                      <Link
-                        to={`/hotels/${hotel?.hotelDetails?.hotel_id}`}
-                        className="text-blue-600 hover:text-blue-800 font-bold text-lg cursor-pointer"
-                      >
-                        See Details
-                      </Link>
-                      <a
-                        className=" text-green-600 hover:text-green-800 font-bold text-lg cursor-pointer"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Add to Incoming trips
-                      </a>
-                      <h2>
-                        FOR ADDING ARRIVAL AND DEPARTURE DATE IN THE FUTURE SO
-                        THAT THE USER CAN PLAN
-                      </h2>
-                      <h2>{hotel?.hotelDetails?.data?.arrival_date}</h2>
-                      <h2>{hotel?.hotelDetails?.data?.departure_date}</h2>
-                    </div>
-                    <Button
-                      onClick={() => removeFromItinerary(hotel._id)}
-                      className="bg-orange-500 rounded-3xl"
-                    >
-                      Remove from itinerary
-                    </Button>
-                  </Card>
-                </div>
-              );
-            })
-          ) : (
-            <div className="col-span-full">
-              <div className="flex flex-col items-center justify-center gap-4">
-                <p className="md:text-2xl">
-                  {user?.firstName}, your itinerary is empty!
-                </p>
-                <img src={emptyItineraryBackground} />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </>
-  );
-};
-export default Itinerary;
+  // Render items based on the selected filter (3)
+  const renderItems = () => {
+    let items = [];
+    if (filter === 'all' || filter === 'hotels') {
+      items = items.concat(hotels.slice(0, 2));
+    }
+    if (filter === 'all' || filter === 'restaurants') {
+      items = items.concat(restaurants.slice(0, 2));
+    }
+    if (filter === 'all' || filter === 'attractions') {
+      items = items.concat(attractions.slice(0, 2));
+    }
+
+	   //or - the alternative to: Render items based on the selected filter (lines 21-31)
+	   /*
+	   const renderItems = () => {
+		let items = [];
+		if (filter === 'all' || filter === 'hotels') {
+		  items = items.concat(hotels.slice(0, 2).map(hotel => ({ ...hotel, type: 'hotel' })));
+		}
+		if (filter === 'all' || filter === 'restaurants') {
+		  items = items.concat(restaurants.slice(0, 2).map(restaurant => ({ ...restaurant, type: 'restaurant' })));
+		}
+		if (filter === 'all' || filter === 'attractions') {
+		  items = items.concat(attractions.slice(0, 2).map(attraction => ({ ...attraction, type: 'attraction' })));
+		}  */
+
+	// Render each item based on its type
+
+	 return items.map((item) => {
+		if (item.type === 'hotel') {
+		  return (
+			<Link to={`/hotels/${item.hotel_id}`} key={item.hotel_id}>
+			  <div className="max-w-sm rounded overflow-hidden shadow-lg mx-auto my-5">
+						<img className="w-full h-48 object-cover" src={item.main_photo_url} alt="Hotel" />
+						<div className="px-6 py-4">
+							<div className="font-bold text-xl mb-2">{item.hotel_name}</div>
+							<p className="text-gray-700 text-base">{item.hotel_description}</p>
+						</div>
+						<div className="px-6 pt-4 pb-2">
+							<span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{item.review_score} Stars</span>
+						</div>
+						<div className="px-6 pt-4 pb-2 flex justify-between items-center">
+							<span className="inline-block">{item.hotel_address}</span>
+							<span className="inline-block">{item.hotel_phone}</span>
+						</div>
+					</div>
+			</Link>
+		  );
+		} else if (item.type === 'restaurant') {
+		  return (
+			<Link to={`/restaurants/${item.restaurant_id}`} key={item.restaurant_id}>
+			  <div className="max-w-sm rounded overflow-hidden shadow-lg mx-auto my-5">
+						<img className="w-full h-48 object-cover" src={item.main_photo_url} alt="Restaurant" />
+						<div className="px-6 py-4">
+							<div className="font-bold text-xl mb-2">{item.restaurant_name}</div>
+							<p className="text-gray-700 text-base">{item.restaurant_description}</p>
+						</div>
+						<div className="px-6 pt-4 pb-2">
+							<span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{item.review_score} Stars</span>
+						</div>
+						<div className="px-6 pt-4 pb-2 flex justify-between items-center">
+							<span className="inline-block">{item.restaurant_address}</span>
+							<span className="inline-block">{item.restaurant_phone}</span>
+						</div>
+					</div>
+			</Link>
+		  );
+		} else if (item.type === 'attraction') {
+		  return (
+			<Link to={`/attractions/${item.attraction_id}`} key={item.attraction_id}>
+			  <div className="max-w-sm rounded overflow-hidden shadow-lg mx-auto my-5">
+						<img className="w-full h-48 object-cover" src={item.main_photo_url} alt="Attraction" />
+						<div className="px-6 py-4">
+							<div className="font-bold text-xl mb-2">{item.attraction_name}</div>
+							<p className="text-gray-700 text-base">{item.attraction_description}</p>
+						</div>
+						<div className="px-6 pt-4 pb-2">
+							<span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{item.review_score} Stars</span>
+						</div>
+						<div className="px-6 pt-4 pb-2 flex justify-between items-center">
+							<span className="inline-block">{item.attraction_address}</span>
+							<span className="inline-block">{item.attraction_phone}</span>
+						</div>
+					</div>
+			</Link>
+		  );
+		}
+	  });
+	};
+
+	return (
+		<>
+		  {/* Filter selection UI */}
+		  <div className="flex flex-col gap-2 max-w-sm">
+			<div className="flex p-4 border-2 rounded-xl justify-evenly ">
+			  <select
+				className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+				onChange={handleFilterChange}
+			  >
+				<option value="all">All</option>
+				<option value="hotels">Hotels</option>
+				<option value="restaurants">Restaurants</option>
+				<option value="attractions">Attractions</option>
+			  </select>
+			</div>
+		  </div>
+	
+		  <h2 className="text-center text-2xl font-bold">My Itinerary</h2>
+	
+		  {renderItems()}
+		</>
+	  );
+	};
+	
+	export default Itinerary;
+
+
+
+	/*
+	return (
+		<>
+
+			
+			<h2 className="text-center text-2xl font-bold">My Itinerary</h2>
+
+			{hotels &&
+                hotels.slice(0, 2).map((hotel) => (
+				<Link to={`/hotels/${hotel.hotel_id}`} key={hotel.hotel_id}>
+					<div className="max-w-sm rounded overflow-hidden shadow-lg mx-auto my-5">
+						<img className="w-full h-48 object-cover" src={hotel.main_photo_url} alt="Hotel" />
+						<div className="px-6 py-4">
+							<div className="font-bold text-xl mb-2">{hotel.hotel_name}</div>
+							<p className="text-gray-700 text-base">{hotel.hotel_description}</p>
+						</div>
+						<div className="px-6 pt-4 pb-2">
+							<span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{hotel.review_score} Stars</span>
+						</div>
+						<div className="px-6 pt-4 pb-2 flex justify-between items-center">
+							<span className="inline-block">{hotel.hotel_address}</span>
+							<span className="inline-block">{hotel.hotel_phone}</span>
+						</div>
+					</div>
+				</Link>
+            ))}
+
+			{restaurants &&
+                restaurants.slice(0, 2).map((restaurant) => (
+				<Link to={`/restaurants/${restaurant.restaurant_id}`} key={restaurant.restaurant_id}>
+					<div className="max-w-sm rounded overflow-hidden shadow-lg mx-auto my-5">
+						<img className="w-full h-48 object-cover" src={restaurant.main_photo_url} alt="Restaurant" />
+						<div className="px-6 py-4">
+							<div className="font-bold text-xl mb-2">{restaurant.restaurant_name}</div>
+							<p className="text-gray-700 text-base">{restaurant.restaurant_description}</p>
+						</div>
+						<div className="px-6 pt-4 pb-2">
+							<span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{restaurant.review_score} Stars</span>
+						</div>
+						<div className="px-6 pt-4 pb-2 flex justify-between items-center">
+							<span className="inline-block">{restaurant.restaurant_address}</span>
+							<span className="inline-block">{restaurant.restaurant_phone}</span>
+						</div>
+					</div>
+				</Link>
+            ))}
+
+			{attractions &&
+                attractions.slice(0, 2).map((attraction) => (
+				<Link to={`/attractions/${attraction.attraction_id}`} key={attraction.attraction_id}>
+					<div className="max-w-sm rounded overflow-hidden shadow-lg mx-auto my-5">
+						<img className="w-full h-48 object-cover" src={restaurant.main_photo_url} alt="Attraction" />
+						<div className="px-6 py-4">
+							<div className="font-bold text-xl mb-2">{attraction.attraction_name}</div>
+							<p className="text-gray-700 text-base">{attraction.attraction_description}</p>
+						</div>
+						<div className="px-6 pt-4 pb-2">
+							<span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{attraction.review_score} Stars</span>
+						</div>
+						<div className="px-6 pt-4 pb-2 flex justify-between items-center">
+							<span className="inline-block">{attraction.attraction_address}</span>
+							<span className="inline-block">{attraction.attraction_phone}</span>
+						</div>
+					</div>
+				</Link>
+            ))}							
+
+		</>
+	);
+
+	*/

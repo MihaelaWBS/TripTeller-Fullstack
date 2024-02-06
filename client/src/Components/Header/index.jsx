@@ -3,11 +3,10 @@ import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { AuthContext } from "../../Context/Auth";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { useParams } from "react-router-dom";
 
 const index = () => {
-  const { userId } = useParams();
   const { user, logout } = useContext(AuthContext);
+  console.log(user);
 
   return (
     <>
@@ -23,25 +22,20 @@ const index = () => {
             <Dropdown
               arrowIcon={false}
               inline
-              label={
-                <Avatar alt="User settings" img={user && user.avatar} rounded />
-              }
+              label={<Avatar alt="User settings" img={user.avatar} rounded />}
             >
               <Dropdown.Header>
                 <span className="block text-sm">
-                  {user && `${user.firstName} ${user.lastName}`}
+                  {user.firstName} {user.lastName}
                 </span>
                 <span className="block truncate text-sm font-medium">
-                  {user && user.email}
+                  {user.email}
                 </span>
               </Dropdown.Header>
-              <Link to={`/myprofile/${user._id}`}>
-                {" "}
+              <Link to="/myprofile">
                 <Dropdown.Item>My profile</Dropdown.Item>
               </Link>
-              <Link to={`/trips/itinerary`}>
-                <Dropdown.Item>My itinerary</Dropdown.Item>
-              </Link>
+              <Dropdown.Item>My trips</Dropdown.Item>
               <Dropdown.Item>Upcoming trips</Dropdown.Item>
               <Link to="/blog">
                 <Dropdown.Item>Blog</Dropdown.Item>

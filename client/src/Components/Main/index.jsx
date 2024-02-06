@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Itinerary from "../Itinerary";
 import Home from "../Home";
@@ -10,13 +10,10 @@ import PostForm from "../PostForm";
 import Login from "../auth/Login";
 import Signup from "../auth/Signup";
 import MyProfile from "../MyProfile";
-import LocationNotification from "../LocationNotification";
-import AddPost from "../AddPost";
 
 const Main = () => {
   return (
     <>
-      <LocationNotification />
       <main className="flex flex-col flex-grow ">
         <Routes>
           <Route exact path="/" element={<Home />} />
@@ -26,9 +23,7 @@ const Main = () => {
           <Route path="/blog" element={<BlogDashboard />} />
           <Route path="/blog/posts/:postId" element={<PostDescription />} />
           <Route path="/blog/post/addPost" element={<PostForm />} />
-          <Route path="/myprofile/:userId" element={<MyProfile />} />
-          <Route path="/addPost" element={<AddPost />} />
-
+          <Route path="/myprofile" element={<MyProfile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>
