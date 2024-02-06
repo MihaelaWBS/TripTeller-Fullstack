@@ -1,5 +1,11 @@
 import { faComment, faShare, faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFacebook,
+  faInstagram,
+  faTwitter,
+  faLinkedin,
+} from "@fortawesome/free-brands-svg-icons";
 import React, { useContext, useEffect, useState } from "react";
 import clap from "../../assets/icons8-clap-50.png";
 import clapFilled from "../../assets/isClapped.png";
@@ -117,8 +123,7 @@ const index = () => {
                       src={isClapped ? clapFilled : clap}
                       className="h-10 w-10 rounded-3xl border-2 p-1.5 border-gray-300 text-blue-500 cursor-pointer"
                     />
-                    <span className="ml-2">{clapsCount}</span>{" "}
-                    {/* Display claps count here */}
+                    <span className="ml-2">{clapsCount}</span>
                   </div>
                 </Tooltip>
               </div>
@@ -134,10 +139,61 @@ const index = () => {
                 </Tooltip>
               </div>
               <div>
-                <Tooltip content="Share" placement="left">
+                <Tooltip
+                  content={
+                    <div className="flex flex-col">
+                      <a
+                        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                          window.location.href
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center px-2 py-1 hover:text-blue-600"
+                      >
+                        <FontAwesomeIcon
+                          icon={faFacebook}
+                          className="mr-2"
+                          aria-hidden="true"
+                        />
+                        Facebook
+                      </a>
+                      <a
+                        href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
+                          window.location.href
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center px-2 py-1 hover:text-blue-600"
+                      >
+                        <FontAwesomeIcon
+                          icon={faLinkedin}
+                          className="mr-2"
+                          aria-hidden="true"
+                        />
+                        LinkedIn
+                      </a>
+                      <a
+                        href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                          window.location.href
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center px-2 py-1 hover:text-blue-600"
+                      >
+                        <FontAwesomeIcon
+                          icon={faTwitter}
+                          className="mr-2"
+                          aria-hidden="true"
+                        />
+                        Twitter
+                      </a>
+                    </div>
+                  }
+                  placement="top"
+                >
                   <img
                     src={share}
-                    className="h-10 w-10 text-blue-500  rounded-3xl border-2 p-1.5 border-gray-300 cursor-pointer "
+                    className="h-10 w-10 text-blue-500 rounded-3xl border-2 p-1.5 border-gray-300 cursor-pointer"
                   />
                 </Tooltip>
               </div>
