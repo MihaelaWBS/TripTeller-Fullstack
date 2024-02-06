@@ -177,15 +177,18 @@ const SearchResults = () => {
                   </div>
                   <div className="text-center flex flex-col items-end">
                     <p className="text-xs text-gray-600 ">After tax & fees</p>
-                    <p className="text-lg font-extrabold text-red-500">
-                      {
+                    <p className="text-2xl font-extrabold  text-red-500">
+                      <span className="text-gray-500 mr-1">
+                        {hotel.composite_price_breakdown.all_inclusive_amount
+                          .currency === "EUR"
+                          ? "€"
+                          : hotel.composite_price_breakdown.all_inclusive_amount
+                              .currency}
+                      </span>
+                      {`${parseFloat(
                         hotel.composite_price_breakdown.all_inclusive_amount
                           .value
-                      }{" "}
-                      {
-                        hotel.composite_price_breakdown.all_inclusive_amount
-                          .currency
-                      }
+                      ).toFixed(0)}`}
                     </p>
                   </div>
                   <button
