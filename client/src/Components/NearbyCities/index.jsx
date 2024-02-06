@@ -130,7 +130,7 @@ const index = () => {
             className="flex overflow-x-auto scrolling-touch justify-start card-scrollbar-container"
             style={{
               scrollbarWidth: "none",
-              "-ms-overflow-style": "none",
+              "msoverflowstyle": "none",
             }}
           >
             {isLoading ? (

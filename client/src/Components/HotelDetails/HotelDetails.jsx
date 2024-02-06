@@ -5,8 +5,12 @@ import { Button, Card } from "flowbite-react";
 import MapView from "../MapView/MapView";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import WeatherComponent from "../WeatherComponent/WeatherComponent";
+import { useLocation } from "react-router-dom";
+
 
 const HotelDetails = () => {
+  const { checkInDate, checkOutDate, setCheckInDate, setCheckOutDate } =
+    useSearch();
   const [hotelDetails, setHotelDetails] = useState(null);
   const [activeImage, setActiveImage] = useState("");
   const [error, setError] = useState(null);
@@ -64,8 +68,8 @@ const HotelDetails = () => {
           url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
           params: {
             hotel_id: hotelId,
-            arrival_date: "2024-03-07",
-            departure_date: "2024-04-11",
+            arrival_date: checkInDate,
+            departure_date: checkOutDate,
             adults: "1",
             children_age: "0",
             room_qty: "1",
