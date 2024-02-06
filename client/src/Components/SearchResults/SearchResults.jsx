@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSearch } from "../../Context/SearchContext";
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +23,7 @@ import { Link } from "react-router-dom";
 import { useItinerary } from "../../Context/ItineraryContext";
 
 const SearchResults = () => {
-  const { checkInDate, checkOutDate } = useSearch();
+  const { checkInDate, checkOutDate, setSortOrder } = useSearch();
   const navigate = useNavigate();
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
   const openSortModal = () => {
@@ -36,6 +36,10 @@ const SearchResults = () => {
   const { hotels } = useSearch();
   const { addToItinerary } = useItinerary();
 
+  useEffect(() => {
+    localStorage.setItem("checkInDate", checkInDate);
+    localStorage.setItem("checkOutDate", checkOutDate);
+  }, [checkInDate, checkOutDate]);
   return (
     <>
       {/* DESKTOP FILTER */}
@@ -90,9 +94,19 @@ const SearchResults = () => {
           <div className="hidden w-full mx-auto md:flex flex-col gap-2 mt-4">
             <div className="flex p-4 border-2 rounded-xl justify-evenly ">
               <p>Sort</p>
-              <p className="cursor-pointer">Lowest price</p>
+              <p
+                onClick={() => setSortOrder("low-high")}
+                className="cursor-pointer"
+              >
+                Lowest price
+              </p>
 
-              <p className="cursor-pointer">Highest price</p>
+              <p
+                onClick={() => setSortOrder("high-low")}
+                className="cursor-pointer"
+              >
+                Highest price
+              </p>
               <p className="cursor-pointer">Distance</p>
             </div>
           </div>
@@ -102,12 +116,12 @@ const SearchResults = () => {
                 key={hotel.hotel_id}
                 className="max-w-2xl mx-auto mt-4 bg-white shadow-md rounded-lg overflow-hidden mb-4 flex xxs:hidden md:flex"
               >
-                <div
-                  onClick={() =>
-                    navigate(`/hotels/${hotel.hotel_id}`, {
-                      state: { test: "test" },
-                    })
-                  }
+                <Link
+                  to={`/hotels/${
+                    hotel.hotel_id
+                  }?arrival_date=${encodeURIComponent(
+                    checkInDate
+                  )}&departure_date=${encodeURIComponent(checkOutDate)}`}
                   className="flex w-3/4 cursor-pointer"
                 >
                   <img
@@ -146,7 +160,7 @@ const SearchResults = () => {
                       )}
                     </div>
                   </div>
-                </div>
+                </Link>
                 <div className="w-1/4 bg-blue-100 py-1 px-2 flex flex-col justify-between">
                   <div className="text-center flex flex-col items-end">
                     <div className="flex items-center justify-end gap-2">
