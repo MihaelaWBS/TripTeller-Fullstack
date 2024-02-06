@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useSearch } from "../../Context/SearchContext";
+import { useNavigate } from "react-router-dom";
+
 import MobileSortDropdown from "../../Components/MobileSortDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import {
   faArrowAltCircleDown,
   faBreadSlice,
@@ -22,6 +23,8 @@ import { Link } from "react-router-dom";
 import { useItinerary } from "../../Context/ItineraryContext";
 
 const SearchResults = () => {
+  const { checkInDate, checkOutDate } = useSearch();
+  const navigate = useNavigate();
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
   const openSortModal = () => {
     setIsSortModalOpen(true);
@@ -32,20 +35,11 @@ const SearchResults = () => {
   };
   const { hotels } = useSearch();
   const { addToItinerary } = useItinerary();
+
   return (
     <>
       {/* DESKTOP FILTER */}
       <div>
-        <div className="hidden max-w-3xl mx-auto md:flex flex-col gap-2 mt-4">
-          <div className="flex p-4 border-2 rounded-xl justify-evenly ">
-            <p>Sort</p>
-            <p className="cursor-pointer">Lowest price</p>
-
-            <p className="cursor-pointer">Highest price</p>
-            <p className="cursor-pointer">Distance</p>
-          </div>
-        </div>
-
         {/* MOBILE FILTER */}
 
         <div className="flex flex-col mt-2 mb-2  space-y-4 md:hidden">
@@ -91,89 +85,108 @@ const SearchResults = () => {
             </div>
           </div>
         </div>
-        {/* MOBILE FILTER */}
 
-        {hotels &&
-          hotels.slice(0, 5).map((hotel) => (
-            <div
-              key={hotel.hotel_id}
-              className="max-w-2xl mx-auto mt-4 bg-white shadow-md rounded-lg overflow-hidden mb-4 flex xxs:hidden md:flex"
-            >
-              <Link to={`/hotels/${hotel.hotel_id}`} className="flex w-3/4">
-                <img
-                  className="w-1/3 object-cover"
-                  src={hotel.main_photo_url.replace("square60", "square500")}
-                  alt="Hotel"
-                />
-                <div className="w-2/3 p-4 flex flex-col">
-                  <p className="flex font-bold">
-                    {hotel.hotel_name || hotel.hotel_name_trans}
-                  </p>
-                  <div className="flex gap-2 items-center">
-                    <FontAwesomeIcon icon={faMapLocationDot} />
-                    <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${hotel.city}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 font-bold"
-                    >
-                      {hotel.city}
-                    </a>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-1">
-                    This property offers:
-                  </p>
-                  <div className="flex mt-2 flex-wrap">
-                    {hotel.hotel_include_breakfast === 0 && (
-                      <span className="bg-gray-200 rounded-full px-2 py-1 mr-2">
-                        Breakfast
-                      </span>
-                    )}
-                    {hotel.has_free_parking && (
-                      <span className="bg-gray-200 rounded-full px-3 py-1 mr-2">
-                        Free parking
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </Link>
-              <div className="w-1/4 bg-blue-100 py-1 px-2 flex flex-col justify-between">
-                <div className="text-center flex flex-col items-end">
-                  <div className="flex items-center justify-end gap-2">
-                    <p className="text-xs text-gray-600">
-                      {hotel.review_score_word}
-                    </p>
-                    <p className="flex items-center justify-center bg-orange-500 text-white rounded-full w-8 h-8">
-                      {hotel.review_score}
-                    </p>
-                  </div>
-                  <p className="text-xs text-black">
-                    {hotel.review_nr} reviews
-                  </p>
-                </div>
-                <div className="text-center flex flex-col items-end">
-                  <p className="text-xs text-gray-600 ">After tax & fees</p>
-                  <p className="text-lg font-extrabold text-red-500">
-                    {hotel.composite_price_breakdown.all_inclusive_amount.value}{" "}
-                    {
-                      hotel.composite_price_breakdown.all_inclusive_amount
-                        .currency
-                    }
-                  </p>
-                </div>
-                <button
-                  className="self-center bg-orange-500 text-white rounded-full px-4 py-2 mt-4"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    addToItinerary(hotel);
-                  }}
-                >
-                  Add to itinerary
-                </button>
-              </div>
+        <div className="flex flex-col max-w-2xl mx-auto ">
+          <div className="hidden w-full mx-auto md:flex flex-col gap-2 mt-4">
+            <div className="flex p-4 border-2 rounded-xl justify-evenly ">
+              <p>Sort</p>
+              <p className="cursor-pointer">Lowest price</p>
+
+              <p className="cursor-pointer">Highest price</p>
+              <p className="cursor-pointer">Distance</p>
             </div>
-          ))}
-
+          </div>
+          {hotels &&
+            hotels.slice(0, 5).map((hotel) => (
+              <div
+                key={hotel.hotel_id}
+                className="max-w-2xl mx-auto mt-4 bg-white shadow-md rounded-lg overflow-hidden mb-4 flex xxs:hidden md:flex"
+              >
+                <div
+                  onClick={() =>
+                    navigate(`/hotels/${hotel.hotel_id}`, {
+                      state: { test: "test" },
+                    })
+                  }
+                  className="flex w-3/4 cursor-pointer"
+                >
+                  <img
+                    className="w-1/3 object-cover"
+                    src={hotel.main_photo_url.replace("square60", "square500")}
+                    alt="Hotel"
+                  />
+                  <div className="w-2/3 p-4 flex flex-col">
+                    <p className="flex font-bold">
+                      {hotel.hotel_name || hotel.hotel_name_trans}
+                    </p>
+                    <div className="flex gap-2 items-center">
+                      <FontAwesomeIcon icon={faMapLocationDot} />
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${hotel.city}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 font-bold"
+                      >
+                        {hotel.city}
+                      </a>
+                    </div>
+                    <p className="text-sm t text-gray-600 mt-1">
+                      This property offers:
+                    </p>
+                    <div className="flex mt-2 flex-wrap">
+                      {hotel.hotel_include_breakfast === 0 && (
+                        <span className="bg-gray-200 rounded-full px-2 py-1 mr-2">
+                          Breakfast
+                        </span>
+                      )}
+                      {hotel.has_free_parking && (
+                        <span className="bg-gray-200 rounded-full px-3 py-1 mr-2">
+                          Free parking
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="w-1/4 bg-blue-100 py-1 px-2 flex flex-col justify-between">
+                  <div className="text-center flex flex-col items-end">
+                    <div className="flex items-center justify-end gap-2">
+                      <p className="text-xs text-gray-600">
+                        {hotel.review_score_word}
+                      </p>
+                      <p className="flex items-center justify-center bg-orange-500 text-white rounded-full w-8 h-8">
+                        {hotel.review_score}
+                      </p>
+                    </div>
+                    <p className="text-xs text-black">
+                      {hotel.review_nr} reviews
+                    </p>
+                  </div>
+                  <div className="text-center flex flex-col items-end">
+                    <p className="text-xs text-gray-600 ">After tax & fees</p>
+                    <p className="text-lg font-extrabold text-red-500">
+                      {
+                        hotel.composite_price_breakdown.all_inclusive_amount
+                          .value
+                      }{" "}
+                      {
+                        hotel.composite_price_breakdown.all_inclusive_amount
+                          .currency
+                      }
+                    </p>
+                  </div>
+                  <button
+                    className="self-center bg-orange-500 text-white rounded-full px-4 py-2 mt-4"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      addToItinerary(hotel);
+                    }}
+                  >
+                    Add to itinerary
+                  </button>
+                </div>
+              </div>
+            ))}
+        </div>
         {hotels &&
           hotels.map((hotel) => (
             <Link to={`/hotels/${hotel.hotel_id}`} key={hotel.hotel_id}>
