@@ -37,9 +37,9 @@ export const ItineraryProvider = ({ children }) => {
         method: "GET",
         url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
         params: {
-          hotel_id: hotel.hotel_id, // Assuming hotel.hotel_id is the correct ID for the RapidAPI call
-          arrival_date: "2024-02-04",
-          departure_date: "2024-02-11",
+          hotel_id: hotel.hotel_id,
+          arrival_date: "2024-02-13",
+          departure_date: "2024-02-14",
           adults: "1",
           children_age: "0",
           room_qty: "1",

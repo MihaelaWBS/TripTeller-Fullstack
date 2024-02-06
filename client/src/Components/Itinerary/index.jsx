@@ -130,19 +130,23 @@ const Itinerary = () => {
                           FOR ADDING ARRIVAL AND DEPARTURE DATE IN THE FUTURE SO
                           THAT THE USER CAN PLAN
                         </h2> */}
-                        <h2 className="mb-2"> Arrival: {hotel?.hotelDetails?.data?.arrival_date}</h2>
-                        <h2 className="mb-2">Departure: {hotel?.hotelDetails?.data?.departure_date}</h2>
+                        <h2 className="mb-2">
+                          {" "}
+                          Arrival: {hotel?.hotelDetails?.data?.arrival_date}
+                        </h2>
+                        <h2 className="mb-2">
+                          Departure: {hotel?.hotelDetails?.data?.departure_date}
+                        </h2>
                       </div>
                       <div className="mt-auto flex justify-center w-full">
-                      <Button
-                        onClick={() => removeFromItinerary(hotel._id)}
-                        className="bg-orange-500 rounded-3xl mt-2"
-                      >
-                        Remove from itinerary
-                      </Button>
-                      </div>     
+                        <Button
+                          onClick={() => removeFromItinerary(hotel._id)}
+                          className="bg-orange-500 rounded-3xl mt-2"
+                        >
+                          Remove from itinerary
+                        </Button>
+                      </div>
                     </div>
-                    
                   </Card>
                 </div>
               );
