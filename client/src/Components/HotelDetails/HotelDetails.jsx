@@ -6,7 +6,15 @@ import MapView from "../MapView/MapView";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import WeatherComponent from "../WeatherComponent/WeatherComponent";
 import { useSearch } from "../../Context/SearchContext";
+import { useLocation } from "react-router-dom";
 const HotelDetails = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const arrival_date = queryParams.get("arrival_date");
+  const departure_date = queryParams.get("departure_date");
+
+  console.log(arrival_date, departure_date);
+
   const { checkInDate, checkOutDate, setCheckInDate, setCheckOutDate } =
     useSearch();
   const [hotelDetails, setHotelDetails] = useState(null);
@@ -65,6 +73,9 @@ const HotelDetails = () => {
     // Add more FAQs as needed
   ]);
 
+  const checkInDateCookie = localStorage.getItem("checkInDate");
+  const checkOutDateCookie = localStorage.getItem("checkOutDate");
+
   useEffect(() => {
     const fetchHotelDetails = async () => {
       try {
@@ -73,8 +84,8 @@ const HotelDetails = () => {
           url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
           params: {
             hotel_id: hotelId,
-            arrival_date: checkInDate,
-            departure_date: checkOutDate,
+            arrival_date: checkInDateCookie,
+            departure_date: checkOutDateCookie,
             adults: "1",
             children_age: "0",
             room_qty: "1",
