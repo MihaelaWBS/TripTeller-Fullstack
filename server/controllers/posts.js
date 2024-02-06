@@ -109,11 +109,30 @@ const likePost = async (req, res) => {
   }
 };
 
+const clapPost = async (req, res) => {
+  const postId = req.params.id;
+
+  try {
+    const clapsToAdd = req.body.claps || 1;
+    const post = await Post.findByIdAndUpdate(
+      postId,
+      { $inc: { claps: clapsToAdd } },
+      { new: true }
+    );
+
+    res.status(200).json({ message: "Claps added successfully", post });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred", error });
+  }
+};
+
 module.exports = {
   createPost,
   likePost,
   getAllPosts,
   getPostById,
   updatePost,
+  clapPost,
   deletePost,
 };
