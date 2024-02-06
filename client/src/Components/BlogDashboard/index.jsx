@@ -6,6 +6,8 @@ import c4 from "../../assets/c4.jpg";
 import DOMPurify from "dompurify";
 import parse from "html-react-parser";
 import { Button } from "flowbite-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClock } from "@fortawesome/free-solid-svg-icons";
 
 /*
 import io from 'socket.io-client';
@@ -77,8 +79,8 @@ const BlogDashboard = () => {
                         className="w-20 rounded-full"
                       />
                     )}
-                    <div className="flex  items-center">
-                      <div className="flex flex-col  items-center">
+                    <div className="flex">
+                      <div className="flex flex-col ">
                         <div className="flex  items-center gap-6">
                           <img
                             src={post.userId?.avatar}
@@ -87,21 +89,24 @@ const BlogDashboard = () => {
                             style={{ width: "40px" }}
                           />
                           <div className="flex  flex-col">
-                            <p className="font-bold text-center">
+                            <p className="font-bold text-nowrap">
                               {post.userId &&
                                 `${post.userId.firstName} ${post.userId.lastName}`}
                             </p>
+                            <div className="flex items-center gap-2">
+                              <FontAwesomeIcon icon={faClock} />
+                              <p className="">
+                                {new Date(post.createdAt).toLocaleDateString(
+                                  "en-GB",
+                                  {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                  }
+                                )}
+                              </p>
+                            </div>
                           </div>
-                          <p className="px-2 border rounded-3xl bg-blue-200">
-                            {new Date(post.createdAt).toLocaleDateString(
-                              "en-GB",
-                              {
-                                day: "2-digit",
-                                month: "short",
-                                year: "numeric",
-                              }
-                            )}
-                          </p>
                         </div>
                       </div>
                     </div>
