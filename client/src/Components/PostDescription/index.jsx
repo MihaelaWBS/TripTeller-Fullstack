@@ -9,6 +9,7 @@ import { Button } from "flowbite-react";
 import { AuthContext } from "../../Context/Auth";
 import CommentSection from "../CommentSection";
 import IconBar from "../IconBar";
+import d1 from "../../assets/d1.jpg";
 const PostDescription = () => {
   const [openComment, setOpenComment] = useState(false);
 
@@ -89,17 +90,25 @@ const PostDescription = () => {
   return (
     <>
       {/* Banner with overlay */}
-
+     {/*
       <div className="relative h-[50rem] w-full">
         <img
-          src="your-cover-image-url.jpg" // Replace with your image URL
+          src={d3} // Replace with your image URL
           alt="Cover"
           className="object-cover w-full h-full"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <h1 className="text-white text-5xl font-bold">Travel Smarter</h1>
+        <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+          <h1 className="text-white text-8xl font-bold">Travel Smarter</h1>
         </div>
-      </div>
+  </div>  */}
+
+        {/* Banner with a cover picture and overlay text */}
+        <div className="relative h-96 w-full overflow-hidden">
+        <img src={d1} alt="Travel" className="w-full h-full" />
+        <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-40 flex items-center justify-center">
+          <h1 className="text-white text-6xl font-bold">Travel smarter</h1>
+        </div>
+      </div> 
 
       <div className=" mx-auto px-4 py-8 flex flex-col max-w-4xl">
         {editMode ? (
