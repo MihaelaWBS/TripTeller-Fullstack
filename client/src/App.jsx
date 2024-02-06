@@ -20,6 +20,8 @@ function App() {
     }
   }, []);
 
+  /*
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,7 +33,7 @@ function App() {
     };
 
     fetchData();
-  }, []);
+  }, []); */
 
 
   return (
