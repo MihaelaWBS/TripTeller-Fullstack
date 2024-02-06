@@ -4,8 +4,11 @@ import React, { useState, useEffect } from "react";
 import { Button, Card } from "flowbite-react";
 import MapView from "../MapView/MapView";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
-
+import WeatherComponent from "../WeatherComponent/WeatherComponent";
+import { useSearch } from "../../Context/SearchContext";
 const HotelDetails = () => {
+  const { checkInDate, checkOutDate, setCheckInDate, setCheckOutDate } =
+    useSearch();
   const [hotelDetails, setHotelDetails] = useState(null);
   const [activeImage, setActiveImage] = useState("");
   const [error, setError] = useState(null);
@@ -26,7 +29,8 @@ const HotelDetails = () => {
     },
     {
       question: "Can I bring my pet?",
-      answer: "Pets are welcome, with some restrictions. Please contact us for more details.",
+      answer:
+        "Pets are welcome, with some restrictions. Please contact us for more details.",
     },
     {
       question: "Do you have a fitness center?",
@@ -34,27 +38,33 @@ const HotelDetails = () => {
     },
     {
       question: "How can I cancel or modify my booking?",
-      answer: "Please contact our customer service for cancellation or modification inquiries.",
+      answer:
+        "Please contact our customer service for cancellation or modification inquiries.",
     },
     {
       question: "Do you offer airport shuttle service?",
-      answer: "Yes, we offer shuttle services to and from the airport. Additional charges may apply.",
+      answer:
+        "Yes, we offer shuttle services to and from the airport. Additional charges may apply.",
     },
     {
       question: "Are there any restaurants on site?",
-      answer: "Yes, we have multiple dining options available, ranging from casual to fine dining.",
+      answer:
+        "Yes, we have multiple dining options available, ranging from casual to fine dining.",
     },
     {
       question: "Is breakfast included in the room rate?",
-      answer: "Breakfast inclusion depends on the booking option selected. Please verify at the time of booking.",
+      answer:
+        "Breakfast inclusion depends on the booking option selected. Please verify at the time of booking.",
     },
     {
-      question: "What safety and hygiene measures are in place due to COVID-19?",
-      answer: "We follow strict safety protocols, including enhanced cleaning, social distancing, and mandatory face masks in public areas.",
+      question:
+        "What safety and hygiene measures are in place due to COVID-19?",
+      answer:
+        "We follow strict safety protocols, including enhanced cleaning, social distancing, and mandatory face masks in public areas.",
     },
     // Add more FAQs as needed
   ]);
-  
+
   useEffect(() => {
     const fetchHotelDetails = async () => {
       try {
@@ -63,8 +73,8 @@ const HotelDetails = () => {
           url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
           params: {
             hotel_id: hotelId,
-            arrival_date: "2024-02-04",
-            departure_date: "2024-02-11",
+            arrival_date: checkInDate,
+            departure_date: checkOutDate,
             adults: "1",
             children_age: "0",
             room_qty: "1",
@@ -193,7 +203,14 @@ const HotelDetails = () => {
           />
         ))}
       </div>
-
+      {/* Weather Component */}
+      {hotelDetails && (
+        <WeatherComponent
+          latitude={hotelDetails.latitude}
+          longitude={hotelDetails.longitude}
+          cityName={hotelDetails.city} // Assuming 'city' is the correct field
+        />
+      )}
       {/* Cards Container */}
       <div className="flex flex-wrap -mx-2">
         {/* Hotel Information Card */}
