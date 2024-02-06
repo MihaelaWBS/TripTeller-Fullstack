@@ -1,16 +1,21 @@
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { Button, Card } from "flowbite-react";
 import MapView from "../MapView/MapView";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
+import { useSearch } from "../../Context/SearchContext";
+import { useParams, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const HotelDetails = () => {
+  const { checkInDate, checkOutDate, setCheckInDate, setCheckOutDate } =
+    useSearch();
   const [hotelDetails, setHotelDetails] = useState(null);
   const [activeImage, setActiveImage] = useState("");
   const [error, setError] = useState(null);
   const { hotelId } = useParams();
   const [readMore, setReadMore] = useState(null);
+
   useEffect(() => {
     const fetchHotelDetails = async () => {
       try {
@@ -19,8 +24,8 @@ const HotelDetails = () => {
           url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
           params: {
             hotel_id: hotelId,
-            arrival_date: "2024-02-04",
-            departure_date: "2024-02-11",
+            arrival_date: checkInDate,
+            departure_date: checkOutDate,
             adults: "1",
             children_age: "0",
             room_qty: "1",
