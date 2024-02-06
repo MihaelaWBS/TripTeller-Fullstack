@@ -84,9 +84,34 @@ const deletePost = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const likePost = async (req, res) => {
+  const postId = req.params.id;
+  const userId = req.body.userId;
+
+  try {
+    const post = await Post.findById(postId);
+    const userIndex = post.likedBy.indexOf(userId);
+
+    if (userIndex === -1) {
+      post.likes += 1;
+      post.likedBy.push(userId);
+      await post.save();
+      res.status(200).json({ message: "Post liked successfully", post });
+    } else {
+      post.likes -= 1;
+      post.likedBy.splice(userIndex, 1);
+      await post.save();
+      res.status(200).json({ message: "Post unliked successfully", post });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "An error occurred", error });
+  }
+};
 
 module.exports = {
   createPost,
+  likePost,
   getAllPosts,
   getPostById,
   updatePost,
