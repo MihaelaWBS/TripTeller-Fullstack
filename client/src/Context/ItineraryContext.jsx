@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import axiosInstance from "../axiosInstance";
+import axios from "../axiosInstance";
 const ItineraryContext = createContext();
 import { AuthContext } from "./Auth";
 import { useSearch } from "./SearchContext";
@@ -21,64 +21,21 @@ export const ItineraryProvider = ({ children }) => {
   }, [itinerary]); */
 
   const addToItinerary = async (hotel) => {
-    // Check if the hotel is already in the itinerary
-    const isHotelAdded = itinerary.some(
-      (item) => item.hotel_id === hotel.hotel_id
-    );
-
-    if (isHotelAdded) {
-      console.log("Hotel is already in the itinerary");
-      return;
-    }
+    // Prepare the request body with hotel ID, check-in/check-out dates, and hotel details
+    const requestBody = {
+      hotelId: hotel.hotel_id,
+      checkInDate,
+      checkOutDate,
+      hotel, // Assuming this contains basic hotel details you want to save initially
+    };
 
     try {
-      console.log("Adding hotel to itinerary:", hotel);
+      const response = await axios.post("/api/itineraries/add", requestBody);
+      console.log("Itinerary item created:", response.data);
 
-      // Fetch additional details from RapidAPI
-      const options = {
-        method: "GET",
-        url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
-        params: {
-          hotel_id: hotel.hotel_id,
-          arrival_date: checkInDate,
-          departure_date: checkOutDate,
-          adults: "1",
-          children_age: "0",
-          room_qty: "1",
-          languagecode: "en-us",
-          currency_code: "EUR",
-        },
-        headers: {
-          "X-RapidAPI-Key":
-            "67e6b85d33mshd5e8a69a6d26d50p140b38jsn02c7a8bf3e37",
-          "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
-        },
-      };
-
-      const rapidApiResponse = await axiosInstance.request(options);
-
-      // Merge the hotel data with the RapidAPI data
-      const hotelWithDetails = { ...hotel, ...rapidApiResponse.data };
-
-      const response = await axiosInstance.post(`/api/itineraries/add`, {
-        userId: userId,
-        hotel: hotelWithDetails,
-      });
-
-      console.log("API response:", response.data);
-
-      if (response.status === 201) {
-        const updatedHotel = {
-          ...hotelWithDetails,
-          itinerary_id: response.data._id,
-        };
-
-        setItinerary((prevItinerary) => {
-          return [...prevItinerary, updatedHotel];
-        });
-      }
+      // Update local state or UI as needed
     } catch (error) {
-      console.log("Error adding hotel to itinerary:", error);
+      console.error("Failed to add hotel to itinerary:", error);
     }
   };
 
