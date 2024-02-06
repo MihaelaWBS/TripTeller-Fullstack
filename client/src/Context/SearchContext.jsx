@@ -22,17 +22,6 @@ export const SearchProvider = ({ children }) => {
   const [longitude, setLongitude] = useState("");
   const [locationSetByGeo, setLocationSetByGeo] = useState(false);
 
-  /*  const sortedHotels = hotels?.data?.hotels?.slice(0, 5).sort((a, b) => {
-  const priceA = a.property.priceBreakdown.grossPrice.value;
-  const priceB = b.property.priceBreakdown.grossPrice.value;
-
-  if (sortOrder === "low-high") {
-    return priceA - priceB;
-  } else {
-    return priceB - priceA;
-  }
-}); */
-
   const getCurrencyCode = async () => {
     const allowedCurrencyCodes = [
       "hotel_currency",
