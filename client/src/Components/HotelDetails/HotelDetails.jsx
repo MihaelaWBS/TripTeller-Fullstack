@@ -64,8 +64,8 @@ const HotelDetails = () => {
           url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
           params: {
             hotel_id: hotelId,
-            arrival_date: "2024-02-04",
-            departure_date: "2024-02-11",
+            arrival_date: "2024-03-07",
+            departure_date: "2024-04-11",
             adults: "1",
             children_age: "0",
             room_qty: "1",
@@ -157,7 +157,7 @@ const HotelDetails = () => {
 
   return (
     <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
-      <h1 className="text-4xl font-bold text-gray-800 mb-6">
+  <h1 className="text-4xl font-bold text-gray-800 mb-6">
         {hotelDetails.hotel_name}
       </h1>
 
@@ -197,9 +197,10 @@ const HotelDetails = () => {
 {/* Weather Component */}
 {hotelDetails && (
   <WeatherComponent
-    latitude={hotelDetails.latitude}
-    longitude={hotelDetails.longitude}
-  />
+  latitude={hotelDetails.latitude}
+  longitude={hotelDetails.longitude}
+  cityName={hotelDetails.city} // Assuming 'city' is the correct field
+/>
 )}
       {/* Cards Container */}
       <div className="flex flex-wrap -mx-2">

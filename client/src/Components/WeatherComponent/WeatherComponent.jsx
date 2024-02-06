@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const WeatherComponent = ({ latitude, longitude }) => {
+const WeatherComponent = ({ latitude, longitude, cityName }) => {
   const [dailyForecast, setDailyForecast] = useState(null);
   const [currentTemperature, setCurrentTemperature] = useState(null);
   const [error, setError] = useState('');
@@ -34,29 +34,26 @@ const WeatherComponent = ({ latitude, longitude }) => {
     return <div className="text-center">Loading weather data...</div>;
   }
 
-  // Limit to the next 5 days
-  const fiveDayForecast = dailyForecast.time.slice(0, 5).map((date, index) => {
-    return {
-      date,
-      maxTemp: dailyForecast.temperature_2m_max[index],
-      minTemp: dailyForecast.temperature_2m_min[index],
-    };
-  });
+  const fiveDayForecast = dailyForecast.time.slice(0, 5).map((date, index) => ({
+    date,
+    maxTemp: dailyForecast.temperature_2m_max[index],
+    minTemp: dailyForecast.temperature_2m_min[index],
+  }));
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <div className="p-4 border-b">
-          <h2 className="text-2xl font-bold text-center text-gray-800">5-Day Weather Forecast</h2>
-          <p className="text-center text-gray-600">Current Temperature: {currentTemperature}°C</p>
+    <div className="max-w-md mx-auto mb-5">
+      <div className="bg-gradient-to-r from-blue-500 to-teal-400 shadow-md rounded-lg overflow-hidden">
+        <div className="p-4 border-b border-teal-200">
+          <h2 className="text-2xl font-bold text-center text-white">{cityName} - 5-Day Weather Forecast</h2>
+          <p className="text-center text-teal-100">Current Temperature: {currentTemperature}°C</p>
         </div>
         <ul className="divide-y divide-gray-200">
           {fiveDayForecast.map((day, index) => (
-            <li key={index} className="px-4 py-3 flex justify-between items-center">
+            <li key={index} className="px-4 py-3 flex justify-between items-center bg-white bg-opacity-25">
               <span className="font-medium text-gray-800">{day.date}</span>
-              <span className="text-sm text-gray-500">
-                Max: <span className="font-medium text-gray-800">{day.maxTemp}°C</span>, 
-                Min: <span className="font-medium text-gray-800">{day.minTemp}°C</span>
+              <span className="text-sm text-gray-300">
+                Max: <span className="font-medium text-white">{day.maxTemp}°C</span>, 
+                Min: <span className="font-medium text-white">{day.minTemp}°C</span>
               </span>
             </li>
           ))}
