@@ -6,6 +6,43 @@ import MapView from "../MapView/MapView";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import WeatherComponent from "../WeatherComponent/WeatherComponent";
 import { useSearch } from "../../Context/SearchContext";
+
+const Accordion = ({ title, children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="mb-2">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`block w-full text-left px-5 py-3 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none transition duration-300 ${
+          isOpen ? 'rounded-t-md' : 'rounded-md'
+        }`}
+      >
+        <div className="flex justify-between items-center">
+          <span>{title}</span>
+          <svg
+            className={`w-6 h-6 transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </button>
+      <div
+        className={`transition-max-height duration-700 overflow-hidden ${
+          isOpen ? 'max-h-96' : 'max-h-0'
+        }`}
+      >
+        <div className="border border-t-0 border-blue-200 bg-white px-5 py-3">
+          <p className="text-gray-600">{children}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const HotelDetails = () => {
   const { checkInDate, checkOutDate, setCheckInDate, setCheckOutDate } =
     useSearch();
@@ -162,8 +199,14 @@ const HotelDetails = () => {
   const toggleReadMore = (section) => {
     setReadMore(readMore === section ? null : section);
   };
+  const familyFacilitiesList = hotelDetails && hotelDetails.family_facilities
+  ? hotelDetails.family_facilities.map((facility, index) => (
+      <li key={index} className="list-disc list-inside">
+        {facility}
+      </li>
+    ))
+  : null;
   
-
   return (
     <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
   <h1 className="text-4xl font-bold text-gray-800 mb-6">
@@ -313,26 +356,49 @@ const HotelDetails = () => {
           </Card>
         </div>
       </div>
+      {/* Family Facilities Section */}
+{familyFacilitiesList && (
+  <div className="px-2 mb-4 w-full md:w-1/3">
+    <Card className="flex flex-col h-full">
+      <div className="p-6 bg-blue-100 rounded-lg flex-grow">
+        <h2 className="text-xl font-semibold mb-4">Family Facilities</h2>
+        {readMore ? (
+          <ul className="list-disc list-inside mb-4">
+            {familyFacilitiesList.map((facility, index) => (
+              <li key={index}>{facility}</li>
+            ))}
+          </ul>
+        ) : (
+          <>
+            {familyFacilitiesList.slice(0, 3).map((facility, index) => (
+              <li key={index}>{facility}</li>
+            ))}
+            {familyFacilitiesList.length > 3 && (
+              <button
+                onClick={() => setReadMore(!readMore)}
+                className="mt-auto text-blue-600 hover:text-blue-800"
+              >
+                Read {readMore ? "Less" : "More"}
+              </button>
+            )}
+          </>
+        )}
+      </div>
+    </Card>
+  </div>
+)}
       <div className="px-2 mb-4 w-full md:w-2/3">
   <Card className="flex flex-col h-full">
-    <div className="p-6 bg-gray-100 rounded-lg flex-grow">
-      <h2 className="text-xl font-semibold mb-4">Frequently Asked Questions</h2>
-      <div className="space-y-4">
+    
+    {/* FAQ Section with Accordion */}
+    <div className="my-8">
+        <h2 className="text-3xl font-semibold mb-4">Frequently Asked Questions</h2>
         {faqs.map((faq, index) => (
-          <div key={index}>
-            <button
-              className="text-left w-full font-semibold text-gray-800"
-              onClick={() => toggleReadMore(`faq-${index}`)}
-            >
-              {faq.question}
-            </button>
-            {readMore === `faq-${index}` && (
-              <p className="text-gray-600 mt-2">{faq.answer}</p>
-            )}
-          </div>
+          <Accordion key={index} title={faq.question}>
+            {faq.answer}
+          </Accordion>
         ))}
       </div>
-    </div>
   </Card>
 </div>
     </div>
