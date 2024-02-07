@@ -263,15 +263,25 @@ const HotelDetails = () => {
         {/* Hotel Information Card */}
         <div className="px-2 mb-4 w-full md:w-1/3">
   <div className="relative">
-    <div className="flex flex-col h-full relative z-10">
+    <div className="flex flex-col  h-full relative z-10">
       <div 
         className="p-6 rounded-lg flex-grow relative z-10 text-white" 
         style={{ 
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover', // Cover the entire area of the div
           backgroundPosition: 'center', // Center the background image
+          height: '350px', // Fixed height
+          width: '100%', // Fixed width (responsive within its grid column)
+          overflow: 'auto',
+        
         }}>
-                <h2 className="text-xl font-semibold mb-4">Hotel Information</h2>
+          <div 
+        style={{ 
+          backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
+          padding: '10px', // Add padding to create some space around the text
+          borderRadius: '5px', // Optional: adds rounded corners
+        }}>
+                <h2 className="text-xl 	 font-semibold mb-4">Hotel Information</h2>
                 <p className="mb-2">
                   {hotelDetails?.address}, {hotelDetails?.city}, {hotelDetails?.country_trans}
                 </p>
@@ -287,14 +297,14 @@ const HotelDetails = () => {
                 {readMore === "hotelInfo" && (
                   <p>Facilities: {hotelDetails?.family_facilities?.join(", ")}</p>
                 )}
-                <button onClick={() => toggleReadMore("hotelInfo")} className="mt-auto text-white-600 font-bold mt-6 hover:text-blue-800 ml-6">
+                <button onClick={() => toggleReadMore("hotelInfo")} className="mt-auto  text-white-600 font-bold mt-6 hover:text-blue-800 ml-6">
                   {readMore === "hotelInfo" ? "Read Less" : "Read More"}
                 </button>
               </div>
             </div>
           </div>
         </div>
-  
+  </div>
         {/* Sustainability Efforts Card */}
         <div className="px-2 mb-4 w-full md:w-1/3">
   <div className="relative">
@@ -305,7 +315,17 @@ const HotelDetails = () => {
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover', // Cover the entire area of the div
           backgroundPosition: 'center', // Center the background image
-        }}>
+          height: '350px', // Fixed height
+          width: '100%', // Fixed width (responsive within its grid column)
+          overflow: 'auto',
+       
+       }}>
+          <div 
+          style={{ 
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
+            padding: '10px', // Add padding to create some space around the text
+            borderRadius: '5px', // Optional: adds rounded corners
+          }}>
                 <h2 className="text-xl font-semibold mb-4">Sustainability Efforts</h2>
                 {readMore === "sustainability" ? (
                   <ul className="list-disc list-inside mb-4">
@@ -330,6 +350,7 @@ className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
 </div>
 </div>
 </div>
+</div>
 </div>  {/* COVID-19 Support Card */}
 <div className="px-2 mb-4 w-full md:w-1/3">
   <div className="relative">
@@ -340,7 +361,16 @@ className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover', // Cover the entire area of the div
           backgroundPosition: 'center', // Center the background image
+          height: '350px', // Fixed height
+          width: '100%', // Fixed width (responsive within its grid column)
+          overflow: 'auto',
         }}>
+          <div 
+          style={{ 
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
+            padding: '10px', // Add padding to create some space around the text
+            borderRadius: '5px', // Optional: adds rounded corners
+          }}>
           <h2 className="text-xl font-semibold mb-4">COVID-19 Support</h2>
           {readMore === "covid" ? (
             hotelDetails.info_banners?.map((banner, index) => (
@@ -364,7 +394,7 @@ className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
       </div>
     </div>
   </div>
-
+  </div>
  {/* Family Facilities Card */}
  <div className="px-2 mb-4 w-full md:w-1/3">
   <div className="relative">
@@ -375,7 +405,16 @@ className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover', // Cover the entire area of the div
           backgroundPosition: 'center', // Center the background image
-        }}>
+          height: '350px', // Fixed height
+          width: '100%', // Fixed width (responsive within its grid column)
+          overflow: 'auto',
+       }}>
+          <div 
+          style={{ 
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
+            padding: '10px', // Add padding to create some space around the text
+            borderRadius: '5px', // Optional: adds rounded corners
+          }}>
         <h2 className="text-xl font-semibold mb-4">Family Facilities</h2>
         <ul className="  mb-4">
           {readMore
@@ -397,7 +436,7 @@ className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
       </div>
     </div>
   </div>
-
+  </div>
 </div>
 </div>
 
