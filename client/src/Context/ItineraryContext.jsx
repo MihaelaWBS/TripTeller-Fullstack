@@ -7,18 +7,11 @@ export const useItinerary = () => useContext(ItineraryContext);
 
 export const ItineraryProvider = ({ children }) => {
   const { checkInDate, checkOutDate } = useSearch();
+  const [upcomingTrips, setUpcomingTrips] = useState([]);
 
   const { userId } = useContext(AuthContext);
-  /*
-  const [itinerary, setItinerary] = useState(() => {
-    const localData = localStorage.getItem('itinerary');
-    return localData ? JSON.parse(localData) : [];
-  }); */
-  const [itinerary, setItinerary] = useState([]);
 
-  /*   useEffect(() => {
-    localStorage.setItem("itinerary", JSON.stringify(itinerary));
-  }, [itinerary]); */
+  const [itinerary, setItinerary] = useState([]);
 
   const addToItinerary = async (hotel) => {
     // Prepare the request body with hotel ID, check-in/check-out dates, and hotel details
@@ -45,9 +38,43 @@ export const ItineraryProvider = ({ children }) => {
     );
   };
 
+  const addTrip = (hotel, checkInDate, checkOutDate) => {
+    setUpcomingTrips((prevTrips) => [
+      ...prevTrips,
+      {
+        id: Date.now(),
+        hotelId: hotel.hotel_id,
+        checkInDate,
+        checkOutDate,
+        hotel,
+      },
+    ]);
+  };
+
+  const fetchItinerariesByStatus = async (status) => {
+    try {
+      const response = await axios.get(`/api/itineraries/${status}`, {
+        headers: {
+          // Add your headers here if needed, like Authorization header
+        },
+      });
+      return response.data; // this will return the itineraries
+    } catch (error) {
+      console.error("Failed to fetch itineraries by status:", error);
+      throw error;
+    }
+  };
   return (
     <ItineraryContext.Provider
-      value={{ itinerary, setItinerary, addToItinerary, removeFromItinerary }}
+      value={{
+        itinerary,
+        setItinerary,
+        fetchItinerariesByStatus,
+        addToItinerary,
+        removeFromItinerary,
+        upcomingTrips,
+        addTrip,
+      }}
     >
       {children}
     </ItineraryContext.Provider>
