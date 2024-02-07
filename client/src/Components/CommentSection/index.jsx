@@ -121,7 +121,8 @@ const index = () => {
                 <div className="flex-col mt-1 ">
                   <div className="flex flex-col gap-2 flex-1 px-4 font-bold leading-tight">
                     <h2>
-                      {comment.userId.firstName} {comment.userId.lastName}
+                      {comment.userId &&
+                        `${comment.userId.firstName} ${comment.userId.lastName}`}
                     </h2>
                     <span className="text-xs flex font-normal text-gray-500 dark:text-white">
                       {new Date(comment.createdAt).toLocaleDateString()}

@@ -20,6 +20,8 @@ function App() {
     }
   }, []);
 
+  /*
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,26 +33,20 @@ function App() {
     };
 
     fetchData();
-  }, []);
-
+  }, []); */
 
   return (
     <>
-      <ItineraryProvider value={{ itinerary, setItinerary }}>
-
-
-        <SearchProvider>
+      <SearchProvider>
+        <ItineraryProvider>
           <div className="flex flex-col min-h-screen">
             <Header />
-
             <Main />
-
             <BottomNavbar />
             <Footer1 />
           </div>
-        </SearchProvider>
-
-      </ItineraryProvider>
+        </ItineraryProvider>
+      </SearchProvider>
     </>
   );
 }

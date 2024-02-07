@@ -12,7 +12,9 @@ const index = () => {
         className="w-64 sm:w-96 md:w-[500px]"
       />
       <p className="font-bold md:text-2xl ">
-        {user.firstName}, we're searching for hotels near you!
+        {user?.firstName
+          ? `${user.firstName}, we're searching for hotels near you!`
+          : "We're searching for hotels near you!"}
       </p>
     </div>
   );
