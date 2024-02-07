@@ -15,8 +15,23 @@ const Itinerary = () => {
   const [hotelDetails, setHotelDetails] = useState(null);
   const [error, setError] = useState(null);
   const { hotelId } = useParams();
+  const [itineraries, setItineraries] = useState([]);
 
-  const { itinerary, setItinerary } = useItinerary();
+  const { itinerary, setItinerary, addTrip } = useItinerary();
+  const [upcomingTrips, setUpcomingTrips] = useState([]);
+
+  useEffect(() => {
+    const fetchItineraries = async () => {
+      try {
+        const response = await axios.get("/api/itineraries");
+        setItineraries(response.data);
+      } catch (error) {
+        console.error("Failed to fetch itineraries:", error);
+      }
+    };
+
+    fetchItineraries();
+  }, []);
 
   useEffect(() => {
     const fetchItinerary = async () => {
@@ -45,6 +60,29 @@ const Itinerary = () => {
       );
     } catch (error) {
       console.log("Error removing item from itinerary:", error);
+    }
+  };
+
+  const addToUpcomingTrips = async (hotelId) => {
+    try {
+      // Prepare the payload with hotelId. Ensure this matches the backend expectation.
+      const payload = {
+        hotelId: hotelId,
+      };
+
+      const response = await axiosInstance.post(
+        "/api/upcomingTrips/add",
+        payload
+      );
+
+      // Check for successful creation
+      if (response.status === 201) {
+        // If you want to immediately show the new trip in the UI,
+        // you should use the response data since it contains the updated trip details.
+        setUpcomingTrips((prevTrips) => [...prevTrips, response.data]);
+      }
+    } catch (error) {
+      console.log("Error adding hotel to upcoming trips:", error);
     }
   };
 
@@ -122,6 +160,9 @@ const Itinerary = () => {
                           className=" text-green-600 hover:text-green-800 font-bold text-lg cursor-pointer mb-2"
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={() =>
+                            addToUpcomingTrips(hotel.hotelDetails.hotel_id)
+                          }
                         >
                           Add to Incoming trips
                         </a>
