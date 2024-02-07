@@ -57,16 +57,14 @@ const PostForm = () => {
   };
 
   return (
-    <div className="mt-40">
-      <h1 className="text-center text-4xl font-bold mb-10">Add your post</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
+    <div>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           name="title"
           value={postData.title}
           onChange={handleChange}
           placeholder="Title"
-          className="w-full max-w-xl p-2 border border-gray-300 rounded-md"
         />
         {/* <input
           type="text"
@@ -75,35 +73,33 @@ const PostForm = () => {
           onChange={handleChange}
           placeholder="description"
         /> */}
-        <div className="flex items-center justify-between w-full max-w-xl">
 
-
-        </div>
         <input
           type="file"
           name="picture_url"
           onChange={handleChange}
           placeholder="Upload Image"
-          className="w-3/4 p-2 border border-gray-300 rounded-md"
         />
 
         <QuillEditor
           value={editorContent}
           onChange={setEditorContent}
           handleImageUpload={handleImageUpload}
-          className="w-full max-w-xl"
-        
         />
 
-        <Button type="submit" className="bg-orange-500 rounded-3xl mt-2">SUBMIT</Button>
+        <Button type="submit">SUBMIT</Button>
       </form>
-      
-      <div className="tailwind-editor-content mt-5 ">
+      <div>
+        <div className="tailwind-editor-content ">
           <div>{parse(editorContent)}</div>
+        </div>
       </div>
-      
     </div>
   );
 };
 
 export default PostForm;
+
+
+       
+
