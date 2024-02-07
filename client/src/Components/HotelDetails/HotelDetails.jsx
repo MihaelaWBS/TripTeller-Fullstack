@@ -7,7 +7,7 @@ import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import WeatherComponent from "../WeatherComponent/WeatherComponent";
 import { useSearch } from "../../Context/SearchContext";
 import gifBackground from '../../Images/Breakthrough Idea.gif'
-
+import backgroundImage from '../../Images/mountains.webp'
 const Accordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -259,13 +259,18 @@ const HotelDetails = () => {
         />
       )}
   
-      <div className="flex flex-wrap mx-2 ">
+  <div className="flex flex-wrap -mx-2">
         {/* Hotel Information Card */}
         <div className="px-2 mb-4 w-full md:w-1/3">
-          <div className="relative">
-            
-            <div className="flex flex-col h-full relative z-10">
-              <div className="p-6 bg-blue-100 rounded-lg flex-grow relative z-10">
+  <div className="relative">
+    <div className="flex flex-col h-full relative z-10">
+      <div 
+        className="p-6 rounded-lg flex-grow relative z-10 text-white" 
+        style={{ 
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover', // Cover the entire area of the div
+          backgroundPosition: 'center', // Center the background image
+        }}>
                 <h2 className="text-xl font-semibold mb-4">Hotel Information</h2>
                 <p className="mb-2">
                   {hotelDetails?.address}, {hotelDetails?.city}, {hotelDetails?.country_trans}
@@ -276,13 +281,13 @@ const HotelDetails = () => {
                 <p className="mb-4">
                   Check-in: {hotelDetails?.arrival_date}, Check-out: {hotelDetails?.departure_date}
                 </p>
-                <a href={hotelDetails?.url} className="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">
+                <a href={hotelDetails?.url} className="text-white-600 font-bold mt-6  hover:text-yellow-800" target="_blank" rel="noopener noreferrer">
                   Visit Hotel Website
                 </a>
                 {readMore === "hotelInfo" && (
                   <p>Facilities: {hotelDetails?.family_facilities?.join(", ")}</p>
                 )}
-                <button onClick={() => toggleReadMore("hotelInfo")} className="mt-auto text-blue-600 hover:text-blue-800 ml-6">
+                <button onClick={() => toggleReadMore("hotelInfo")} className="mt-auto text-white-600 font-bold mt-6 hover:text-blue-800 ml-6">
                   {readMore === "hotelInfo" ? "Read Less" : "Read More"}
                 </button>
               </div>
@@ -292,10 +297,15 @@ const HotelDetails = () => {
   
         {/* Sustainability Efforts Card */}
         <div className="px-2 mb-4 w-full md:w-1/3">
-          <div className="relative">
-           
-            <div className="flex flex-col h-full relative z-10">
-              <div className="p-6 bg-green-100 rounded-lg flex-grow relative z-10">
+  <div className="relative">
+    <div className="flex flex-col h-full relative z-10">
+      <div 
+        className="p-6 rounded-lg flex-grow relative z-10 text-white" 
+        style={{ 
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover', // Cover the entire area of the div
+          backgroundPosition: 'center', // Center the background image
+        }}>
                 <h2 className="text-xl font-semibold mb-4">Sustainability Efforts</h2>
                 {readMore === "sustainability" ? (
                   <ul className="list-disc list-inside mb-4">
@@ -313,7 +323,7 @@ const HotelDetails = () => {
 )}
 <button
 onClick={() => toggleReadMore("sustainability")}
-className="mt-auto text-green-600 hover:text-green-800"
+className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
 >
 {readMore === "sustainability" ? "Read Less" : "Read More"}
 </button>
@@ -321,11 +331,16 @@ className="mt-auto text-green-600 hover:text-green-800"
 </div>
 </div>
 </div>  {/* COVID-19 Support Card */}
-  <div className="px-2 mb-4 w-full md:w-1/3">
-    <div className="relative">
-      
-      <div className="flex flex-col h-full relative z-10">
-        <div className="p-6 bg-red-100 rounded-lg flex-grow relative z-10">
+<div className="px-2 mb-4 w-full md:w-1/3">
+  <div className="relative">
+    <div className="flex flex-col h-full relative z-10">
+      <div 
+        className="p-6 rounded-lg flex-grow relative z-10 text-white" 
+        style={{ 
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover', // Cover the entire area of the div
+          backgroundPosition: 'center', // Center the background image
+        }}>
           <h2 className="text-xl font-semibold mb-4">COVID-19 Support</h2>
           {readMore === "covid" ? (
             hotelDetails.info_banners?.map((banner, index) => (
@@ -341,7 +356,7 @@ className="mt-auto text-green-600 hover:text-green-800"
           )}
           <button
             onClick={() => toggleReadMore("covid")}
-            className="mt-auto text-red-600 hover:text-red-800"
+            className="mt-auto text-white-600 font-bold mt-6 hover:text-red-800"
           >
             {readMore === "covid" ? "Read Less" : "Read More"}
           </button>
@@ -351,12 +366,16 @@ className="mt-auto text-green-600 hover:text-green-800"
   </div>
 
  {/* Family Facilities Card */}
-<div className="px-2 mb-4 w-full md:w-1/3">
-
+ <div className="px-2 mb-4 w-full md:w-1/3">
   <div className="relative">
-    
     <div className="flex flex-col h-full relative z-10">
-      <div className="p-6 bg-yellow-100 rounded-lg flex-grow relative z-10">
+      <div 
+        className="p-6 rounded-lg flex-grow relative z-10 text-white" 
+        style={{ 
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover', // Cover the entire area of the div
+          backgroundPosition: 'center', // Center the background image
+        }}>
         <h2 className="text-xl font-semibold mb-4">Family Facilities</h2>
         <ul className="  mb-4">
           {readMore
