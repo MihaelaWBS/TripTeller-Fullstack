@@ -13,7 +13,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const cloudinary = require("cloudinary").v2;
 const cors = require("cors");
-
+const apiRouter = require("./routes/apiRoutes");
 const connectDB = require("./config/db");
 const postRouter = require("./routes/posts");
 const commentRouter = require("./routes/comments");
@@ -46,6 +46,7 @@ app.use("/api/events", eventsRouter);
 app.use("/api/comments", commentRouter);
 app.use("/api/itineraries", itineraryRouter);
 app.use("/api/posts", postRouter);
+app.use("/api", apiRouter);
 const hardcodedLatitude = "48.858844";
 const hardcodedLongitude = "2.294351";
 
