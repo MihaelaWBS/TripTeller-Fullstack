@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../axiosInstance";
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { Button, Card } from "flowbite-react";
@@ -79,9 +79,7 @@ const HotelDetails = () => {
   useEffect(() => {
     const fetchHotelDetails = async () => {
       try {
-        const options = {
-          method: "GET",
-          url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
+        const response = await axios.get("/api/getHotelDetails", {
           params: {
             hotel_id: hotelId,
             arrival_date: checkInDateCookie,
@@ -92,14 +90,8 @@ const HotelDetails = () => {
             languagecode: "en-us",
             currency_code: "EUR",
           },
-          headers: {
-            "X-RapidAPI-Key":
-              "67e6b85d33mshd5e8a69a6d26d50p140b38jsn02c7a8bf3e37",
-            "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
-          },
-        };
+        });
 
-        const response = await axios.request(options);
         console.log(response.data);
         if (response.data.status && response.data.data) {
           setHotelDetails(response.data.data);
