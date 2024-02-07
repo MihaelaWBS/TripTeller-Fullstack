@@ -207,6 +207,10 @@ const HotelDetails = () => {
       </li>
     ))
   : null;
+
+
+  // Map your icon names to actual icon components
+  
   return (
     <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-4xl font-bold text-gray-800 mb-6">
@@ -255,13 +259,11 @@ const HotelDetails = () => {
         />
       )}
   
-      <div className="flex flex-wrap -mx-2">
+      <div className="flex flex-wrap mx-2 ">
         {/* Hotel Information Card */}
         <div className="px-2 mb-4 w-full md:w-1/3">
           <div className="relative">
-            <div className="absolute inset-0 bg-cover bg-center z-0">
-              <img src={gifBackground} alt="Background" className="w-full h-full opacity-60" />
-            </div>
+            
             <div className="flex flex-col h-full relative z-10">
               <div className="p-6 bg-blue-100 rounded-lg flex-grow relative z-10">
                 <h2 className="text-xl font-semibold mb-4">Hotel Information</h2>
@@ -291,9 +293,7 @@ const HotelDetails = () => {
         {/* Sustainability Efforts Card */}
         <div className="px-2 mb-4 w-full md:w-1/3">
           <div className="relative">
-            <div className="absolute inset-0 bg-cover bg-center z-0">
-              <img src={gifBackground} alt="Background" className="w-full h-full opacity-60" />
-            </div>
+           
             <div className="flex flex-col h-full relative z-10">
               <div className="p-6 bg-green-100 rounded-lg flex-grow relative z-10">
                 <h2 className="text-xl font-semibold mb-4">Sustainability Efforts</h2>
@@ -323,9 +323,7 @@ className="mt-auto text-green-600 hover:text-green-800"
 </div>  {/* COVID-19 Support Card */}
   <div className="px-2 mb-4 w-full md:w-1/3">
     <div className="relative">
-      <div className="absolute inset-0 bg-cover bg-center z-0">
-        <img src={gifBackground} alt="Background" className="w-full h-full opacity-60" />
-      </div>
+      
       <div className="flex flex-col h-full relative z-10">
         <div className="p-6 bg-red-100 rounded-lg flex-grow relative z-10">
           <h2 className="text-xl font-semibold mb-4">COVID-19 Support</h2>
@@ -352,40 +350,36 @@ className="mt-auto text-green-600 hover:text-green-800"
     </div>
   </div>
 
-  {/* Family Facilities Card */}
-  <div className="px-2 mb-4 w-full md:w-1/3">
-    <div className="relative">
-      <div className="absolute inset-0 bg-cover bg-center z-0">
-        <img src={gifBackground} alt="Background" className="w-full h-full opacity-60" />
-      </div>
-      <div className="flex flex-col h-full relative z-10">
-        <div className="p-6 bg-yellow-100 rounded-lg flex-grow relative z-10">
-          <h2 className="text-xl font-semibold mb-4">Family Facilities</h2>
-          {readMore ? (
-            <ul className="list-disc list-inside mb-4">
-              {familyFacilitiesList.map((facility, index) => (
+ {/* Family Facilities Card */}
+<div className="px-2 mb-4 w-full md:w-1/3">
+
+  <div className="relative">
+    
+    <div className="flex flex-col h-full relative z-10">
+      <div className="p-6 bg-yellow-100 rounded-lg flex-grow relative z-10">
+        <h2 className="text-xl font-semibold mb-4">Family Facilities</h2>
+        <ul className="  mb-4">
+          {readMore
+            ? familyFacilitiesList.map((facility, index) => (
+                <li key={index}>{facility}</li>
+              ))
+            : familyFacilitiesList.slice(0, 5).map((facility, index) => (
                 <li key={index}>{facility}</li>
               ))}
-            </ul>
-          ) : (
-            <>
-              {familyFacilitiesList.slice(0, 3).map((facility, index) => (
-                <li key={index}>{facility}</li>
-              ))}
-              {familyFacilitiesList.length > 3 && (
-                <button
-                  onClick={() => setReadMore(!readMore)}
-                  className="mt-auto text-blue-600 hover:text-blue-800"
-                >
-                  Read {readMore ? "Less" : "More"}
-                </button>
-              )}
-            </>
-          )}
-        </div>
+        </ul>
+        {familyFacilitiesList.length > 5 && (
+          <button
+            onClick={() => setReadMore(!readMore)}
+            className="mt-auto text-blue-600 hover:text-blue-800"
+          >
+            Read {readMore ? "Less" : "More"}
+          </button>
+        )}
       </div>
     </div>
   </div>
+
+</div>
 </div>
 
 <div className="px-2 mb-4 w-full md:w-2/3">
