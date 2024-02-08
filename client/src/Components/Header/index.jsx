@@ -42,7 +42,9 @@ const index = () => {
               <Link to={`/trips/itinerary`}>
                 <Dropdown.Item>My itinerary</Dropdown.Item>
               </Link>
-              <Dropdown.Item>Upcoming trips</Dropdown.Item>
+              <Link to="/upcomingtrips">
+                <Dropdown.Item>Upcoming trips</Dropdown.Item>
+              </Link>
               <Link to="/blog">
                 <Dropdown.Item>Blog</Dropdown.Item>
               </Link>

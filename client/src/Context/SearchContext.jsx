@@ -70,6 +70,11 @@ export const SearchProvider = ({ children }) => {
   };
 
   const fetchData = async () => {
+    // Check if all required parameters are set
+    if (!latitude || !longitude || !checkInDate || !checkOutDate) {
+      return;
+    }
+
     setIsLoading(true);
 
     const currencyCode = await getCurrencyCode();
@@ -79,8 +84,17 @@ export const SearchProvider = ({ children }) => {
       );
 
       setApiCallsCount((prevCount) => prevCount + 1);
-      console.log(response.data);
-      setHotels(response.data.data.result);
+
+      let hotelsData = response.data.data.result;
+
+      // Sort the hotels based on sortOrder
+      if (sortOrder === "low-high") {
+        hotelsData.sort((a, b) => a.min_total_price - b.min_total_price);
+      } else if (sortOrder === "high-low") {
+        hotelsData.sort((a, b) => b.min_total_price - a.min_total_price);
+      }
+
+      setHotels(hotelsData);
     } catch (err) {
       setError(err);
       console.error("Error fetching hotels: ", err);
@@ -88,6 +102,10 @@ export const SearchProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [sortOrder]);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
