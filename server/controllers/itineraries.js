@@ -1,18 +1,49 @@
 const Itinerary = require("../models/itinerary");
+const axios = require("axios");
 
 const createItinerary = async (req, res) => {
+  const { hotelId, checkInDate, checkOutDate, hotel } = req.body; // Ensure you're destructuring hotel here if it's part of the body
+
+  // Define the external API request options
+  const options = {
+    method: "GET",
+    url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
+    params: {
+      hotel_id: hotelId,
+      arrival_date: checkInDate,
+      departure_date: checkOutDate,
+    },
+    headers: {
+      "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
+      "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
+    },
+  };
+
   try {
+    // Fetching hotel details from external API
+    const response = await axios.request(options);
+    console.log("Hotel details fetched successfully:", response.data);
+
+    // Combining fetched hotel details with existing hotel data from the request body
+    const combinedHotelDetails = { ...hotel, ...response.data };
+
+    // Creating a new itinerary in the database with combined hotel details
     const newItinerary = await Itinerary.create({
-      userId: req.user._id,
-      hotelDetails: req.body.hotel, // Save the hotel details
+      userId: req.user._id, // Make sure req.user is populated correctly by your authentication middleware
+      hotelDetails: combinedHotelDetails,
     });
-    console.log(newItinerary); // Add this line
+
+    console.log("New itinerary created successfully:", newItinerary);
     res.status(201).json(newItinerary);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: error.message });
+    console.error("Failed to fetch hotel details or create itinerary:", error);
+    res.status(500).json({
+      message: "Failed to fetch hotel details or create itinerary",
+      error: error.message,
+    });
   }
 };
+
 const getAllItineraries = async (req, res) => {
   try {
     const itinerary = await Itinerary.find().populate(
@@ -101,11 +132,70 @@ const getItinerariesByUserId = async (req, res) => {
   }
 };
 
+const getItinerariesByStatus = async (req, res) => {
+  try {
+    const { status } = req.params;
+    const itineraries = await Itinerary.find({ userId: req.user_id, status });
+    res.json(itineraries);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/* const createUpcomingTrip = async (req, res) => {
+  const { hotelId, checkInDate, checkOutDate, hotel } = req.body;
+  const { userId } = req.params; // Extract userId from request parameters
+
+  // Define the external API request options
+  const options = {
+    method: "GET",
+    url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
+    params: {
+      hotel_id: hotelId,
+      arrival_date: checkInDate,
+      departure_date: checkOutDate,
+    },
+    headers: {
+      "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
+      "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
+    },
+  };
+
+  try {
+    // Fetching hotel details from external API
+    const response = await axios.request(options);
+
+    // Combining fetched hotel details with existing hotel data from the request body
+    const combinedHotelDetails = { ...hotel, ...response.data };
+
+    // Assuming you have a User model and each user has an 'upcomingTrips' array
+    const user = await User.findById(userId); // Use userId instead of req.user._id
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.upcomingTrips.push(combinedHotelDetails);
+
+    await user.save();
+
+    res.status(201).json(combinedHotelDetails);
+  } catch (error) {
+    console.error("Failed to create upcoming trip:", error);
+    res.status(500).json({
+      message: "Failed to create upcoming trip",
+      error: error.message,
+    });
+  }
+}; */
 module.exports = {
   createItinerary,
+  getItinerariesByStatus,
   getAllItineraries,
   getItineraryById,
   getItinerariesByUserId,
   updateItinerary,
+
   deleteItinerary,
 };

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../axiosInstance";
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { Button, Card } from "flowbite-react";
@@ -46,7 +46,15 @@ const Accordion = ({ title, children }) => {
   );
 };
 
+import { useLocation } from "react-router-dom";
 const HotelDetails = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const arrival_date = queryParams.get("arrival_date");
+  const departure_date = queryParams.get("departure_date");
+
+  console.log(arrival_date, departure_date);
+
   const { checkInDate, checkOutDate, setCheckInDate, setCheckOutDate } =
     useSearch();
   const [hotelDetails, setHotelDetails] = useState(null);
@@ -109,30 +117,25 @@ const HotelDetails = () => {
     // Add more FAQs as needed
   ]);
 
+  const checkInDateCookie = localStorage.getItem("checkInDate");
+  const checkOutDateCookie = localStorage.getItem("checkOutDate");
+
   useEffect(() => {
     const fetchHotelDetails = async () => {
       try {
-        const options = {
-          method: "GET",
-          url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
+        const response = await axios.get("/api/getHotelDetails", {
           params: {
             hotel_id: hotelId,
-            arrival_date: checkInDate,
-            departure_date: checkOutDate,
+            arrival_date: checkInDateCookie,
+            departure_date: checkOutDateCookie,
             adults: "1",
             children_age: "0",
             room_qty: "1",
             languagecode: "en-us",
             currency_code: "EUR",
           },
-          headers: {
-            "X-RapidAPI-Key":
-              "67e6b85d33mshd5e8a69a6d26d50p140b38jsn02c7a8bf3e37",
-            "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
-          },
-        };
+        });
 
-        const response = await axios.request(options);
         console.log(response.data);
         if (response.data.status && response.data.data) {
           setHotelDetails(response.data.data);
