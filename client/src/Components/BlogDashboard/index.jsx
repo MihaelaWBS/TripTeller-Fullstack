@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import axios from "../../axiosInstance";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import c4 from "../../assets/c4.jpg";
+import d6 from "../../assets/d6.jpg";
 import DOMPurify from "dompurify";
 import parse from "html-react-parser";
 import { Button } from "flowbite-react";
@@ -37,20 +37,20 @@ const BlogDashboard = () => {
   return (
     <>
       {/* Banner with a cover picture and overlay text */}
-      <div className="relative h-96 w-full overflow-hidden">
-        <img src={c4} alt="Travel" className="w-full h-full object-cover" />
-        <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-40 flex items-center justify-center">
-          <h1 className="text-white text-6xl font-bold">Travel smarter</h1>
+      <div className="relative  md:h-[42rem] w-full overflow-hidden">
+        <img src={d6} alt="Travel" className="w-full h-full object-fill" />
+        <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-10 flex items-center justify-center"> 
+         {/*<h1 className="text-white text-6xl font-bold">Travel smarter</h1> */}
         </div>
       </div>
 
       {/* Title for latest posts */}
       <div className="container mx-auto p-4">
         <div className="my-8 text-center ">
-          <h2 className="text-4xl font-bold">Our latest posts</h2>
+          <h2 className="text-4xl font-bold">OUR LATEST POSTS</h2>
         </div>
      
-        <div className="text-center mb-10">
+        <div className="text-center mb-10 md:ml-1 xl:ml-10">
           <Link to="/addPost">
             <Button className="bg-orange-500 rounded-3xl">Create a post</Button>
           </Link>
@@ -126,3 +126,4 @@ const BlogDashboard = () => {
 };
 
 export default BlogDashboard;
+
