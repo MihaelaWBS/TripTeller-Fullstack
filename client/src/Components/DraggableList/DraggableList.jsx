@@ -173,10 +173,10 @@ const DraggableList = ({ activities, itineraryId }) => {
                 .sort((a, b) => a.time.localeCompare(b.time))
                 .map((activity, index) => (
                   <div
-                    key={activity.id}
+                    key={activity._id}
                     className="grid grid-cols-3 gap-4 items-center p-4 mb-2 bg-transparent rounded-xl"
                   >
-                    {editingActivity === activity.id ? (
+                    {editingActivity === activity._id ? (
                       <form
                         onSubmit={(event) => {
                           updateActivity(event, key, activity._id);
@@ -195,6 +195,7 @@ const DraggableList = ({ activities, itineraryId }) => {
                           name="content"
                           required
                           defaultValue={activity.content}
+                          placeholder="Activity description"
                           className="p-2 text-lg rounded-lg border col-span-2"
                         />
                         <button
@@ -211,16 +212,16 @@ const DraggableList = ({ activities, itineraryId }) => {
                           {activity.content}
                           <div>
                             <button
-                              onClick={() => setEditingActivity(activity.id)}
-                              className="bg-orange-500 text-white font-bold py-1 px-2 rounded-full mr-2"
+                              onClick={() => setEditingActivity(activity._id)}
+                              className="bg-white text-white font-bold py-1 px-2 rounded-full mr-2"
                             >
-                              <FontAwesomeIcon icon={faEdit} />
+                              <FontAwesomeIcon icon={faEdit} color="black" />
                             </button>
                             <button
                               onClick={() => deleteActivity(key, activity._id)}
-                              className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                              className="bg-white hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
                             >
-                              <FontAwesomeIcon icon={faTrash} />
+                              <FontAwesomeIcon icon={faTrash} color="red" />
                             </button>
                           </div>
                         </div>
@@ -230,42 +231,46 @@ const DraggableList = ({ activities, itineraryId }) => {
                 ))}
             </div>
           ))}
-      <form
-        onSubmit={addActivity}
-        className="grid grid-cols-3 gap-4 items-center mt-4"
-        onChange={handleInputChange}
-      >
-        <input
-          name="day"
-          value={newActivity.day}
+      <div className="flex items">
+        <form
+          onSubmit={addActivity}
+          className="grid grid-cols-2 gap-4 items-center mt-4"
           onChange={handleInputChange}
-          type="number"
-          min="1"
-          required
-          className="px-4 py-2 text-lg rounded-lg border"
-        />
-        <input
-          name="time"
-          type="time"
-          required
-          value={newActivity.time}
-          onChange={handleInputChange}
-          className="p-2 text-lg rounded-lg border"
-        />
-        <input
-          name="content"
-          required
-          value={newActivity.content}
-          onChange={handleInputChange}
-          className="p-2 text-lg rounded-lg border col-span-2"
-        />
-        <button
-          type="submit"
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full col-span-3"
         >
-          Add Activity
-        </button>
-      </form>
+          <input
+            name="day"
+            value={newActivity.day}
+            onChange={handleInputChange}
+            type="number"
+            min="1"
+            required
+            placeholder="Day"
+            className="px-4 py-2 text-lg rounded-lg border"
+          />
+          <input
+            name="time"
+            type="time"
+            required
+            value={newActivity.time}
+            onChange={handleInputChange}
+            className="p-2 text-lg rounded-lg border"
+          />
+          <input
+            name="content"
+            required
+            placeholder="Activity description"
+            value={newActivity.content}
+            onChange={handleInputChange}
+            className="p-2 text-lg rounded-lg border col-span-2"
+          />
+          <button
+            type="submit"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full col-span-3"
+          >
+            Add Activity
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

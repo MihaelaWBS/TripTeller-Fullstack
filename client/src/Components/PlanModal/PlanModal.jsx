@@ -57,7 +57,7 @@ const PlanModal = ({ isOpen, onClose, itineraryId }) => {
                   className="text-lg leading-6 font-medium text-gray-900"
                   id="modal-title"
                 >
-                  Plan Form
+                  Plan your trip
                 </h3>
                 <div className="mt-2">
                   <PlanForm activities={activities} itineraryId={itineraryId} />
