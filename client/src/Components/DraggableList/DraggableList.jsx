@@ -176,18 +176,26 @@ const DraggableList = ({ activities, itineraryId }) => {
   return (
     <div className="mx-auto w-full max-w-3xl">
       {myActivities &&
-        Object.keys(myActivities).map((key) => (
-          <div>
-            <h2> day{key}</h2>
-            {myActivities[key].map((a) => (
-              <>
-                <p>{a.content}</p>
-                <p>{a.time}</p>
-              </>
-            ))}
-          </div>
-        ))}
-
+        Object.keys(myActivities)
+          .sort((a, b) => Number(a) - Number(b))
+          .map((key) => (
+            <div key={key} className="mb-6">
+              <div className="grid grid-cols-3 gap-4 items-center mb-4">
+                <div className="font-bold px-2 bg-pink-300 rounded-3xl col-span-3">{`Day ${key}`}</div>
+              </div>
+              {myActivities[key]
+                .sort((a, b) => a.time.localeCompare(b.time))
+                .map((activity, index) => (
+                  <div
+                    key={activity.id}
+                    className="grid grid-cols-3 gap-4 items-center p-4 mb-2 bg-transparent rounded-xl"
+                  >
+                    <span className="font-bold">{activity.time}</span>
+                    <div className="col-span-2">{activity.content}</div>
+                  </div>
+                ))}
+            </div>
+          ))}
       <form
         onSubmit={addActivity}
         className="grid grid-cols-3 gap-4 items-center mt-4"
