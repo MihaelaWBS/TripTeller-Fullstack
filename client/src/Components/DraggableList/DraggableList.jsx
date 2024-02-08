@@ -85,7 +85,7 @@ const DraggableList = ({ activities, itineraryId }) => {
 
     // Access the current itinerary ID from the context
     console.log(itinerary);
-    const currentItineraryId = itinerary[0]._id; // Adjust this line based on how the itinerary ID is stored
+    const currentItineraryId = itineraryId; // Adjust this line based on how the itinerary ID is stored
 
     // Prepare the new activity data, including the itinerary ID
     const newActivityData = { ...newActivity, itineraryId: currentItineraryId };
