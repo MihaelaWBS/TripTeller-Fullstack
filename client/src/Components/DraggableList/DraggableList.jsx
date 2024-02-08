@@ -1,10 +1,12 @@
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-const DraggableList = () => {
+import axiosInstance from "../../axiosInstance";
+import { useItinerary } from "../../Context/ItineraryContext";
+const DraggableList = ({ itineraryId }) => {
+  const { itinerary } = useItinerary();
   const [activities, setActivities] = useState({});
   const [newActivity, setNewActivity] = useState({
     day: "",
@@ -40,57 +42,82 @@ const DraggableList = () => {
     });
   };
 
-  const updateActivity = (event, day, id) => {
+  const updateActivity = async (event, day, id) => {
     event.preventDefault();
     const { time, content } = event.target.elements;
-    setActivities({
-      ...activities,
-      [day]: activities[day].map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              time: time.value,
-              content: content.value,
-              isEditing: false,
-            }
-          : item
-      ),
-    });
+
+    const updatedActivity = {
+      time: time.value,
+      content: content.value,
+      isEditing: false,
+    };
+
+    try {
+      // Send a PUT request to your server with the updated activity
+      const response = await axiosInstance.put(
+        `/api/activities/${id}`,
+        updatedActivity
+      );
+
+      // If the request is successful, update the activity in your local state
+      if (response.status === 200) {
+        setActivities({
+          ...activities,
+          [day]: activities[day].map((item) =>
+            item.id === id
+              ? {
+                  ...item,
+                  ...updatedActivity,
+                }
+              : item
+          ),
+        });
+      } else {
+        console.error("Error updating activity:", response);
+      }
+    } catch (error) {
+      console.error("Error updating activity:", error);
+    }
   };
 
-  const addActivity = (e) => {
+  const addActivity = async (e) => {
     e.preventDefault();
 
-    const dayKey = newActivity.day.toString();
-    const activityWithId = { ...newActivity, id: uuidv4(), isEditing: false };
+    // Access the current itinerary ID from the context
+    console.log(itinerary);
+    const currentItineraryId = itinerary[0]._id; // Adjust this line based on how the itinerary ID is stored
 
-    setActivities({
-      ...activities,
-      [dayKey]: activities[dayKey]
-        ? [...activities[dayKey], activityWithId]
-        : [activityWithId],
-    });
+    // Prepare the new activity data, including the itinerary ID
+    const newActivityData = { ...newActivity, itineraryId: currentItineraryId };
 
-    setNewActivity({ day: "", time: "", content: "" });
+    try {
+      console.log(newActivityData);
+      const response = await axiosInstance.post(
+        "/api/activities",
+        newActivityData
+      );
 
-    // Notification code starts here
-    /*
-    // Calculate the time until the activity starts
-    const now = new Date();
-    const activityTime = new Date();
-    activityTime.setHours(newActivity.time.split(":")[0]);
-    activityTime.setMinutes(newActivity.time.split(":")[1]);
-    const timeUntilActivityStarts = activityTime.getTime() - now.getTime();
-  
-    // Subtract 5 minutes (in milliseconds) from the time until the activity starts
-    const notificationTime = timeUntilActivityStarts - 5 * 60 * 1000;
-  
-    // Set a timer to show a notification 5 minutes before the activity starts
-    setTimeout(() => {
-      alert(`Activity "${newActivity.content}" is starting in 5 minutes!`);
-    }, notificationTime);
-    */
-    // Notification code ends here
+      if (response.status === 200 || response.status === 201) {
+        // Assuming the server response includes the newly created activity
+        const createdActivity = response.data;
+
+        // Update the activities state with the new activity
+        // You might need to adjust this logic based on how you're managing activities state
+        setActivities((prevActivities) => ({
+          ...prevActivities,
+          [createdActivity.day]: prevActivities[createdActivity.day]
+            ? [...prevActivities[createdActivity.day], createdActivity]
+            : [createdActivity],
+        }));
+
+        // Reset the form fields
+        setNewActivity({ day: "", time: "", content: "" });
+      } else {
+        console.error("Error adding activity:", response);
+      }
+    } catch (error) {
+      console.error("Error adding activity:", error);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -104,6 +131,22 @@ const DraggableList = () => {
       [day]: prevActivities[day].filter((activity) => activity.id !== id),
     }));
   };
+  useEffect(() => {
+    const fetchActivities = async () => {
+      if (itineraryId) {
+        try {
+          const response = await axiosInstance.get(
+            `/api/activities/itinerary/${itineraryId}`
+          );
+          setActivities(response.data);
+        } catch (error) {
+          console.error("Error fetching activities:", error);
+        }
+      }
+    };
+
+    fetchActivities();
+  }, [itineraryId]);
   return (
     <div className="mx-auto w-full max-w-3xl">
       <DragDropContext onDragEnd={onDragEnd}>
@@ -199,6 +242,7 @@ const DraggableList = () => {
       <form
         onSubmit={addActivity}
         className="grid grid-cols-3 gap-4 items-center mt-4"
+        onChange={handleInputChange}
       >
         <input
           name="day"

@@ -9,7 +9,12 @@ import { Link } from "react-router-dom";
 import axiosInstance from "../../axiosInstance";
 import { AuthContext } from "../../Context/Auth";
 import emptyItineraryBackground from "../../assets/empty_itinerary_background.png";
+import PlanModal from "../PlanModal/PlanModal";
 const Itinerary = () => {
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
+  const [plan, setPlan] = useState(null);
+  const [selectedItineraryId, setSelectedItineraryId] = useState(null);
+
   const { user } = useContext(AuthContext);
   const { hotels } = useSearch();
   const [hotelDetails, setHotelDetails] = useState(null);
@@ -186,6 +191,23 @@ const Itinerary = () => {
                         >
                           Remove from itinerary
                         </Button>
+                        <Button
+                          onClick={() => {
+                            setIsPlanModalOpen(true);
+                            setSelectedItineraryId(hotel._id); // Assuming hotel._id is the correct identifier for your itinerary items
+                          }}
+                          className="bg-orange-500 rounded-3xl mt-2"
+                        >
+                          Plan
+                        </Button>
+                        <PlanModal
+                          isOpen={isPlanModalOpen}
+                          onClose={() => {
+                            setIsPlanModalOpen(false);
+                            setSelectedItineraryId(null); // Reset selectedItineraryId when closing the modal
+                          }}
+                          itineraryId={selectedItineraryId} // Pass the selected itinerary ID to the modal
+                        />
                       </div>
                     </div>
                   </Card>

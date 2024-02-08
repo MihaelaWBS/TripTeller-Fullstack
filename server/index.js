@@ -20,6 +20,7 @@ const commentRouter = require("./routes/comments");
 const itineraryRouter = require("./routes/itineraries");
 const authRouter = require("./routes/users");
 const upcomingTripsRouter = require("./routes/upcomingTrips");
+const activitiesRouter = require("./routes/activity");
 const api = require("api");
 const { addAvatar } = require("./controllers/users");
 const sdk = api("@fsq-developer/v1.0#18rps1flohmmndw");
@@ -47,6 +48,7 @@ app.use("/api/itineraries", itineraryRouter);
 app.use("/api/posts", postRouter);
 app.use("/api", apiRouter);
 app.use("/api/upcomingTrips", upcomingTripsRouter);
+app.use("/api/activities", activitiesRouter);
 const hardcodedLatitude = "48.858844";
 const hardcodedLongitude = "2.294351";
 
