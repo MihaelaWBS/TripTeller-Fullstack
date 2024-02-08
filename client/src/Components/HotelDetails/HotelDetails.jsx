@@ -1,4 +1,4 @@
-import axios from "../../axiosInstance";
+import axios from "axios";
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { Button, Card } from "flowbite-react";
@@ -6,8 +6,10 @@ import MapView from "../MapView/MapView";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import WeatherComponent from "../WeatherComponent/WeatherComponent";
 import { useSearch } from "../../Context/SearchContext";
-import gifBackground from '../../Images/Breakthrough Idea.gif'
 import backgroundImage from '../../Images/mountains.webp'
+import  Modal  from "react-modal";
+
+Modal.setAppElement('#root');
 const Accordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -44,15 +46,7 @@ const Accordion = ({ title, children }) => {
   );
 };
 
-import { useLocation } from "react-router-dom";
 const HotelDetails = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const arrival_date = queryParams.get("arrival_date");
-  const departure_date = queryParams.get("departure_date");
-
-  console.log(arrival_date, departure_date);
-
   const { checkInDate, checkOutDate, setCheckInDate, setCheckOutDate } =
     useSearch();
   const [hotelDetails, setHotelDetails] = useState(null);
@@ -60,6 +54,10 @@ const HotelDetails = () => {
   const [error, setError] = useState(null);
   const { hotelId } = useParams();
   const [readMore, setReadMore] = useState(null);
+  const [isPriceBreakdownModalOpen, setIsPriceBreakdownModalOpen] = useState(true);
+  const [priceBreakdown, setPriceBreakdown] = useState(null);
+  const [spokenLanguages, setSpokenLanguages] = useState([]);
+
   const [faqs, setFaqs] = useState([
     {
       question: "What time is check-in and check-out?",
@@ -111,28 +109,36 @@ const HotelDetails = () => {
     // Add more FAQs as needed
   ]);
 
-  const checkInDateCookie = localStorage.getItem("checkInDate");
-  const checkOutDateCookie = localStorage.getItem("checkOutDate");
-
   useEffect(() => {
     const fetchHotelDetails = async () => {
       try {
-        const response = await axios.get("/api/getHotelDetails", {
+        const options = {
+          method: "GET",
+          url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
           params: {
             hotel_id: hotelId,
-            arrival_date: checkInDateCookie,
-            departure_date: checkOutDateCookie,
+            arrival_date: checkInDate,
+            departure_date: checkOutDate,
             adults: "1",
             children_age: "0",
             room_qty: "1",
             languagecode: "en-us",
             currency_code: "EUR",
           },
-        });
+          headers: {
+            "X-RapidAPI-Key":
+              "67e6b85d33mshd5e8a69a6d26d50p140b38jsn02c7a8bf3e37",
+            "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
+          },
+        };
 
+        const response = await axios.request(options);
         console.log(response.data);
         if (response.data.status && response.data.data) {
           setHotelDetails(response.data.data);
+          setSpokenLanguages(response.data.data.spoken_languages || []);
+          setPriceBreakdown(response.data.data.product_price_breakdown || {});
+
           const initialImage =
             (response.data.data.rooms &&
               response.data.data.rooms[0]?.photos[0]?.url_original) ||
@@ -210,9 +216,9 @@ const HotelDetails = () => {
       </li>
     ))
   : null;
+  const languageMap = {"mr": "Marathi", "hi": "Hindi", "en-gb": "English (UK)", "de": "German", "es": "Spanish", "fr": "French", "it": "Italian", "pt": "Portuguese", "nl": "Dutch", "ru": "Russian", "pl": "Polish", "da": "Danish", "sv": "Swedish", "no": "Norwegian", "fi": "Finnish", "cs": "Czech", "el": "Greek", "hu": "Hungarian", "ro": "Romanian", "sk": "Slovak", "sl": "Slovenian", "bg": "Bulgarian", "lv": "Latvian", "lt": "Lithuanian", "et": "Estonian", "hr": "Croatian", "sr": "Serbian", "mk": "Macedonian", "bs": "Bosnian", "al": "Albanian", "is": "Icelandic", "mt": "Maltese", "ga": "Irish", "cy": "Welsh"};
 
 
-  // Map your icon names to actual icon components
   
   return (
     <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
@@ -308,6 +314,95 @@ const HotelDetails = () => {
           </div>
         </div>
   </div>
+  <Modal
+  isOpen={isPriceBreakdownModalOpen}
+  onRequestClose={() => setIsPriceBreakdownModalOpen(false)}
+  style={{
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+      zIndex: 1000,
+    },
+    content: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      border: '1px solid #ccc',
+      background: `url(${backgroundImage}) center/cover no-repeat, rgba(0, 0, 0, 0.5)`,
+      overflow: 'auto',
+      WebkitOverflowScrolling: 'touch',
+      borderRadius: '10px',
+      outline: 'none',
+      padding: '20px',
+      color: 'white',
+      width: '80%',
+      maxWidth: '600px',
+    },
+  }}
+>
+  <h2 style={{ textAlign: 'center', fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>Price Breakdown</h2>
+  {priceBreakdown && (
+    <div style={{ lineHeight: '1.5' }}>
+      <p>Gross Amount: <strong>{priceBreakdown.gross_amount.currency} {priceBreakdown.gross_amount.value.toFixed(2)}</strong></p>
+      <p>All Inclusive Amount: <strong>{priceBreakdown.all_inclusive_amount.currency} {priceBreakdown.all_inclusive_amount.value.toFixed(2)}</strong></p>
+      <p>Excluded Amount: <strong>{priceBreakdown.excluded_amount.currency} {priceBreakdown.excluded_amount.value.toFixed(2)}</strong></p>
+    </div>
+  )}
+  <button
+    onClick={() => setIsPriceBreakdownModalOpen(false)}
+    style={{
+      display: 'block',
+      marginTop: '20px',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      padding: '10px 20px',
+      backgroundColor: '#007bff', // Button color
+      color: 'white',
+      border: 'none',
+      borderRadius: '5px',
+      cursor: 'pointer',
+    }}
+  >
+    Close
+  </button>
+</Modal>
+
+   {/* Spoken Languages Card */}
+   <div className="px-2 mb-4 w-full md:w-1/3">
+        <div className="relative">
+          <div className="flex flex-col h-full relative z-10">
+            <div
+              className="p-6 rounded-lg flex-grow relative z-10 text-white"
+              style={{ 
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                height: '350px',
+                width: '100%',
+                overflow: 'auto',
+              }}
+            >
+              <div
+                style={{ 
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  padding: '10px',
+                  borderRadius: '5px',
+                }}
+              >
+                <h2 className="text-xl font-semibold mb-4">Spoken Languages</h2>
+                <ul className="list-disc list-inside text-white">
+                  {spokenLanguages.map((code, index) => (
+                    <li key={index}>{languageMap[code] || code}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
         {/* Sustainability Efforts Card */}
         <div className="px-2 mb-4 w-full md:w-1/3">
   <div className="relative">
@@ -446,7 +541,9 @@ className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
 <div className="px-2 mb-4 w-full md:w-2/3">
   <Card className="flex flex-col h-full">
     <div className="my-8">
-      <h2 className="text-3xl font-semibold mb-4">Frequently Asked Questions</h2>
+    
+      <h2 className="text-3xl font-semibold mb-4"  > Frequently Asked Questions  </h2>
+      
       {faqs.map((faq, index) => (
         <Accordion key={index} title={faq.question}>
           {faq.answer}
@@ -454,6 +551,7 @@ className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
       ))}
     </div>
   </Card>
+  
 </div>
 
   
