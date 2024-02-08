@@ -7,6 +7,8 @@ import axiosInstance from "../../axiosInstance";
 import { useItinerary } from "../../Context/ItineraryContext";
 const DraggableList = ({ activities, itineraryId }) => {
   const { itinerary } = useItinerary();
+  const [editingActivity, setEditingActivity] = useState(null);
+
   const [myActivities, setMyActivities] = useState(null);
   const [newActivity, setNewActivity] = useState({
     day: "",
@@ -42,75 +44,66 @@ const DraggableList = ({ activities, itineraryId }) => {
     });
   };
 
-  const updateActivity = async (event, day, id) => {
+  const updateActivity = async (event, day, activityId) => {
     event.preventDefault();
     const { time, content } = event.target.elements;
 
+    // Log the ID to ensure it's correct
+    console.log("Updating activity with ID:", activityId);
+
     const updatedActivity = {
+      day,
       time: time.value,
       content: content.value,
-      isEditing: false,
     };
 
+    // Ensure the endpoint is correct
     try {
-      // Send a PUT request to your server with the updated activity
       const response = await axiosInstance.put(
-        `/api/activities/${id}`,
+        `/api/activities/${activityId}`, // Corrected endpoint
         updatedActivity
       );
 
-      // If the request is successful, update the activity in your local state
-      if (response.status === 200) {
-        setMyActivities({
-          ...myActivities,
-          [day]: myActivities[day].map((item) =>
-            item.id === id
-              ? {
-                  ...item,
-                  ...updatedActivity,
-                }
-              : item
-          ),
-        });
-      } else {
-        console.error("Error updating activity:", response);
-      }
+      console.log("Updated activity:", response.data);
+      // Fetch activities again here or update the state to reflect the changes
+      // This might include setting myActivities with the updated activity list
     } catch (error) {
       console.error("Error updating activity:", error);
     }
-  };
 
+    setEditingActivity(null); // Reset editing state
+  };
   const addActivity = async (e) => {
     e.preventDefault();
 
-    // Access the current itinerary ID from the context
-    console.log(itinerary);
-    const currentItineraryId = itineraryId; // Adjust this line based on how the itinerary ID is stored
-
-    // Prepare the new activity data, including the itinerary ID
+    const currentItineraryId = itineraryId;
     const newActivityData = { ...newActivity, itineraryId: currentItineraryId };
 
     try {
-      console.log(newActivityData);
       const response = await axiosInstance.post(
         "/api/activities",
         newActivityData
       );
 
       if (response.status === 200 || response.status === 201) {
-        // Assuming the server response includes the newly created activity
         const createdActivity = response.data;
 
-        // Update the activities state with the new activity
-        // You might need to adjust this logic based on how you're managing activities state
-        setMyActivities((prevActivities) => ({
-          ...prevActivities,
-          [createdActivity.day]: prevActivities[createdActivity.day]
-            ? [...prevActivities[createdActivity.day], createdActivity]
-            : [createdActivity],
-        }));
+        // Functional update form to ensure you're working with the most up-to-date state
+        setMyActivities((currentActivities) => {
+          // Clone the current activities to avoid direct mutation
+          const updatedActivities = { ...currentActivities };
 
-        // Reset the form fields
+          // Append the new activity to the correct day, creating a new array if necessary
+          const dayActivities = updatedActivities[createdActivity.day] || [];
+          updatedActivities[createdActivity.day] = [
+            ...dayActivities,
+            createdActivity,
+          ];
+
+          return updatedActivities;
+        });
+
+        // Optionally reset the newActivity state to clear the form
         setNewActivity({ day: "", time: "", content: "" });
       } else {
         console.error("Error adding activity:", response);
@@ -125,11 +118,26 @@ const DraggableList = ({ activities, itineraryId }) => {
     setNewActivity({ ...newActivity, [name]: value });
   };
 
-  const deleteActivity = (day, id) => {
-    setMyActivities((prevActivities) => ({
-      ...prevActivities,
-      [day]: prevActivities[day].filter((activity) => activity.id !== id),
-    }));
+  const deleteActivity = async (day, activityId) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/api/activities/${activityId}`
+      );
+
+      if (response.status === 200) {
+        setMyActivities((prevActivities) => {
+          const updatedActivities = { ...prevActivities };
+          updatedActivities[day] = updatedActivities[day].filter(
+            (activity) => activity._id !== activityId
+          );
+          return updatedActivities;
+        });
+      } else {
+        console.error("Error deleting activity:", response);
+      }
+    } catch (error) {
+      console.error("Error deleting activity:", error);
+    }
   };
   function groupBy(array, key) {
     return array.reduce((acc, obj) => {
@@ -145,34 +153,12 @@ const DraggableList = ({ activities, itineraryId }) => {
   useEffect(() => {
     if (activities) {
       const groupedData = groupBy(activities, "day");
-      console.log("WHAAAAT IS THIS GROUP", groupedData);
+      console.log("Activities with ID:", groupedData);
+
       setMyActivities(groupedData); // objects
     }
   }, [activities]);
-  // useEffect(() => {
-  //   const fetchActivities = async () => {
-  //     if (!itineraryId) return; // Skip if no itineraryId is provided
-  //     try {
-  //       const response = await axiosInstance.get(
-  //         `/api/activities/itinerary/${itineraryId}`
-  //       );
-  //       const fetchedActivities = response.data;
-  //       // Process and set activities based on your data structure. Example:
-  //       const activitiesByDay = fetchedActivities.reduce((acc, activity) => {
-  //         const { day, ...rest } = activity;
-  //         acc[day] = acc[day] ? [...acc[day], rest] : [rest];
-  //         return acc;
-  //       }, {});
-  //       setMyActivities(activitiesByDay);
-  //     } catch (error) {
-  //       console.error("Error fetching activities:", error);
-  //     }
-  //   };
-  //   fetchActivities();
-  // }, [itineraryId]);
-  // useEffect(() => {
-  //   fetchActivities();
-  // }, [itineraryId]);
+
   return (
     <div className="mx-auto w-full max-w-3xl">
       {myActivities &&
@@ -190,8 +176,56 @@ const DraggableList = ({ activities, itineraryId }) => {
                     key={activity.id}
                     className="grid grid-cols-3 gap-4 items-center p-4 mb-2 bg-transparent rounded-xl"
                   >
-                    <span className="font-bold">{activity.time}</span>
-                    <div className="col-span-2">{activity.content}</div>
+                    {editingActivity === activity.id ? (
+                      <form
+                        onSubmit={(event) => {
+                          updateActivity(event, key, activity._id);
+                          setEditingActivity(null);
+                        }}
+                        className="col-span-3 grid grid-cols-3 gap-4 items-center"
+                      >
+                        <input
+                          name="time"
+                          defaultValue={activity.time}
+                          type="time"
+                          required
+                          className="p-2 text-lg rounded-lg border"
+                        />
+                        <input
+                          name="content"
+                          required
+                          defaultValue={activity.content}
+                          className="p-2 text-lg rounded-lg border col-span-2"
+                        />
+                        <button
+                          type="submit"
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full"
+                        >
+                          Save
+                        </button>
+                      </form>
+                    ) : (
+                      <>
+                        <span className="font-bold">{activity.time}</span>
+                        <div className="col-span-2 flex justify-between">
+                          {activity.content}
+                          <div>
+                            <button
+                              onClick={() => setEditingActivity(activity.id)}
+                              className="bg-orange-500 text-white font-bold py-1 px-2 rounded-full mr-2"
+                            >
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button
+                              onClick={() => deleteActivity(key, activity._id)}
+                              className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                            >
+                              <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 ))}
             </div>

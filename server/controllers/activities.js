@@ -1,5 +1,5 @@
 const Activity = require("../models/activity");
-
+const Itinerary = require("../models/itinerary");
 const createActivity = async (req, res) => {
   const { day, time, content, itineraryId } = req.body;
 
@@ -29,38 +29,6 @@ const getActivitiesByItinerary = async (req, res) => {
     res.json(activities);
   } catch (error) {
     console.error("Error fetching activities:", error);
-    res.status(500).json({ message: error.message });
-  }
-};
-const deleteActivity = async (req, res) => {
-  const { activityId } = req.params; // Assuming you're passing activityId as a URL parameter
-
-  try {
-    // Find the activity to ensure it exists and to verify ownership if necessary
-    const activity = await Activity.findById(activityId);
-
-    if (!activity) {
-      return res.status(404).json({ message: "Activity not found." });
-    }
-
-    // Optional: Verify the activity belongs to the user attempting to delete
-    // This requires your activities to have a reference to the user or itinerary that has a reference to the user
-    // For example, if each activity is linked to an itinerary, verify the itinerary's user matches the current user
-    if (activity.itinerary) {
-      const itinerary = await Itinerary.findById(activity.itinerary);
-      if (!itinerary || itinerary.user.toString() !== req.user._id.toString()) {
-        return res
-          .status(403)
-          .json({ message: "Unauthorized to delete this activity." });
-      }
-    }
-
-    // Delete the activity
-    await Activity.findByIdAndDelete(activityId);
-
-    res.json({ message: "Activity successfully deleted." });
-  } catch (error) {
-    console.error("Error deleting activity:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -100,7 +68,22 @@ const updateActivity = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const deleteActivity = async (req, res) => {
+  const { activityId } = req.params;
 
+  try {
+    const activity = await Activity.findById(activityId);
+    if (!activity) {
+      return res.status(404).json({ message: "Activity not found" });
+    }
+
+    await Activity.findByIdAndRemove(activityId);
+    res.json({ message: "Activity deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting activity:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   updateActivity,
   createActivity,
