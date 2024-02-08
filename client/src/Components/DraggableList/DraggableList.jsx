@@ -5,9 +5,9 @@ import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axiosInstance from "../../axiosInstance";
 import { useItinerary } from "../../Context/ItineraryContext";
-const DraggableList = ({ itineraryId }) => {
+const DraggableList = ({ activities, itineraryId }) => {
   const { itinerary } = useItinerary();
-  const [activities, setActivities] = useState({});
+  const [myActivities, setMyActivities] = useState(null);
   const [newActivity, setNewActivity] = useState({
     day: "",
     time: "",
@@ -22,11 +22,11 @@ const DraggableList = ({ itineraryId }) => {
     const destDay = destination.droppableId;
 
     if (sourceDay === destDay) {
-      const items = Array.from(activities[sourceDay]);
+      const items = Array.from(myActivities[sourceDay]);
       const [reorderedItem] = items.splice(source.index, 1);
       items.splice(destination.index, 0, reorderedItem);
 
-      setActivities({
+      setMyActivities({
         ...activities,
         [sourceDay]: items,
       });
@@ -34,9 +34,9 @@ const DraggableList = ({ itineraryId }) => {
   };
 
   const startEditing = (day, id) => {
-    setActivities({
-      ...activities,
-      [day]: activities[day].map((item) =>
+    setMyActivities({
+      ...myActivities,
+      [day]: myActivities[day].map((item) =>
         item.id === id ? { ...item, isEditing: true } : item
       ),
     });
@@ -61,9 +61,9 @@ const DraggableList = ({ itineraryId }) => {
 
       // If the request is successful, update the activity in your local state
       if (response.status === 200) {
-        setActivities({
-          ...activities,
-          [day]: activities[day].map((item) =>
+        setMyActivities({
+          ...myActivities,
+          [day]: myActivities[day].map((item) =>
             item.id === id
               ? {
                   ...item,
@@ -103,7 +103,7 @@ const DraggableList = ({ itineraryId }) => {
 
         // Update the activities state with the new activity
         // You might need to adjust this logic based on how you're managing activities state
-        setActivities((prevActivities) => ({
+        setMyActivities((prevActivities) => ({
           ...prevActivities,
           [createdActivity.day]: prevActivities[createdActivity.day]
             ? [...prevActivities[createdActivity.day], createdActivity]
@@ -126,119 +126,68 @@ const DraggableList = ({ itineraryId }) => {
   };
 
   const deleteActivity = (day, id) => {
-    setActivities((prevActivities) => ({
+    setMyActivities((prevActivities) => ({
       ...prevActivities,
       [day]: prevActivities[day].filter((activity) => activity.id !== id),
     }));
   };
-  useEffect(() => {
-    const fetchActivities = async () => {
-      if (itineraryId) {
-        try {
-          const response = await axiosInstance.get(
-            `/api/activities/itinerary/${itineraryId}`
-          );
-          setActivities(response.data);
-        } catch (error) {
-          console.error("Error fetching activities:", error);
-        }
+  function groupBy(array, key) {
+    return array.reduce((acc, obj) => {
+      const category = obj[key];
+      if (!acc[category]) {
+        acc[category] = [];
       }
-    };
+      acc[category].push(obj);
+      return acc;
+    }, {});
+  }
 
-    fetchActivities();
-  }, [itineraryId]);
+  useEffect(() => {
+    if (activities) {
+      const groupedData = groupBy(activities, "day");
+      console.log("WHAAAAT IS THIS GROUP", groupedData);
+      setMyActivities(groupedData); // objects
+    }
+  }, [activities]);
+  // useEffect(() => {
+  //   const fetchActivities = async () => {
+  //     if (!itineraryId) return; // Skip if no itineraryId is provided
+  //     try {
+  //       const response = await axiosInstance.get(
+  //         `/api/activities/itinerary/${itineraryId}`
+  //       );
+  //       const fetchedActivities = response.data;
+  //       // Process and set activities based on your data structure. Example:
+  //       const activitiesByDay = fetchedActivities.reduce((acc, activity) => {
+  //         const { day, ...rest } = activity;
+  //         acc[day] = acc[day] ? [...acc[day], rest] : [rest];
+  //         return acc;
+  //       }, {});
+  //       setMyActivities(activitiesByDay);
+  //     } catch (error) {
+  //       console.error("Error fetching activities:", error);
+  //     }
+  //   };
+  //   fetchActivities();
+  // }, [itineraryId]);
+  // useEffect(() => {
+  //   fetchActivities();
+  // }, [itineraryId]);
   return (
     <div className="mx-auto w-full max-w-3xl">
-      <DragDropContext onDragEnd={onDragEnd}>
-        {Object.entries(activities)
-          .sort((a, b) => Number(a) - Number(b))
-          .map(([day, dayActivities], idx) => (
-            <Droppable key={day} droppableId={day}>
-              {(provided, snapshot) => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  className="mb-6"
-                >
-                  <div className="grid grid-cols-3 gap-4 items-center mb-4">
-                    <div className="font-bold px-2 bg-pink-300 rounded-3xl col-span-3">{`Day ${day}`}</div>
-                  </div>
-                  {dayActivities.map((activity, index) => (
-                    <Draggable
-                      key={activity.id}
-                      draggableId={activity.id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="grid grid-cols-3 gap-4 items-center p-4 mb-2 bg-transparent rounded-xl"
-                        >
-                          {activity.isEditing ? (
-                            <form
-                              onSubmit={(event) =>
-                                updateActivity(event, day, activity.id)
-                              }
-                              className="col-span-3 grid grid-cols-3 gap-4 items-center"
-                            >
-                              <input
-                                name="time"
-                                defaultValue={activity.time}
-                                type="time"
-                                required
-                                className="p-2 text-lg rounded-lg border"
-                              />
-                              <input
-                                name="content"
-                                required
-                                defaultValue={activity.content}
-                                className="p-2 text-lg rounded-lg border col-span-2"
-                              />
-                              <button
-                                type="submit"
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full"
-                              >
-                                Save
-                              </button>
-                            </form>
-                          ) : (
-                            <>
-                              <span className="font-bold">{activity.time}</span>
-                              <div className="col-span-2 flex justify-between">
-                                {activity.content}
-                                <div>
-                                  <button
-                                    onClick={() =>
-                                      startEditing(day, activity.id)
-                                    }
-                                    className="bg-orange-500 text-white font-bold py-1 px-2 rounded-full mr-2"
-                                  >
-                                    <FontAwesomeIcon icon={faEdit} />
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      deleteActivity(day, activity.id)
-                                    }
-                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                                  >
-                                    <FontAwesomeIcon icon={faTrash} />
-                                  </button>
-                                </div>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          ))}
-      </DragDropContext>
+      {myActivities &&
+        Object.keys(myActivities).map((key) => (
+          <div>
+            <h2> day{key}</h2>
+            {myActivities[key].map((a) => (
+              <>
+                <p>{a.content}</p>
+                <p>{a.time}</p>
+              </>
+            ))}
+          </div>
+        ))}
+
       <form
         onSubmit={addActivity}
         className="grid grid-cols-3 gap-4 items-center mt-4"

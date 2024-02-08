@@ -64,6 +64,23 @@ export const ItineraryProvider = ({ children }) => {
       throw error;
     }
   };
+
+  const fetchActivitiesByItineraryId = async (itineraryId) => {
+    try {
+      const response = await axios.get(`/api/activities/${itineraryId}`);
+      return response.data; // this will return the activities
+    } catch (error) {
+      console.error("Failed to fetch activities:", error);
+      throw error;
+    }
+  };
+
+  const setCurrentItinerary = (itineraryId) => {
+    const currentItinerary = itineraries.find(
+      (itinerary) => itinerary._id === itineraryId
+    );
+    setItinerary(currentItinerary);
+  };
   return (
     <ItineraryContext.Provider
       value={{
@@ -72,6 +89,7 @@ export const ItineraryProvider = ({ children }) => {
         fetchItinerariesByStatus,
         addToItinerary,
         removeFromItinerary,
+        fetchActivitiesByItineraryId,
         upcomingTrips,
         addTrip,
       }}

@@ -26,26 +26,30 @@ const Itinerary = () => {
   const [upcomingTrips, setUpcomingTrips] = useState([]);
 
   useEffect(() => {
-    const fetchItineraries = async () => {
-      try {
-        const response = await axios.get("/api/itineraries");
-        setItineraries(response.data);
-      } catch (error) {
-        console.error("Failed to fetch itineraries:", error);
-      }
-    };
-
-    fetchItineraries();
-  }, []);
-
-  useEffect(() => {
     const fetchItinerary = async () => {
       if (user && user._id) {
         try {
           const response = await axiosInstance.get(
             `/api/itineraries/user/${user._id}`
           );
-          setItinerary(response.data);
+
+          // Fetch activities for each itinerary
+          const activitiesPromises = response.data.map((itinerary) =>
+            axiosInstance.get(`/api/activities/itinerary/${itinerary._id}`)
+          );
+          const activitiesResponses = await Promise.all(activitiesPromises);
+          const activitiesData = activitiesResponses.map((res) => res.data);
+
+          // Add activities to each itinerary
+          const itinerariesWithActivities = response.data.map(
+            (itinerary, index) => ({
+              ...itinerary,
+              activities: activitiesData[index],
+            })
+          );
+
+          setItinerary(itinerariesWithActivities);
+          console.log(itinerariesWithActivities);
         } catch (error) {
           console.log("Error fetching itinerary:", error);
         }
@@ -194,7 +198,8 @@ const Itinerary = () => {
                         <Button
                           onClick={() => {
                             setIsPlanModalOpen(true);
-                            setSelectedItineraryId(hotel._id); // Assuming hotel._id is the correct identifier for your itinerary items
+                            console.log("WHAASDASDASD", hotel._id);
+                            setSelectedItineraryId(hotel._id); // Use the actual itinerary's ID here
                           }}
                           className="bg-orange-500 rounded-3xl mt-2"
                         >

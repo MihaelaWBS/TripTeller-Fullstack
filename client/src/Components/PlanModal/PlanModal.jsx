@@ -1,6 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useItinerary } from "../../Context/ItineraryContext";
 import PlanForm from "../PlanForm/TravelItinerary";
-const PlanModal = ({ isOpen, onClose }) => {
+import axiosInstance from "../../axiosInstance";
+
+const PlanModal = ({ isOpen, onClose, itineraryId }) => {
+  const { itinerary } = useItinerary();
+  const [activities, setActivities] = useState([]);
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      console.log("asdasd", itineraryId, isOpen);
+      if (isOpen && itineraryId) {
+        console.log("WHAT IS THIS", itineraryId);
+        try {
+          const response = await axiosInstance.get(
+            `/api/activities/itinerary/${itineraryId}`
+          );
+          console.log("WHAAAA", response.data);
+          setActivities(response.data);
+        } catch (error) {
+          console.error("Failed to fetch activities:", error);
+          setActivities([]); // Reset activities on error or if the itinerary has no activities
+        }
+      }
+    };
+
+    fetchActivities();
+  }, [isOpen, itineraryId]);
+
   if (!isOpen) {
     return null;
   }
@@ -33,7 +60,7 @@ const PlanModal = ({ isOpen, onClose }) => {
                   Plan Form
                 </h3>
                 <div className="mt-2">
-                  <PlanForm />
+                  <PlanForm activities={activities} itineraryId={itineraryId} />
                 </div>
               </div>
             </div>

@@ -1,11 +1,11 @@
 import React from "react";
 import DraggableList from "../DraggableList/DraggableList";
 
-const TravelItinerary = () => {
+const TravelItinerary = ({ activities, itineraryId }) => {
   return (
     <>
       <div>TravelItinerary</div>
-      <DraggableList />
+      <DraggableList activities={activities} itineraryId={itineraryId} />
     </>
   );
 };
