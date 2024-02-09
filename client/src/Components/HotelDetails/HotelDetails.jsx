@@ -216,7 +216,7 @@ const HotelDetails = () => {
       </li>
     ))
   : null;
-  const languageMap = {"mr": "Marathi", "hi": "Hindi", "en-gb": "English (UK)", "de": "German", "es": "Spanish", "fr": "French", "it": "Italian", "pt": "Portuguese", "nl": "Dutch", "ru": "Russian", "pl": "Polish", "da": "Danish", "sv": "Swedish", "no": "Norwegian", "fi": "Finnish", "cs": "Czech", "el": "Greek", "hu": "Hungarian", "ro": "Romanian", "sk": "Slovak", "sl": "Slovenian", "bg": "Bulgarian", "lv": "Latvian", "lt": "Lithuanian", "et": "Estonian", "hr": "Croatian", "sr": "Serbian", "mk": "Macedonian", "bs": "Bosnian", "al": "Albanian", "is": "Icelandic", "mt": "Maltese", "ga": "Irish", "cy": "Welsh"};
+  const languageMap = {"mr": "Marathi", "hi": "Hindi", "en-gb": "English (UK)", "de": "German", "es": "Spanish", "fr": "French", "it": "Italian", "pt": "Portuguese", "nl": "Dutch", "ru": "Russian", "pl": "Polish", "da": "Danish", "sv": "Swedish", "no": "Norwegian", "fi": "Finnish", "cs": "Czech", "el": "Greek", "hu": "Hungarian", "ro": "Romanian", "sk": "Slovak", "sl": "Slovenian", "bg": "Bulgarian", "lv": "Latvian", "lt": "Lithuanian", "et": "Estonian", "hr": "Croatian", "sr": "Serbian", "mk": "Macedonian", "bs": "Bosnian", "al": "Albanian", "is": "Icelandic", "mt": "Maltese", "ga": "Irish", "cy": "Welsh","uk": "English", "tr": "Turkish","pt-pt": "Portuguese", "az": "Azerbaijani"};
 
 
   
@@ -348,7 +348,7 @@ const HotelDetails = () => {
     <div style={{ lineHeight: '1.5' }}>
       <p>Gross Amount: <strong>{priceBreakdown.gross_amount.currency} {priceBreakdown.gross_amount.value.toFixed(2)}</strong></p>
       <p>All Inclusive Amount: <strong>{priceBreakdown.all_inclusive_amount.currency} {priceBreakdown.all_inclusive_amount.value.toFixed(2)}</strong></p>
-      <p>Excluded Amount: <strong>{priceBreakdown.excluded_amount.currency} {priceBreakdown.excluded_amount.value.toFixed(2)}</strong></p>
+      <p>Trip-teller Discount: <strong>{priceBreakdown.excluded_amount.currency} {priceBreakdown.excluded_amount.value.toFixed(2)}</strong></p>
     </div>
   )}
   <button
@@ -366,7 +366,7 @@ const HotelDetails = () => {
       cursor: 'pointer',
     }}
   >
-    Close
+    Close to View more
   </button>
 </Modal>
 
