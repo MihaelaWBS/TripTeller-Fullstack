@@ -6,19 +6,18 @@ import MapView from "../MapView/MapView";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import WeatherComponent from "../WeatherComponent/WeatherComponent";
 import { useSearch } from "../../Context/SearchContext";
-import backgroundImage from '../../Images/mountains.webp'
-import  Modal  from "react-modal";
-import freeParkingIcon from '../../images/parking-svgrepo-com.svg';
-import petFriendlyIcon from '../../images/pet-shop-svgrepo-com.svg';
-import outdoorPoolIcon from '../../images/pool-svgrepo-com.svg';
-import restaurantIcon from '../../images/restaurant-svgrepo-com.svg';
-import spaIcon from '../../images/spa-candle-svgrepo-com.svg';
-import airConditioningIcon from '../../images/air-conditioning-svgrepo-com.svg';
-import privateBathroomIcon from '../../images/bathroom-filled-shower-svgrepo-com.svg';
-import viewIcon from '../../images/river-svgrepo-com.svg';
-import freeWifiIcon from '../../images/wifi-svgrepo-com.svg';
-import showerIcon from '../../images/showers-water-svgrepo-com.svg';
-
+import backgroundImage from "../../Images/mountains.webp";
+import Modal from "react-modal";
+import freeParkingIcon from "../../Images/parking-svgrepo-com.svg";
+import petFriendlyIcon from "../../Images/pet-shop-svgrepo-com.svg";
+import outdoorPoolIcon from "../../Images/pool-svgrepo-com.svg";
+import restaurantIcon from "../../Images/restaurant-svgrepo-com.svg";
+import spaIcon from "../../Images/spa-candle-svgrepo-com.svg";
+import airConditioningIcon from "../../Images/air-conditioning-svgrepo-com.svg";
+import privateBathroomIcon from "../../Images/bathroom-filled-shower-svgrepo-com.svg";
+import viewIcon from "../../Images/river-svgrepo-com.svg";
+import freeWifiIcon from "../../Images/wifi-svgrepo-com.svg";
+import showerIcon from "../../Images/showers-water-svgrepo-com.svg";
 
 Modal.setAppElement("#root");
 const Accordion = ({ title, children }) => {
@@ -284,7 +283,11 @@ const HotelDetails = () => {
     is: "Icelandic",
     mt: "Maltese",
     ga: "Irish",
-    cy: "Welsh","uk": "English", "tr": "Turkish","pt-pt": "Portuguese", "az": "Azerbaijani",
+    cy: "Welsh",
+    uk: "English",
+    tr: "Turkish",
+    "pt-pt": "Portuguese",
+    az: "Azerbaijani",
   };
 
   return (
@@ -338,308 +341,376 @@ const HotelDetails = () => {
       <div className="flex flex-wrap -mx-2">
         {/* Hotel Information Card */}
         <div className="px-2 mb-4 w-full md:w-1/3">
-  <div className="relative">
-    <div className="flex flex-col  h-full relative z-10">
-      <div 
-        className="p-6 rounded-lg flex-grow relative z-10 text-white" 
-        style={{ 
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: 'cover', // Cover the entire area of the div
-          backgroundPosition: 'center', // Center the background image
-          height: '350px', // Fixed height
-          width: '100%', // Fixed width (responsive within its grid column)
-          overflow: 'auto',
-        
-        }}>
-          <div 
-        style={{ 
-          backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
-          padding: '10px', // Add padding to create some space around the text
-          borderRadius: '5px', // Optional: adds rounded corners
-        }}>
-                <h2 className="text-xl 	 font-semibold mb-4">Hotel Information</h2>
-                <p className="mb-2">
-                  {hotelDetails?.address}, {hotelDetails?.city}, {hotelDetails?.country_trans}
-                </p>
-                <p className="mb-2">
-                  Latitude: {hotelDetails?.latitude}, Longitude: {hotelDetails?.longitude}
-                </p>
-                <p className="mb-4">
-                  Check-in: {hotelDetails?.arrival_date}, Check-out: {hotelDetails?.departure_date}
-                </p>
-                <a href={hotelDetails?.url} className="text-white-600 font-bold mt-6  hover:text-yellow-800" target="_blank" rel="noopener noreferrer">
-                  Visit Hotel Website
-                </a>
-                {readMore === "hotelInfo" && (
-                  <p>Facilities: {hotelDetails?.family_facilities?.join(", ")}</p>
-                )}
-                <button onClick={() => toggleReadMore("hotelInfo")} className="mt-auto  text-white-600 font-bold mt-6 hover:text-blue-800 ml-6">
-                  {readMore === "hotelInfo" ? "Read Less" : "Read More"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-  </div>
-  <Modal
-  isOpen={isPriceBreakdownModalOpen}
-  onRequestClose={() => setIsPriceBreakdownModalOpen(false)}
-  style={{
-    overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.75)',
-      zIndex: 1000,
-    },
-    content: {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      border: '1px solid #ccc',
-      background: `url(${backgroundImage}) center/cover no-repeat, rgba(0, 0, 0, 0.5)`,
-      overflow: 'auto',
-      WebkitOverflowScrolling: 'touch',
-      borderRadius: '10px',
-      outline: 'none',
-      padding: '20px',
-      color: 'white',
-      width: '80%',
-      maxWidth: '600px',
-    },
-  }}
->
-  <h2 style={{ textAlign: 'center', fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>Price Breakdown</h2>
-  {priceBreakdown && (
-    <div style={{ lineHeight: '1.5' }}>
-      <p>Gross Amount: <strong>{priceBreakdown.gross_amount.currency} {priceBreakdown.gross_amount.value.toFixed(2)}</strong></p>
-      <p>All Inclusive Amount: <strong>{priceBreakdown.all_inclusive_amount.currency} {priceBreakdown.all_inclusive_amount.value.toFixed(2)}</strong></p>
-      <p>Trip-teller Discount: <strong>{priceBreakdown.excluded_amount.currency} {priceBreakdown.excluded_amount.value.toFixed(2)}</strong></p>
-    </div>
-  )}
-  <button
-    onClick={() => setIsPriceBreakdownModalOpen(false)}
-    style={{
-      display: 'block',
-      marginTop: '20px',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      padding: '10px 20px',
-      backgroundColor: '#007bff', // Button color
-      color: 'white',
-      border: 'none',
-      borderRadius: '5px',
-      cursor: 'pointer',
-    }}
-  >
-    Close to View more
-  </button>
-</Modal>
-
-   {/* Spoken Languages Card */}
-   <div className="px-2 mb-4 w-full md:w-1/3">
-        <div className="relative">
-          <div className="flex flex-col h-full relative z-10">
-            <div
-              className="p-6 rounded-lg flex-grow relative z-10 text-white"
-              style={{ 
-                backgroundImage: `url(${backgroundImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                height: '350px',
-                width: '100%',
-                overflow: 'auto',
-              }}
-            >
+          <div className="relative">
+            <div className="flex flex-col  h-full relative z-10">
               <div
-                style={{ 
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  padding: '10px',
-                  borderRadius: '5px',
+                className="p-6 rounded-lg flex-grow relative z-10 text-white"
+                style={{
+                  backgroundImage: `url(${backgroundImage})`,
+                  backgroundSize: "cover", // Cover the entire area of the div
+                  backgroundPosition: "center", // Center the background image
+                  height: "350px", // Fixed height
+                  width: "100%", // Fixed width (responsive within its grid column)
+                  overflow: "auto",
                 }}
               >
-                <h2 className="text-xl font-semibold mb-4">Spoken Languages</h2>
-                <ul className="list-disc list-inside text-white">
-                  {spokenLanguages.map((code, index) => (
-                    <li key={index}>{languageMap[code] || code}</li>
-                  ))}
-                </ul>
+                <div
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
+                    padding: "10px", // Add padding to create some space around the text
+                    borderRadius: "5px", // Optional: adds rounded corners
+                  }}
+                >
+                  <h2 className="text-xl 	 font-semibold mb-4">
+                    Hotel Information
+                  </h2>
+                  <p className="mb-2">
+                    {hotelDetails?.address}, {hotelDetails?.city},{" "}
+                    {hotelDetails?.country_trans}
+                  </p>
+                  <p className="mb-2">
+                    Latitude: {hotelDetails?.latitude}, Longitude:{" "}
+                    {hotelDetails?.longitude}
+                  </p>
+                  <p className="mb-4">
+                    Check-in: {hotelDetails?.arrival_date}, Check-out:{" "}
+                    {hotelDetails?.departure_date}
+                  </p>
+                  <a
+                    href={hotelDetails?.url}
+                    className="text-white-600 font-bold mt-6  hover:text-yellow-800"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit Hotel Website
+                  </a>
+                  {readMore === "hotelInfo" && (
+                    <p>
+                      Facilities: {hotelDetails?.family_facilities?.join(", ")}
+                    </p>
+                  )}
+                  <button
+                    onClick={() => toggleReadMore("hotelInfo")}
+                    className="mt-auto  text-white-600 font-bold mt-6 hover:text-blue-800 ml-6"
+                  >
+                    {readMore === "hotelInfo" ? "Read Less" : "Read More"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Modal
+          isOpen={isPriceBreakdownModalOpen}
+          onRequestClose={() => setIsPriceBreakdownModalOpen(false)}
+          style={{
+            overlay: {
+              backgroundColor: "rgba(0, 0, 0, 0.75)",
+              zIndex: 1000,
+            },
+            content: {
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              right: "auto",
+              bottom: "auto",
+              marginRight: "-50%",
+              transform: "translate(-50%, -50%)",
+              border: "1px solid #ccc",
+              background: `url(${backgroundImage}) center/cover no-repeat, rgba(0, 0, 0, 0.5)`,
+              overflow: "auto",
+              WebkitOverflowScrolling: "touch",
+              borderRadius: "10px",
+              outline: "none",
+              padding: "20px",
+              color: "white",
+              width: "80%",
+              maxWidth: "600px",
+            },
+          }}
+        >
+          <h2
+            style={{
+              textAlign: "center",
+              fontSize: "24px",
+              fontWeight: "bold",
+              marginBottom: "20px",
+            }}
+          >
+            Price Breakdown
+          </h2>
+          {priceBreakdown && (
+            <div style={{ lineHeight: "1.5" }}>
+              <p>
+                Gross Amount:{" "}
+                <strong>
+                  {priceBreakdown.gross_amount.currency}{" "}
+                  {priceBreakdown.gross_amount.value.toFixed(2)}
+                </strong>
+              </p>
+              <p>
+                All Inclusive Amount:{" "}
+                <strong>
+                  {priceBreakdown.all_inclusive_amount.currency}{" "}
+                  {priceBreakdown.all_inclusive_amount.value.toFixed(2)}
+                </strong>
+              </p>
+              <p>
+                Trip-teller Discount:{" "}
+                <strong>
+                  {priceBreakdown.excluded_amount.currency}{" "}
+                  {priceBreakdown.excluded_amount.value.toFixed(2)}
+                </strong>
+              </p>
+            </div>
+          )}
+          <button
+            onClick={() => setIsPriceBreakdownModalOpen(false)}
+            style={{
+              display: "block",
+              marginTop: "20px",
+              marginLeft: "auto",
+              marginRight: "auto",
+              padding: "10px 20px",
+              backgroundColor: "#007bff", // Button color
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Close to View more
+          </button>
+        </Modal>
+        {/* Spoken Languages Card */}
+        <div className="px-2 mb-4 w-full md:w-1/3">
+          <div className="relative">
+            <div className="flex flex-col h-full relative z-10">
+              <div
+                className="p-6 rounded-lg flex-grow relative z-10 text-white"
+                style={{
+                  backgroundImage: `url(${backgroundImage})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  height: "350px",
+                  width: "100%",
+                  overflow: "auto",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    padding: "10px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <h2 className="text-xl font-semibold mb-4">
+                    Spoken Languages
+                  </h2>
+                  <ul className="list-disc list-inside text-white">
+                    {spokenLanguages.map((code, index) => (
+                      <li key={index}>{languageMap[code] || code}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Sustainability Efforts Card */}
+        <div className="px-2 mb-4 w-full md:w-1/3">
+          <div className="relative">
+            <div className="flex flex-col h-full relative z-10">
+              <div
+                className="p-6 rounded-lg flex-grow relative z-10 text-white"
+                style={{
+                  backgroundImage: `url(${backgroundImage})`,
+                  backgroundSize: "cover", // Cover the entire area of the div
+                  backgroundPosition: "center", // Center the background image
+                  height: "350px", // Fixed height
+                  width: "100%", // Fixed width (responsive within its grid column)
+                  overflow: "auto",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
+                    padding: "10px", // Add padding to create some space around the text
+                    borderRadius: "5px", // Optional: adds rounded corners
+                  }}
+                >
+                  <h2 className="text-xl font-semibold mb-4">
+                    Sustainability Efforts
+                  </h2>
+                  {readMore === "sustainability" ? (
+                    <ul className="list-disc list-inside mb-4">
+                      {hotelDetails.sustainability?.sustainability_page?.efforts?.map(
+                        (effort, index) => (
+                          <li key={index}>
+                            {effort.title}: {effort.steps.join(", ")}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  ) : (
+                    <p>
+                      {hotelDetails.sustainability?.sustainability_page
+                        ?.efforts?.[0]?.title ||
+                        "Details on sustainability efforts"}
+                    </p>
+                  )}
+                  <button
+                    onClick={() => toggleReadMore("sustainability")}
+                    className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
+                  >
+                    {readMore === "sustainability" ? "Read Less" : "Read More"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>{" "}
+        {/* COVID-19 Support Card */}
+        <div className="px-2 mb-4 w-full md:w-1/3">
+          <div className="relative">
+            <div className="flex flex-col h-full relative z-10">
+              <div
+                className="p-6 rounded-lg flex-grow relative z-10 text-white"
+                style={{
+                  backgroundImage: `url(${backgroundImage})`,
+                  backgroundSize: "cover", // Cover the entire area of the div
+                  backgroundPosition: "center", // Center the background image
+                  height: "350px", // Fixed height
+                  width: "100%", // Fixed width (responsive within its grid column)
+                  overflow: "auto",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
+                    padding: "10px", // Add padding to create some space around the text
+                    borderRadius: "5px", // Optional: adds rounded corners
+                  }}
+                >
+                  <h2 className="text-xl font-semibold mb-4">
+                    COVID-19 Support
+                  </h2>
+                  {readMore === "covid" ? (
+                    hotelDetails.info_banners?.map((banner, index) => (
+                      <div key={index} className="mb-4">
+                        <p className="font-semibold">{banner.title}</p>
+                        <p>{banner.messages.join(" ")}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>
+                      {hotelDetails.info_banners?.[0]?.title ||
+                        "COVID-19 support information not available"}
+                    </p>
+                  )}
+                  <button
+                    onClick={() => toggleReadMore("covid")}
+                    className="mt-auto text-white-600 font-bold mt-6 hover:text-red-800"
+                  >
+                    {readMore === "covid" ? "Read Less" : "Read More"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Property Highlights Section */}
+        <div className="px-2 mb-4 w-full md:w-1/3">
+          <div className="relative">
+            <div className="flex flex-col h-full relative z-10">
+              <div
+                className="p-6 rounded-lg flex-grow relative z-10 text-white"
+                style={{
+                  backgroundImage: `url(${backgroundImage})`,
+                  backgroundSize: "cover", // Cover the entire area of the div
+                  backgroundPosition: "center", // Center the background image
+                  height: "350px", // Fixed height
+                  width: "100%", // Fixed width (responsive within its grid column)
+                  overflow: "auto",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
+                    padding: "10px", // Add padding to create some space around the text
+                    borderRadius: "5px", // Optional: adds rounded corners
+                  }}
+                >
+                  <h2 className="text-xl font-semibold mb-4">
+                    Property Highlights
+                  </h2>
+                  <div className="flex flex-wrap">
+                    {propertyHighlights.map((highlight, index) => (
+                      <div key={index} className="flex items-center m-2">
+                        <img
+                          src={highlight.icon}
+                          alt={highlight.name}
+                          className="w-6 h-6 mr-2"
+                        />
+                        <span>{highlight.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Family Facilities Card */}
+        <div className="px-2 mb-4 w-full md:w-1/3">
+          <div className="relative">
+            <div className="flex flex-col h-full relative z-10">
+              <div
+                className="p-6 rounded-lg flex-grow relative z-10 text-white"
+                style={{
+                  backgroundImage: `url(${backgroundImage})`,
+                  backgroundSize: "cover", // Cover the entire area of the div
+                  backgroundPosition: "center", // Center the background image
+                  height: "350px", // Fixed height
+                  width: "100%", // Fixed width (responsive within its grid column)
+                  overflow: "auto",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
+                    padding: "10px", // Add padding to create some space around the text
+                    borderRadius: "5px", // Optional: adds rounded corners
+                  }}
+                >
+                  <h2 className="text-xl font-semibold mb-4">
+                    Family Facilities
+                  </h2>
+                  <ul className="  mb-4">
+                    {readMore
+                      ? familyFacilitiesList.map((facility, index) => (
+                          <li key={index}>{facility}</li>
+                        ))
+                      : familyFacilitiesList
+                          .slice(0, 5)
+                          .map((facility, index) => (
+                            <li key={index}>{facility}</li>
+                          ))}
+                  </ul>
+                  {familyFacilitiesList.length > 5 && (
+                    <button
+                      onClick={() => setReadMore(!readMore)}
+                      className="mt-auto text-blue-600 hover:text-blue-800"
+                    >
+                      Read {readMore ? "Less" : "More"}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-        {/* Sustainability Efforts Card */}
-        <div className="px-2 mb-4 w-full md:w-1/3">
-  <div className="relative">
-    <div className="flex flex-col h-full relative z-10">
-      <div 
-        className="p-6 rounded-lg flex-grow relative z-10 text-white" 
-        style={{ 
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: 'cover', // Cover the entire area of the div
-          backgroundPosition: 'center', // Center the background image
-          height: '350px', // Fixed height
-          width: '100%', // Fixed width (responsive within its grid column)
-          overflow: 'auto',
-       
-       }}>
-          <div 
-          style={{ 
-            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
-            padding: '10px', // Add padding to create some space around the text
-            borderRadius: '5px', // Optional: adds rounded corners
-          }}>
-                <h2 className="text-xl font-semibold mb-4">Sustainability Efforts</h2>
-                {readMore === "sustainability" ? (
-                  <ul className="list-disc list-inside mb-4">
-                    {hotelDetails.sustainability?.sustainability_page?.efforts?.map((effort, index) => (
-<li key={index}>
-{effort.title}: {effort.steps.join(", ")}
-</li>
-))
-}
-</ul>
-) : (
-<p>
-{hotelDetails.sustainability?.sustainability_page?.efforts?.[0]?.title || "Details on sustainability efforts"}
-</p>
-)}
-<button
-onClick={() => toggleReadMore("sustainability")}
-className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
->
-{readMore === "sustainability" ? "Read Less" : "Read More"}
-</button>
-</div>
-</div>
-</div>
-</div>
-</div>  {/* COVID-19 Support Card */}
-<div className="px-2 mb-4 w-full md:w-1/3">
-  <div className="relative">
-    <div className="flex flex-col h-full relative z-10">
-      <div 
-        className="p-6 rounded-lg flex-grow relative z-10 text-white" 
-        style={{ 
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: 'cover', // Cover the entire area of the div
-          backgroundPosition: 'center', // Center the background image
-          height: '350px', // Fixed height
-          width: '100%', // Fixed width (responsive within its grid column)
-          overflow: 'auto',
-        }}>
-          <div 
-          style={{ 
-            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
-            padding: '10px', // Add padding to create some space around the text
-            borderRadius: '5px', // Optional: adds rounded corners
-          }}>
-          <h2 className="text-xl font-semibold mb-4">COVID-19 Support</h2>
-          {readMore === "covid" ? (
-            hotelDetails.info_banners?.map((banner, index) => (
-              <div key={index} className="mb-4">
-                <p className="font-semibold">{banner.title}</p>
-                <p>{banner.messages.join(" ")}</p>
-              </div>
-            ))
-          ) : (
-            <p>
-              {hotelDetails.info_banners?.[0]?.title || "COVID-19 support information not available"}
-            </p>
-          )}
-          <button
-            onClick={() => toggleReadMore("covid")}
-            className="mt-auto text-white-600 font-bold mt-6 hover:text-red-800"
-          >
-            {readMore === "covid" ? "Read Less" : "Read More"}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
-  {/* Property Highlights Section */}
-<div className="px-2 mb-4 w-full md:w-1/3">
-  <div className="relative">
-    <div className="flex flex-col h-full relative z-10">
-      <div
-        className="p-6 rounded-lg flex-grow relative z-10 text-white"
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: 'cover', // Cover the entire area of the div
-          backgroundPosition: 'center', // Center the background image
-          height: '350px', // Fixed height
-          width: '100%', // Fixed width (responsive within its grid column)
-          overflow: 'auto',
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
-            padding: '10px', // Add padding to create some space around the text
-            borderRadius: '5px', // Optional: adds rounded corners
-          }}
-        >
-          <h2 className="text-xl font-semibold mb-4">Property Highlights</h2>
-          <div className="flex flex-wrap">
-            {propertyHighlights.map((highlight, index) => (
-              <div key={index} className="flex items-center m-2">
-                <img src={highlight.icon} alt={highlight.name} className="w-6 h-6 mr-2" />
-                <span>{highlight.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
- {/* Family Facilities Card */}
- <div className="px-2 mb-4 w-full md:w-1/3">
-  <div className="relative">
-    <div className="flex flex-col h-full relative z-10">
-      <div 
-        className="p-6 rounded-lg flex-grow relative z-10 text-white" 
-        style={{ 
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: 'cover', // Cover the entire area of the div
-          backgroundPosition: 'center', // Center the background image
-          height: '350px', // Fixed height
-          width: '100%', // Fixed width (responsive within its grid column)
-          overflow: 'auto',
-       }}>
-          <div 
-          style={{ 
-            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
-            padding: '10px', // Add padding to create some space around the text
-            borderRadius: '5px', // Optional: adds rounded corners
-          }}>
-        <h2 className="text-xl font-semibold mb-4">Family Facilities</h2>
-        <ul className="  mb-4">
-          {readMore
-            ? familyFacilitiesList.map((facility, index) => (
-                <li key={index}>{facility}</li>
-              ))
-            : familyFacilitiesList.slice(0, 5).map((facility, index) => (
-                <li key={index}>{facility}</li>
-              ))}
-        </ul>
-        {familyFacilitiesList.length > 5 && (
-          <button
-            onClick={() => setReadMore(!readMore)}
-            className="mt-auto text-blue-600 hover:text-blue-800"
-          >
-            Read {readMore ? "Less" : "More"}
-          </button>
-        )}
-      </div>
-    </div>
-  </div>
-  </div>
-</div>
-</div>
 
       <div className="px-2 mb-4 w-full md:w-2/3">
         <Card className="flex flex-col h-full">
