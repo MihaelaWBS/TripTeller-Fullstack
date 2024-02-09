@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../Context/Auth";
 import axiosInstance from "../../axiosInstance";
 import { useParams } from "react-router-dom";
+import Flag from "../FlagComponent/Flag";
 
 const index = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -47,12 +48,22 @@ const index = () => {
           <div className="mb-4">
             <h2 className="text-xl font-semibold mb-2">My Profile</h2>
             <div className="flex flex-wrap items-center mb-4 space-x-4">
-              {/* Profile Image */}
-              <img
-                className="rounded-full h-24 w-24"
-                src={user && user.avatar ? user.avatar : "default_avatar_path"} // Replace with your default avatar path
-                alt="Profile"
-              />
+              <div className="relative inline-block">
+                <img
+                  className="rounded-full h-24 w-24 object-cover"
+                  src={
+                    user && user.avatar ? user.avatar : "default_avatar_path"
+                  }
+                  alt="Profile"
+                />
+                {user && user.flag && (
+                  <img
+                    src={user.flag}
+                    alt="Flag"
+                    className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-8 object-fill  border-2 border-white" // Adjusted Tailwind classes
+                  />
+                )}
+              </div>
 
               {/* User Info */}
               <div className="flex-grow">
@@ -107,6 +118,7 @@ const index = () => {
           </div>
         </div>
       </div>
+      <Flag />
     </div>
   );
 };
