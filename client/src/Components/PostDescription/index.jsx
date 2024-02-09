@@ -9,7 +9,7 @@ import { Button } from "flowbite-react";
 import { AuthContext } from "../../Context/Auth";
 import CommentSection from "../CommentSection";
 import IconBar from "../IconBar";
-import d1 from "../../assets/d1.jpg";
+import d5 from "../../assets/d5.jpg";
 const PostDescription = () => {
   const [openComment, setOpenComment] = useState(false);
 
@@ -103,10 +103,10 @@ const PostDescription = () => {
   </div>  */}
 
         {/* Banner with a cover picture and overlay text */}
-        <div className="relative h-96 w-full overflow-hidden">
-        <img src={d1} alt="Travel" className="w-full h-full" />
-        <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-40 flex items-center justify-center">
-          <h1 className="text-white text-6xl font-bold">Travel smarter</h1>
+        <div className="relative md:h-[42rem] w-full overflow-hidden">
+        <img src={d5} alt="Travel" className="w-full h-full object-fill" />
+        <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-10 flex items-center justify-center">
+           {/* <h1 className="text-white text-6xl font-bold">Travel smarter</h1> */}
         </div>
       </div> 
 
@@ -178,3 +178,4 @@ const PostDescription = () => {
 };
 
 export default PostDescription;
+

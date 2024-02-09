@@ -20,7 +20,7 @@ import freeWifiIcon from '../../images/wifi-svgrepo-com.svg';
 import showerIcon from '../../images/showers-water-svgrepo-com.svg';
 
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 const Accordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,24 +29,31 @@ const Accordion = ({ title, children }) => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`block w-full text-left px-5 py-3 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none transition duration-300 ${
-          isOpen ? 'rounded-t-md' : 'rounded-md'
+          isOpen ? "rounded-t-md" : "rounded-md"
         }`}
       >
         <div className="flex justify-between items-center">
           <span>{title}</span>
           <svg
-            className={`w-6 h-6 transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            className={`w-6 h-6 transform transition-transform ${
+              isOpen ? "rotate-180" : ""
+            }`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </div>
       </button>
       <div
         className={`transition-max-height duration-700 overflow-hidden ${
-          isOpen ? 'max-h-96' : 'max-h-0'
+          isOpen ? "max-h-96" : "max-h-0"
         }`}
       >
         <div className="border border-t-0 border-blue-200 bg-white px-5 py-3">
@@ -65,7 +72,8 @@ const HotelDetails = () => {
   const [error, setError] = useState(null);
   const { hotelId } = useParams();
   const [readMore, setReadMore] = useState(null);
-  const [isPriceBreakdownModalOpen, setIsPriceBreakdownModalOpen] = useState(true);
+  const [isPriceBreakdownModalOpen, setIsPriceBreakdownModalOpen] =
+    useState(true);
   const [priceBreakdown, setPriceBreakdown] = useState(null);
   const [spokenLanguages, setSpokenLanguages] = useState([]);
 
@@ -131,6 +139,9 @@ const HotelDetails = () => {
     { name: "Free WiFi", icon: freeWifiIcon },
     { name: "Shower", icon: showerIcon },
   ];
+  const checkInDateCookie = localStorage.getItem("checkInDate");
+  const checkOutDateCookie = localStorage.getItem("checkOutDate");
+
   useEffect(() => {
     const fetchHotelDetails = async () => {
       try {
@@ -139,8 +150,8 @@ const HotelDetails = () => {
           url: "https://booking-com15.p.rapidapi.com/api/v1/hotels/getHotelDetails",
           params: {
             hotel_id: hotelId,
-            arrival_date: checkInDate,
-            departure_date: checkOutDate,
+            arrival_date: checkInDateCookie,
+            departure_date: checkOutDateCookie,
             adults: "1",
             children_age: "0",
             room_qty: "1",
@@ -231,23 +242,57 @@ const HotelDetails = () => {
   const toggleReadMore = (section) => {
     setReadMore(readMore === section ? null : section);
   };
-  const familyFacilitiesList = hotelDetails && hotelDetails.family_facilities
-  ? hotelDetails.family_facilities.map((facility, index) => (
-      <li key={index} className="list-disc list-inside">
-        {facility}
-      </li>
-    ))
-  : null;
-  const languageMap = {"mr": "Marathi", "hi": "Hindi", "en-gb": "English (UK)", "de": "German", "es": "Spanish", "fr": "French", "it": "Italian", "pt": "Portuguese", "nl": "Dutch", "ru": "Russian", "pl": "Polish", "da": "Danish", "sv": "Swedish", "no": "Norwegian", "fi": "Finnish", "cs": "Czech", "el": "Greek", "hu": "Hungarian", "ro": "Romanian", "sk": "Slovak", "sl": "Slovenian", "bg": "Bulgarian", "lv": "Latvian", "lt": "Lithuanian", "et": "Estonian", "hr": "Croatian", "sr": "Serbian", "mk": "Macedonian", "bs": "Bosnian", "al": "Albanian", "is": "Icelandic", "mt": "Maltese", "ga": "Irish", "cy": "Welsh","uk": "English", "tr": "Turkish","pt-pt": "Portuguese", "az": "Azerbaijani"};
+  const familyFacilitiesList =
+    hotelDetails && hotelDetails.family_facilities
+      ? hotelDetails.family_facilities.map((facility, index) => (
+          <li key={index} className="list-disc list-inside">
+            {facility}
+          </li>
+        ))
+      : null;
+  const languageMap = {
+    mr: "Marathi",
+    hi: "Hindi",
+    "en-gb": "English (UK)",
+    de: "German",
+    es: "Spanish",
+    fr: "French",
+    it: "Italian",
+    pt: "Portuguese",
+    nl: "Dutch",
+    ru: "Russian",
+    pl: "Polish",
+    da: "Danish",
+    sv: "Swedish",
+    no: "Norwegian",
+    fi: "Finnish",
+    cs: "Czech",
+    el: "Greek",
+    hu: "Hungarian",
+    ro: "Romanian",
+    sk: "Slovak",
+    sl: "Slovenian",
+    bg: "Bulgarian",
+    lv: "Latvian",
+    lt: "Lithuanian",
+    et: "Estonian",
+    hr: "Croatian",
+    sr: "Serbian",
+    mk: "Macedonian",
+    bs: "Bosnian",
+    al: "Albanian",
+    is: "Icelandic",
+    mt: "Maltese",
+    ga: "Irish",
+    cy: "Welsh","uk": "English", "tr": "Turkish","pt-pt": "Portuguese", "az": "Azerbaijani",
+  };
 
-
-  
   return (
     <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-4xl font-bold text-gray-800 mb-6">
         {hotelDetails.hotel_name}
       </h1>
-  
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div className="lg:col-span-2 max-w-2xl max-h-900px overflow-hidden">
           <img
@@ -269,7 +314,7 @@ const HotelDetails = () => {
           )}
         </div>
       </div>
-  
+
       <div className="flex flex-wrap gap-4 mb-8">
         {allPhotos.map((photo, index) => (
           <img
@@ -281,7 +326,7 @@ const HotelDetails = () => {
           />
         ))}
       </div>
-  
+
       {hotelDetails && (
         <WeatherComponent
           latitude={hotelDetails.latitude}
@@ -289,8 +334,8 @@ const HotelDetails = () => {
           cityName={hotelDetails.city} // Assuming 'city' is the correct field
         />
       )}
-  
-  <div className="flex flex-wrap -mx-2">
+
+      <div className="flex flex-wrap -mx-2">
         {/* Hotel Information Card */}
         <div className="px-2 mb-4 w-full md:w-1/3">
   <div className="relative">
@@ -596,24 +641,22 @@ className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
 </div>
 </div>
 
-<div className="px-2 mb-4 w-full md:w-2/3">
-  <Card className="flex flex-col h-full">
-    <div className="my-8">
-    
-      <h2 className="text-3xl font-semibold mb-4"  > Frequently Asked Questions  </h2>
-      
-      {faqs.map((faq, index) => (
-        <Accordion key={index} title={faq.question}>
-          {faq.answer}
-        </Accordion>
-      ))}
-    </div>
-  </Card>
-  
-</div>
+      <div className="px-2 mb-4 w-full md:w-2/3">
+        <Card className="flex flex-col h-full">
+          <div className="my-8">
+            <h2 className="text-3xl font-semibold mb-4">
+              {" "}
+              Frequently Asked Questions{" "}
+            </h2>
 
-  
-
+            {faqs.map((faq, index) => (
+              <Accordion key={index} title={faq.question}>
+                {faq.answer}
+              </Accordion>
+            ))}
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };

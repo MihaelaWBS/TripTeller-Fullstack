@@ -9,7 +9,13 @@ import { Link } from "react-router-dom";
 import axiosInstance from "../../axiosInstance";
 import { AuthContext } from "../../Context/Auth";
 import emptyItineraryBackground from "../../assets/empty_itinerary_background.png";
+import PlanModal from "../PlanModal/PlanModal";
+import d6 from "../../assets/d6.jpg";
 const Itinerary = () => {
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
+  const [plan, setPlan] = useState(null);
+  const [selectedItineraryId, setSelectedItineraryId] = useState(null);
+
   const { user } = useContext(AuthContext);
   const { hotels } = useSearch();
   const [hotelDetails, setHotelDetails] = useState(null);
@@ -21,26 +27,30 @@ const Itinerary = () => {
   const [upcomingTrips, setUpcomingTrips] = useState([]);
 
   useEffect(() => {
-    const fetchItineraries = async () => {
-      try {
-        const response = await axios.get("/api/itineraries");
-        setItineraries(response.data);
-      } catch (error) {
-        console.error("Failed to fetch itineraries:", error);
-      }
-    };
-
-    fetchItineraries();
-  }, []);
-
-  useEffect(() => {
     const fetchItinerary = async () => {
       if (user && user._id) {
         try {
           const response = await axiosInstance.get(
             `/api/itineraries/user/${user._id}`
           );
-          setItinerary(response.data);
+
+          // Fetch activities for each itinerary
+          const activitiesPromises = response.data.map((itinerary) =>
+            axiosInstance.get(`/api/activities/itinerary/${itinerary._id}`)
+          );
+          const activitiesResponses = await Promise.all(activitiesPromises);
+          const activitiesData = activitiesResponses.map((res) => res.data);
+
+          // Add activities to each itinerary
+          const itinerariesWithActivities = response.data.map(
+            (itinerary, index) => ({
+              ...itinerary,
+              activities: activitiesData[index],
+            })
+          );
+
+          setItinerary(itinerariesWithActivities);
+          console.log(itinerariesWithActivities);
         } catch (error) {
           console.log("Error fetching itinerary:", error);
         }
@@ -88,10 +98,10 @@ const Itinerary = () => {
 
   return (
     <>
-      <div className="relative h-96 w-full overflow-hidden">
-        <img src={c1} alt="Travel" className="w-full h-full" />
-        <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-50 flex items-center justify-center">
-          <h1 className="text-white text-6xl font-bold">Travel smarter</h1>
+      <div className="relative  md:h-[42rem] w-full overflow-hidden">
+        <img src={d6} alt="Travel" className="w-full h-full object-fill" />
+        <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-10 flex items-center justify-center">
+        {/*<h1 className="text-black text-6xl font-bold">Travel smarter</h1> */}
         </div>
       </div>
       <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
@@ -179,13 +189,31 @@ const Itinerary = () => {
                           Departure: {hotel?.hotelDetails?.data?.departure_date}
                         </h2>
                       </div>
-                      <div className="mt-auto flex justify-center w-full">
+                      <div className="mt-auto flex justify-between w-full">
                         <Button
                           onClick={() => removeFromItinerary(hotel._id)}
-                          className="bg-orange-500 rounded-3xl mt-2"
+                          className="bg-red-500 rounded-3xl mt-2"
                         >
                           Remove from itinerary
                         </Button>
+                        <Button
+                          onClick={() => {
+                            setIsPlanModalOpen(true);
+                            console.log("WHAASDASDASD", hotel._id);
+                            setSelectedItineraryId(hotel._id); // Use the actual itinerary's ID here
+                          }}
+                          className="bg-blue-500 rounded-3xl mt-2"
+                        >
+                          Plan
+                        </Button>
+                        <PlanModal
+                          isOpen={isPlanModalOpen}
+                          onClose={() => {
+                            setIsPlanModalOpen(false);
+                            setSelectedItineraryId(null); // Reset selectedItineraryId when closing the modal
+                          }}
+                          itineraryId={selectedItineraryId} // Pass the selected itinerary ID to the modal
+                        />
                       </div>
                     </div>
                   </Card>
