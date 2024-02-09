@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useSearch } from "../../Context/SearchContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import MobileSortDropdown from "../../Components/MobileSortDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -196,6 +197,7 @@ const SearchResults = () => {
                     onClick={(event) => {
                       event.stopPropagation();
                       addToItinerary(hotel);
+                      toast.success("Hotel added to itinerary!"); // Add this line
                     }}
                   >
                     Add to itinerary

@@ -9,6 +9,8 @@ import React, { useState, useEffect } from "react";
 import { ItineraryProvider } from "./Context/ItineraryContext";
 import Footer1 from "./Components/Footer1";
 import axios from "axios";
+import "react-toastify/dist/ReactToastify.css"; // Add this line
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [itinerary, setItinerary] = useState([]);
@@ -37,6 +39,7 @@ function App() {
 
   return (
     <>
+      <ToastContainer />
       <SearchProvider>
         <ItineraryProvider>
           <div className="flex flex-col min-h-screen">
