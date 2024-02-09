@@ -7,7 +7,7 @@ import DOMPurify from "dompurify";
 import parse from "html-react-parser";
 import { Button } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { faClock, faSort } from "@fortawesome/free-solid-svg-icons";
 
 /*
 import io from 'socket.io-client';
@@ -15,6 +15,7 @@ const socket = io(import.meta.env.VITE_SERVER_BASE_URL, { transports: ['websocke
 
 const BlogDashboard = () => {
   const [user, setUser] = useState(null);
+  const [sortOrder, setSortOrder] = useState("desc"); // Add this line
 
   const [posts, setPosts] = useState([]);
 
@@ -34,6 +35,22 @@ const BlogDashboard = () => {
     }; */
   }, []);
 
+  const sortByDate = () => {
+    let sortedPosts;
+    if (sortOrder === "desc") {
+      sortedPosts = [...posts].sort(
+        (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+      );
+      setSortOrder("asc");
+    } else {
+      sortedPosts = [...posts].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      setSortOrder("desc");
+    }
+    setPosts(sortedPosts);
+  };
+
   return (
     <>
       {/* Banner with a cover picture and overlay text */}
@@ -50,13 +67,18 @@ const BlogDashboard = () => {
           <h2 className="text-4xl font-bold">OUR LATEST POSTS</h2>
         </div>
 
-        <div className="text-center mb-10 md:ml-1 xl:ml-10">
+        <div className=" mb-10 md:ml-1 xl:ml-10 flex- flex-col">
           <Link to="/addPost">
             <Button className="bg-orange-500 rounded-3xl">Create a post</Button>
           </Link>
+          <div className="p-2 mt-2 rounded-3xl bg-gray-200 w-32 text-center">
+            <button onClick={sortByDate}>
+              <FontAwesomeIcon icon={faSort} /> Sort by date
+            </button>
+          </div>
         </div>
-        {/* Content area for cards */}
 
+        {/* Content area for cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {posts.map(
             (
