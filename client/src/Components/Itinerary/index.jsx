@@ -11,6 +11,7 @@ import { AuthContext } from "../../Context/Auth";
 import emptyItineraryBackground from "../../assets/empty_itinerary_background.png";
 import PlanModal from "../PlanModal/PlanModal";
 import d6 from "../../assets/d6.jpg";
+import { toast } from "react-toastify";
 const Itinerary = () => {
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [plan, setPlan] = useState(null);
@@ -101,7 +102,7 @@ const Itinerary = () => {
       <div className="relative  md:h-[42rem] w-full overflow-hidden">
         <img src={d6} alt="Travel" className="w-full h-full object-fill" />
         <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-10 flex items-center justify-center">
-        {/*<h1 className="text-black text-6xl font-bold">Travel smarter</h1> */}
+          {/*<h1 className="text-black text-6xl font-bold">Travel smarter</h1> */}
         </div>
       </div>
       <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
@@ -170,11 +171,12 @@ const Itinerary = () => {
                           className=" text-green-600 hover:text-green-800 font-bold text-lg cursor-pointer mb-2"
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() =>
-                            addToUpcomingTrips(hotel.hotelDetails.hotel_id)
-                          }
+                          onClick={() => {
+                            addToUpcomingTrips(hotel.hotelDetails.hotel_id);
+                            toast.success("Added to upcoming trips!");
+                          }}
                         >
-                          Add to Incoming trips
+                          Add to upcoming trips
                         </a>
                         {/*
                         <h2>

@@ -8,6 +8,16 @@ import WeatherComponent from "../WeatherComponent/WeatherComponent";
 import { useSearch } from "../../Context/SearchContext";
 import backgroundImage from "../../Images/mountains.webp";
 import Modal from "react-modal";
+import freeParkingIcon from "../../Images/parking-svgrepo-com.svg";
+import petFriendlyIcon from "../../Images/pet-shop-svgrepo-com.svg";
+import outdoorPoolIcon from "../../Images/pool-svgrepo-com.svg";
+import restaurantIcon from "../../Images/restaurant-svgrepo-com.svg";
+import spaIcon from "../../Images/spa-candle-svgrepo-com.svg";
+import airConditioningIcon from "../../Images/air-conditioning-svgrepo-com.svg";
+import privateBathroomIcon from "../../Images/bathroom-filled-shower-svgrepo-com.svg";
+import viewIcon from "../../Images/river-svgrepo-com.svg";
+import freeWifiIcon from "../../Images/wifi-svgrepo-com.svg";
+import showerIcon from "../../Images/showers-water-svgrepo-com.svg";
 
 Modal.setAppElement("#root");
 const Accordion = ({ title, children }) => {
@@ -116,7 +126,18 @@ const HotelDetails = () => {
     },
     // Add more FAQs as needed
   ]);
-
+  const propertyHighlights = [
+    { name: "Free parking", icon: freeParkingIcon },
+    { name: "Pet friendly", icon: petFriendlyIcon },
+    { name: "Outdoor pool", icon: outdoorPoolIcon },
+    { name: "Restaurant", icon: restaurantIcon },
+    { name: "Spa", icon: spaIcon },
+    { name: "Air conditioning", icon: airConditioningIcon },
+    { name: "Private Bathroom", icon: privateBathroomIcon },
+    { name: "View", icon: viewIcon },
+    { name: "Free WiFi", icon: freeWifiIcon },
+    { name: "Shower", icon: showerIcon },
+  ];
   const checkInDateCookie = localStorage.getItem("checkInDate");
   const checkOutDateCookie = localStorage.getItem("checkOutDate");
 
@@ -263,6 +284,10 @@ const HotelDetails = () => {
     mt: "Maltese",
     ga: "Irish",
     cy: "Welsh",
+    uk: "English",
+    tr: "Turkish",
+    "pt-pt": "Portuguese",
+    az: "Azerbaijani",
   };
 
   return (
@@ -431,7 +456,7 @@ const HotelDetails = () => {
                 </strong>
               </p>
               <p>
-                Excluded Amount:{" "}
+                Trip-teller Discount:{" "}
                 <strong>
                   {priceBreakdown.excluded_amount.currency}{" "}
                   {priceBreakdown.excluded_amount.value.toFixed(2)}
@@ -454,7 +479,7 @@ const HotelDetails = () => {
               cursor: "pointer",
             }}
           >
-            Close
+            Close to View more
           </button>
         </Modal>
         {/* Spoken Languages Card */}
@@ -589,6 +614,48 @@ const HotelDetails = () => {
                   >
                     {readMore === "covid" ? "Read Less" : "Read More"}
                   </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Property Highlights Section */}
+        <div className="px-2 mb-4 w-full md:w-1/3">
+          <div className="relative">
+            <div className="flex flex-col h-full relative z-10">
+              <div
+                className="p-6 rounded-lg flex-grow relative z-10 text-white"
+                style={{
+                  backgroundImage: `url(${backgroundImage})`,
+                  backgroundSize: "cover", // Cover the entire area of the div
+                  backgroundPosition: "center", // Center the background image
+                  height: "350px", // Fixed height
+                  width: "100%", // Fixed width (responsive within its grid column)
+                  overflow: "auto",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
+                    padding: "10px", // Add padding to create some space around the text
+                    borderRadius: "5px", // Optional: adds rounded corners
+                  }}
+                >
+                  <h2 className="text-xl font-semibold mb-4">
+                    Property Highlights
+                  </h2>
+                  <div className="flex flex-wrap">
+                    {propertyHighlights.map((highlight, index) => (
+                      <div key={index} className="flex items-center m-2">
+                        <img
+                          src={highlight.icon}
+                          alt={highlight.name}
+                          className="w-6 h-6 mr-2"
+                        />
+                        <span>{highlight.name}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
