@@ -4,6 +4,7 @@ import { AuthContext } from "../../Context/Auth";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { useParams } from "react-router-dom";
+import HeaderWeather from "../HeaderWeather/HeaderWeather";
 
 const index = () => {
   const { userId } = useParams();
@@ -11,12 +12,15 @@ const index = () => {
 
   return (
     <>
-      <Navbar fluid rounded>
+      <Navbar fluid rounded style={{ position: "relative" }}>
         <Navbar.Brand href="/">
           <img src={logo} className="mr-3 h-6 sm:h-9" alt="TripTeller" />
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
             TripTeller
           </span>
+          <div className="absolute left-60 top-1/2 transform -translate-y-1/2">
+            <HeaderWeather />
+          </div>
         </Navbar.Brand>
         <div className="flex md:order-2">
           {user ? (
@@ -64,18 +68,20 @@ const index = () => {
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse>
-          <Link to="/hotels" className="block py-2 px-4 text-sm">
-            Hotels
-          </Link>
-          <Link to="/restaurants" className="block py-2 px-4 text-sm">
-            Restaurants
-          </Link>
-          <Link to="/attractions" className="block py-2 px-4 text-sm">
-            Attractions
-          </Link>
-          <Link to="/taxi" className="block py-2 px-4 text-sm">
-            Taxi
-          </Link>
+          <div className="flex">
+            <Link to="/hotels" className="block py-2 px-4 text-sm">
+              Hotels
+            </Link>
+            <Link to="/restaurants" className="block py-2 px-4 text-sm">
+              Restaurants
+            </Link>
+            <Link to="/attractions" className="block py-2 px-4 text-sm">
+              Attractions
+            </Link>
+            <Link to="/taxi" className="block py-2 px-4 text-sm">
+              Taxi
+            </Link>
+          </div>
         </Navbar.Collapse>
       </Navbar>
     </>

@@ -16,7 +16,6 @@ const index = () => {
 
       <NearbyCities />
       <TellerAI />
-      <HeaderWeather />
       {/* <PlanForm /> */}
       {/*  <Attractions /> */}
     </>
