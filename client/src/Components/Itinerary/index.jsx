@@ -101,7 +101,7 @@ const Itinerary = () => {
       <div className="relative  md:h-[42rem] w-full overflow-hidden">
         <img src={d6} alt="Travel" className="w-full h-full object-fill" />
         <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-10 flex items-center justify-center">
-          <h1 className="text-black text-6xl font-bold">Travel smarter</h1>
+        {/*<h1 className="text-black text-6xl font-bold">Travel smarter</h1> */}
         </div>
       </div>
       <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
