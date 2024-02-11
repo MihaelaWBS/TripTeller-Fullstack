@@ -72,19 +72,19 @@ const index = () => {
 
               {/* User Info */}
               <div>
-                <div className="flex-grow">
+                <div className="flex-grow mb-4">
+                  {" "}
+                  {/* Added margin-bottom for spacing */}
                   <p className="font-bold text-xl">
                     {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
                   </p>
                   <div className="flex items-center mt-2">
                     <p className="text-gray-600">
-                      {user?.nickname || "Your nickname"}
+                      {user?.nickname || "YourNickname"}
                     </p>
-                    <button
-                      onClick={() => setIsModalOpen(true)}
-                      className="ml-2"
-                    >
-                      <FontAwesomeIcon icon={faPencilAlt} />
+                    <button onClick={toggleModal} className="ml-2">
+                      <FontAwesomeIcon icon={faPencilAlt} />{" "}
+                      {/* Example using FontAwesome */}
                     </button>
                   </div>
                 </div>
@@ -92,26 +92,28 @@ const index = () => {
                 {isModalOpen && (
                   <NicknameModal isOpen={isModalOpen} onClose={toggleModal} />
                 )}
+
+                {/* Container for upload and remove buttons for better grouping and spacing */}
+                <div className="flex items-center space-x-2 mt-4">
+                  {" "}
+                  {/* Adjusted spacing and alignment */}
+                  <label
+                    htmlFor="fileInput"
+                    className="bg-black text-white px-3 py-1 rounded shadow cursor-pointer"
+                  >
+                    Upload new
+                  </label>
+                  <input
+                    id="fileInput"
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                  <button className="bg-red-500 text-white px-3 py-1 rounded shadow">
+                    Remove
+                  </button>
+                </div>
               </div>
-
-              {/* Edit Button and File Input */}
-              <label
-                htmlFor="fileInput"
-                className="bg-black text-white px-3 py-1 rounded shadow mr-2"
-              >
-                Upload new
-              </label>
-              <input
-                id="fileInput"
-                type="file"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-
-              {/* Remove Button */}
-              <button className="bg-red-500 text-white px-3 py-1 rounded shadow mr-2">
-                Remove
-              </button>
             </div>
           </div>
 
