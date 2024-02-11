@@ -12,6 +12,8 @@ import emptyItineraryBackground from "../../assets/empty_itinerary_background.pn
 import PlanModal from "../PlanModal/PlanModal";
 import d6 from "../../assets/d6.jpg";
 import { toast } from "react-toastify";
+import ItinerarySidebar from "./ItinerarySidebar";
+
 const Itinerary = () => {
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [plan, setPlan] = useState(null);
@@ -109,7 +111,11 @@ const Itinerary = () => {
         <h1 className="text-4xl font-bold text-gray-800 mb-10 text-center">
           My Itinerary
         </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-10 ">
+        <div className="flex flex-col md:flex-row gap-10">
+        <div className="md:w-1/4">
+        <ItinerarySidebar />
+        </div>
+        <div className="flex-grow grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-10 ">
           {itinerary.length > 0 ? (
             itinerary.map((hotel) => {
               let imgSrc = hotel.hotelDetails?.main_photo_url;
@@ -234,6 +240,7 @@ const Itinerary = () => {
           )}
         </div>
       </div>
+    </div>
     </>
   );
 };
