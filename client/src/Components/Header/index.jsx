@@ -39,7 +39,7 @@ const index = () => {
                   {user && user.email}
                 </span>
               </Dropdown.Header>
-              <Link to={`/myprofile/${user._id}`}>
+              <Link to={`/myprofile`}>
                 {" "}
                 <Dropdown.Item>My profile</Dropdown.Item>
               </Link>
@@ -48,6 +48,9 @@ const index = () => {
               </Link>
               <Link to="/upcomingtrips">
                 <Dropdown.Item>Upcoming trips</Dropdown.Item>
+              </Link>
+              <Link to="/myposts">
+                <Dropdown.Item>My posts</Dropdown.Item>
               </Link>
               <Link to="/blog">
                 <Dropdown.Item>Blog</Dropdown.Item>

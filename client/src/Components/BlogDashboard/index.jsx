@@ -22,7 +22,6 @@ const BlogDashboard = () => {
     axios
       .get(`/api/posts`)
       .then((res) => {
-        console.log(res.data); // This logs the data correctly
         setPosts(res.data);
       })
       .catch((e) => console.error(e));

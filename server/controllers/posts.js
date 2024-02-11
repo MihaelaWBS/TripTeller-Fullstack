@@ -127,6 +127,19 @@ const clapPost = async (req, res) => {
   }
 };
 
+const getPostsByUserId = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const posts = await Post.find({ userId }).populate(
+      "userId",
+      "username email avatar firstName lastName flag"
+    );
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createPost,
   likePost,
@@ -135,4 +148,5 @@ module.exports = {
   updatePost,
   clapPost,
   deletePost,
+  getPostsByUserId,
 };
