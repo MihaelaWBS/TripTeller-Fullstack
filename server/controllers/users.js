@@ -116,19 +116,17 @@ const addAvatar = async (req, res) => {
 const addFlag = async (req, res) => {
   try {
     console.log("req.user:", req.user);
-    console.log("req.file:", req.file);
-    if (!req.file || !req.file.path) {
-      return res.status(400).json({ message: "No file uploaded." });
+    const { flag } = req.body;
+
+    if (!flag) {
+      return res.status(400).json({ message: "No flag selected." });
     }
-    const result = await cloudinary.uploader.upload(req.file.path);
 
     const user = await User.findByIdAndUpdate(
       req.user._id,
-      {
-        flag: result.secure_url,
-      },
+      { flag },
       { new: true }
-    ); // { new: true } to return the updated user
+    );
 
     res.status(200).json({ flag: user.flag });
   } catch (error) {
