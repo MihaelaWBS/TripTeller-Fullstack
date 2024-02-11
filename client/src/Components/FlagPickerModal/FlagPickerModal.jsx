@@ -37,10 +37,11 @@ const FlagPickerModal = () => {
         {countryCodes.map((code) => (
           <i
             key={code}
-            className={`fi fi-${code} cursor-pointer`}
+            className={`fi fi-${code} cursor-pointer h-6 w-6 space-x-4 space-y-4 `}
             onClick={() => {
               handleFlagSelect(code);
               toast.success("Flag changed!");
+              setModalIsOpen(false);
             }}
           ></i>
         ))}
