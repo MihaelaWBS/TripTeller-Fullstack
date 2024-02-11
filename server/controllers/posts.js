@@ -16,7 +16,7 @@ const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find().populate(
       "userId",
-      "username email avatar firstName lastName"
+      "username email avatar firstName lastName flag"
     );
     res.json(posts);
   } catch (error) {

@@ -1,10 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { AuthContext } from "../../Context/Auth";
 import axios from "../../axiosInstance";
-import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import d6 from "../../assets/d6.jpg";
-import DOMPurify from "dompurify";
-import parse from "html-react-parser";
 import { Button } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faSort } from "@fortawesome/free-solid-svg-icons";
@@ -15,18 +14,23 @@ import io from 'socket.io-client';
 const socket = io(import.meta.env.VITE_SERVER_BASE_URL, { transports: ['websocket'] }); */
 
 const BlogDashboard = () => {
+
   /*const [user, setUser] = useState(null); */
   // Assuming AuthContext provides the current user's information
   const { user } = useContext(AuthContext);
   const [sortOrder, setSortOrder] = useState("desc"); // Add this line
 
-  const [posts, setPosts] = useState([]);
 
+  const [posts, setPosts] = useState([]);
   useEffect(() => {
     axios
       .get(`/api/posts`)
-      .then((res) => setPosts(res.data))
+      .then((res) => {
+        console.log(res.data); // This logs the data correctly
+        setPosts(res.data);
+      })
       .catch((e) => console.error(e));
+
 
     /* socket.on('postCreated', newPost => {
       setPosts(posts => [newPost, ...posts]);
@@ -36,6 +40,7 @@ const BlogDashboard = () => {
       //disconnect
       socket.disconnect();+-
     }; */
+
   }, []);
 
   const sortByDate = () => {
@@ -112,6 +117,7 @@ const BlogDashboard = () => {
                     />
                   )}
                   <div className="flex flex-col">
+
                     <p className="font-bold text-nowrap">
                       {post.userId && `${post.userId.firstName} ${post.userId.lastName}`}
                     </p>
@@ -176,6 +182,7 @@ const BlogDashboard = () => {
                           <p className="font-bold text-nowrap">
                             {post.userId &&
                               `${post.userId.firstName} ${post.userId.lastName}`}
+
                           </p>
                           <div className="flex items-center gap-2">
                             <FontAwesomeIcon icon={faClock} />
