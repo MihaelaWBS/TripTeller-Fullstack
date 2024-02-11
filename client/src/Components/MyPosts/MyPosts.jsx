@@ -28,7 +28,6 @@ const MyPosts = () => {
 
   const handleDelete = async (postId) => {
     try {
-      console.log(postId);
       await axiosInstance.delete(`/api/posts/${postId}`);
       navigate("/blog");
     } catch (error) {
@@ -38,8 +37,6 @@ const MyPosts = () => {
 
   useEffect(() => {
     if (user) {
-      console.log("User:", user);
-      console.log("Posts:", posts);
       axiosInstance
         .get(`/api/posts/user/${user._id}`)
         .then((res) => {
@@ -49,7 +46,7 @@ const MyPosts = () => {
         .catch((error) => console.log("Error:", error));
     }
   }, [user]);
-  console.log(posts);
+
   return (
     <div className="max-w-4xl w-full mx-auto mt-10 flex flex-col">
       <div className="flex items-center gap-10">

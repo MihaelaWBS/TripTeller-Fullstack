@@ -1,14 +1,25 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { AuthContext } from "../../Context/Auth";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { useParams } from "react-router-dom";
 import HeaderWeather from "../HeaderWeather/HeaderWeather";
+import axiosInstance from "../../axiosInstance";
 
 const index = () => {
-  const { userId } = useParams();
   const { user, logout } = useContext(AuthContext);
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/api/posts/user/${user._id}`)
+        .then((res) => {
+          console.log("Response:", res);
+          setPosts(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((error) => console.log("Error:", error));
+    }
+  }, [user]);
 
   return (
     <>
@@ -50,7 +61,7 @@ const index = () => {
                 <Dropdown.Item>Upcoming trips</Dropdown.Item>
               </Link>
               <Link to="/myposts">
-                <Dropdown.Item>My posts</Dropdown.Item>
+                <Dropdown.Item>My posts ({posts.length})</Dropdown.Item>
               </Link>
               <Link to="/blog">
                 <Dropdown.Item>Blog</Dropdown.Item>
