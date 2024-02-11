@@ -120,12 +120,11 @@ const index = () => {
                     src={comment.userId.avatar}
                   />
                   {comment.userId.flag && (
-                    <img
-                      src={comment.userId.flag}
-                      alt="Flag"
-                      className="absolute right-0 top-1/2 transform -translate-y-1/2 h-4 w-6 object-fill  border-2 border-white" // Adjusted Tailwind classes
+                    <i
+                      className={`fi-${comment.userId.flag} absolute -right-2 top-1/2 transform -translate-y-1/2 h-3 w-4  `}
                       style={{ top: "22%", transform: "translateY(-50%)" }}
-                    />
+                      title={`${comment.userId.flag.toUpperCase()} flag`}
+                    ></i>
                   )}
                 </div>
                 <div className="flex-col mt-1">

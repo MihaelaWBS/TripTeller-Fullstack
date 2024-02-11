@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../Context/Auth";
 import axiosInstance from "../../axiosInstance";
 import { useParams } from "react-router-dom";
-import Flag from "../FlagComponent/Flag";
+import FlagPickerModal from "../FlagPickerModal/FlagPickerModal";
 
 const index = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -57,11 +57,11 @@ const index = () => {
                   alt="Profile"
                 />
                 {user && user.flag && (
-                  <img
-                    src={user.flag}
-                    alt="Flag"
-                    className="absolute right-0 top-1/2 transform -translate-y-1/2 h-6 w-8 object-fill  border-2 border-white" // Adjusted Tailwind classes
-                  />
+                  <i
+                    className={` fi-${user.flag} absolute -right-2 top-1/2 transform -translate-y-1/2 h-5 w-7`}
+                    style={{ height: "1.1rem", width: "1.5rem" }}
+                    title={`${user.flag.toUpperCase()} flag`}
+                  ></i>
                 )}
               </div>
 
@@ -109,6 +109,7 @@ const index = () => {
                   <p className="text-gray-500">Email address</p>
                   <p>{user ? user.email : "Loading"}</p>
                 </div>
+                <FlagPickerModal />
               </div>
 
               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 md:mt-0">
@@ -118,7 +119,6 @@ const index = () => {
           </div>
         </div>
       </div>
-      <Flag />
     </div>
   );
 };

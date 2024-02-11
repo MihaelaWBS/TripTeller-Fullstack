@@ -1,10 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../Context/Auth";
 import axios from "../../axiosInstance";
-
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import d6 from "../../assets/d6.jpg";
-
 import { Button } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faSort } from "@fortawesome/free-solid-svg-icons";
