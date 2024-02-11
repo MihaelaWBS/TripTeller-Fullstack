@@ -97,8 +97,6 @@ const getLoggedInUser = async (req, res) => {
 };
 const addAvatar = async (req, res) => {
   try {
-    console.log("req.user:", req.user);
-    console.log("req.file:", req.file);
     if (!req.file || !req.file.path) {
       return res.status(400).json({ message: "No file uploaded." });
     }
@@ -115,12 +113,33 @@ const addAvatar = async (req, res) => {
   }
 };
 
+const addFlag = async (req, res) => {
+  try {
+    console.log("req.user:", req.user);
+    const { flag } = req.body;
+
+    if (!flag) {
+      return res.status(400).json({ message: "No flag selected." });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { flag },
+      { new: true }
+    );
+
+    res.status(200).json({ flag: user.flag });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
-
+  addFlag,
   addAvatar,
-
   getLoggedInUser,
 };
