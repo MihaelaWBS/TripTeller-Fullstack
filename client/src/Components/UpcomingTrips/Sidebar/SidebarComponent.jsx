@@ -37,9 +37,22 @@ const SidebarComponent = () => {
           <Sidebar.Item href="#" icon={HiOutlineStar}>
             Reviews
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiOutlineDocumentText}>
-            My Blog
-          </Sidebar.Item>
+          <Link to="/blog/post/addPost">
+            <Sidebar.Item href="#" icon={HiOutlineStar}>
+                Add New Post
+            </Sidebar.Item>
+          </Link>
+          <Link to="/blog">
+            <Sidebar.Item href="#" icon={HiOutlineDocumentText}>
+                My Blog
+            </Sidebar.Item>
+          </Link>
+          <Link to="/upcomingtrips">
+            <Sidebar.Item href="#" icon={HiOutlineDocumentText}>
+                Upcoming Trips
+            </Sidebar.Item>
+          </Link>
+
           <Link to="/trips/itinerary">
             <Sidebar.Item href="#" icon={HiOutlineBriefcase}>
               My itinerary
