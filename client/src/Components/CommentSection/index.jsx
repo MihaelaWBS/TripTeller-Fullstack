@@ -112,13 +112,23 @@ const index = () => {
               key={index}
               className="flex-col py-4 mx-auto mt-3 bg-white border-b-2 border-gray-200 sm:px-4 sm:py-4 md:px-4 sm:shadow-sm dark:bg-inherit"
             >
-              <div className="flex flex-row ">
-                <img
-                  className="object-cover w-12 h-12 rounded-3xl border-gray-300 dark:hidden"
-                  alt="User avatar"
-                  src={comment.userId.avatar}
-                />
-                <div className="flex-col mt-1 ">
+              <div className="flex flex-row">
+                <div className="relative">
+                  <img
+                    className="object-cover w-12 h-12 rounded-3xl border-gray-300 dark:hidden"
+                    alt="User avatar"
+                    src={comment.userId.avatar}
+                  />
+                  {comment.userId.flag && (
+                    <img
+                      src={comment.userId.flag}
+                      alt="Flag"
+                      className="absolute right-0 top-1/2 transform -translate-y-1/2 h-4 w-6 object-fill  border-2 border-white" // Adjusted Tailwind classes
+                      style={{ top: "22%", transform: "translateY(-50%)" }}
+                    />
+                  )}
+                </div>
+                <div className="flex-col mt-1">
                   <div className="flex flex-col gap-2 flex-1 px-4 font-bold leading-tight">
                     <h2>
                       {comment.userId &&
