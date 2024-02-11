@@ -16,7 +16,7 @@ const TripList = ({ activeTab, upcomingTrips, cancelledTrips, cancelTrip }) => {
     if (imgSrc) {
       imgSrc = imgSrc.replace("square60", "square500");
     } else {
-      imgSrc = "default_image_url"; // replace with your actual default image URL
+      imgSrc = "default_image_url";
     }
 
     return (

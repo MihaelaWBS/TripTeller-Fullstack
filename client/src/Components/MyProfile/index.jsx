@@ -3,11 +3,16 @@ import { AuthContext } from "../../Context/Auth";
 import axiosInstance from "../../axiosInstance";
 import { useParams } from "react-router-dom";
 import FlagPickerModal from "../FlagPickerModal/FlagPickerModal";
+import NicknameModal from "../NicknameModal/NicknameModal";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const index = () => {
   const { user, setUser } = useContext(AuthContext);
   const [imageUrl, setImageUrl] = useState(null);
   const { userId } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -66,10 +71,27 @@ const index = () => {
               </div>
 
               {/* User Info */}
-              <div className="flex-grow">
-                <p className="font-bold text-xl">
-                  {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
-                </p>
+              <div>
+                <div className="flex-grow">
+                  <p className="font-bold text-xl">
+                    {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
+                  </p>
+                  <div className="flex items-center mt-2">
+                    <p className="text-gray-600">
+                      {user?.nickname || "Your nickname"}
+                    </p>
+                    <button
+                      onClick={() => setIsModalOpen(true)}
+                      className="ml-2"
+                    >
+                      <FontAwesomeIcon icon={faPencilAlt} />
+                    </button>
+                  </div>
+                </div>
+                {/* Conditional rendering for the modal */}
+                {isModalOpen && (
+                  <NicknameModal isOpen={isModalOpen} onClose={toggleModal} />
+                )}
               </div>
 
               {/* Edit Button and File Input */}

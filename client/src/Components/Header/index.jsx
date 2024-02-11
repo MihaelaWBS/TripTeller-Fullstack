@@ -9,13 +9,36 @@ import axiosInstance from "../../axiosInstance";
 const index = () => {
   const { user, logout } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
+  const [itinerary, setItinerary] = useState([]);
+  const [upcomingTripsLength, setUpcomingTripsLength] = useState([]);
+
   useEffect(() => {
     if (user) {
       axiosInstance
         .get(`/api/posts/user/${user._id}`)
         .then((res) => {
-          console.log("Response:", res);
           setPosts(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((error) => console.log("Error:", error));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/api/upcomingTrips/user/${user._id}`)
+        .then((res) => {
+          setUpcomingTripsLength(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((error) => console.log("Error:", error));
+    }
+  }, [user]);
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/api/itineraries/user/${user._id}`)
+        .then((res) => {
+          setItinerary(Array.isArray(res.data) ? res.data : []);
         })
         .catch((error) => console.log("Error:", error));
     }
@@ -55,10 +78,12 @@ const index = () => {
                 <Dropdown.Item>My profile</Dropdown.Item>
               </Link>
               <Link to={`/trips/itinerary`}>
-                <Dropdown.Item>My itinerary</Dropdown.Item>
+                <Dropdown.Item>My itinerary ({itinerary.length})</Dropdown.Item>
               </Link>
               <Link to="/upcomingtrips">
-                <Dropdown.Item>Upcoming trips</Dropdown.Item>
+                <Dropdown.Item>
+                  Upcoming trips ({upcomingTripsLength.length})
+                </Dropdown.Item>
               </Link>
               <Link to="/myposts">
                 <Dropdown.Item>My posts ({posts.length})</Dropdown.Item>

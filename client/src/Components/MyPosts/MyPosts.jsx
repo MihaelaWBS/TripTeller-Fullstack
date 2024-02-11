@@ -68,7 +68,7 @@ const MyPosts = () => {
           <p className="font-bold text-xl">
             {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
           </p>
-          <p>Just some random text that will be added in the future!</p>
+          <p className="text-gray-600">{user?.nickname || "Your nickname"}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Link to="/myprofile">
