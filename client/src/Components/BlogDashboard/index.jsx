@@ -7,7 +7,7 @@ import d6 from "../../assets/d6.jpg";
 import { Button } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faSort } from "@fortawesome/free-solid-svg-icons";
-import  {AuthContext}  from "../../Context/Auth";
+
 
 /*
 import io from 'socket.io-client';
