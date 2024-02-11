@@ -44,6 +44,12 @@ const ItinerarySidebar = () => {
                 My Blog
             </Sidebar.Item>
           </Link>
+          <Link to="/upcomingtrips">
+            <Sidebar.Item href="#" icon={HiOutlineDocumentText}>
+                Upcoming Trips
+            </Sidebar.Item>
+          </Link>
+
           <Link to="/trips/itinerary">
             <Sidebar.Item href="#" icon={HiOutlineBriefcase}>
               My itinerary
