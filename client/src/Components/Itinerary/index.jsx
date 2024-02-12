@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSearch } from "../../Context/SearchContext";
 import { useItinerary } from "../../Context/ItineraryContext";
 import { useParams } from "react-router-dom";
-import { Button, Card } from "flowbite-react";
+import { Button, Card, Tooltip } from "flowbite-react";
 import c1 from "../../assets/c1.jpg";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../axiosInstance";
@@ -13,6 +13,13 @@ import PlanModal from "../PlanModal/PlanModal";
 import d6 from "../../assets/d6.jpg";
 import { toast } from "react-toastify";
 import ItinerarySidebar from "./ItinerarySidebar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMapLocationDot,
+  faPlane,
+  faTasks,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Itinerary = () => {
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
@@ -107,140 +114,168 @@ const Itinerary = () => {
           {/*<h1 className="text-black text-6xl font-bold">Travel smarter</h1> */}
         </div>
       </div>
-      <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
-        <h1 className="text-4xl font-bold text-gray-800 mb-10 text-center">
+      <div className="container mx-auto my-8 p-6   ">
+        <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-10 text-center">
           My Itinerary
         </h1>
         <div className="flex flex-col md:flex-row gap-10">
-        <div className="md:w-1/4">
-        <ItinerarySidebar />
-        </div>
-        <div className="flex-grow grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-10 ">
-          {itinerary.length > 0 ? (
-            itinerary.map((hotel) => {
-              let imgSrc = hotel.hotelDetails?.main_photo_url;
-              if (imgSrc) {
+          <div className="md:w-1/4" style={{ maxHeight: "51vh" }}>
+            <ItinerarySidebar />
+          </div>
+          <div className="flex-grow grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-10 ">
+            {itinerary.length > 0 ? (
+              itinerary.map((hotel) => {
+                let imgSrc = hotel.hotelDetails?.main_photo_url;
+                if (imgSrc) {
+                  imgSrc = imgSrc.replace("square60", "square500");
+                } else {
+                  imgSrc = "default_image_url";
+                }
                 imgSrc = imgSrc.replace("square60", "square500");
-              } else {
-                imgSrc = "default_image_url";
-              }
-              imgSrc = imgSrc.replace("square60", "square500");
-              return (
-                <div key={hotel?.hotel_id} className="flex flex-col h-full">
-                  <Card
-                    className="mb-5 w-full  h-full flex flex-col"
-                    imgAlt="Property picture"
-                    imgSrc={imgSrc}
-                  >
-                    <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                      {hotel?.hotelDetails?.hotel_name}
-                    </h2>
-                    <p>{hotel?.hotelDetails?.city}</p>
-                    <div className="flex items-center space-x-2">
-                      <p className="text-lg font-extrabold  text-blue-600 dark:text-gray-700">
-                        {hotel?.hotelDetails?.review_score}
-                      </p>
-                      <p className="text-lg font-extrabold  text-blue-600 dark:text-gray-700">
-                        {hotel?.hotelDetails?.review_score_word}
-                      </p>
-                      <p>{hotel?.hotelDetails?.review_nr} reviews</p>
-                    </div>
-                    <div className="flex  space-x-2">
-                      {/*
-                      <p className="font-bold text-red-500">
-                        {" "}
-                        Arrival {hotel?.hotelDetails?.checkin?.from} - {" "}
-                        {hotel?.hotelDetails?.checkin?.until}
-                      </p> */}
-                      <div className="flex mt-2">
-                        {hotel?.hotelDetails?.hotel_include_breakfast === 0 && (
-                          <span className="bg-green-200 rounded-full px-3 py-1 ml-4 mr-2">
-                            Breakfast
-                          </span>
-                        )}
-                        {hotel?.hotelDetails?.has_free_parking && (
-                          <span className="bg-gray-200 rounded-full px-3 py-1 ml-4 mr-2">
-                            Free parking
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="mt-auto">
-                      <div className="flex mt-2 flex-wrap justify-around">
-                        <Link
-                          to={`/hotels/${hotel?.hotelDetails?.hotel_id}`}
-                          className="text-blue-600 hover:text-blue-800 font-bold text-lg cursor-pointer mb-2"
-                        >
-                          See Details
-                        </Link>
+                return (
+                  <div key={hotel?.hotel_id} className="flex flex-col h-full">
+                    <Card
+                      className="mb-5  flex flex-col img-height"
+                      imgAlt="Property picture"
+                      imgSrc={imgSrc}
+                    >
+                      <h2 className="text-2xl font-bold tracking-tight text-wrap text-gray-900 dark:text-white">
+                        {hotel?.hotelDetails?.hotel_name}
+                      </h2>
+                      <div className="flex gap-2 items-center">
+                        <FontAwesomeIcon icon={faMapLocationDot} />
                         <a
-                          className=" text-green-600 hover:text-green-800 font-bold text-lg cursor-pointer mb-2"
+                          onClick={(e) => e.stopPropagation()}
+                          href={`https://www.google.com/maps/search/?api=1&query=${hotel.city}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() => {
-                            addToUpcomingTrips(hotel.hotelDetails.hotel_id);
-                            toast.success("Added to upcoming trips!");
-                          }}
+                          className="text-blue-500 font-bold"
                         >
-                          Add to upcoming trips
+                          {hotel?.hotelDetails?.city}
                         </a>
-                        {/*
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <p className="text-lg font-extrabold  text-blue-600 dark:text-white">
+                          {hotel?.hotelDetails?.review_score}
+                        </p>
+                        <p className="text-lg font-extrabold  text-blue-600 dark:text-white">
+                          {hotel?.hotelDetails?.review_score_word}
+                        </p>
+                        <p>{hotel?.hotelDetails?.review_nr} reviews</p>
+                      </div>
+                      <div className="flex">
+                        <div className="flex gap-2">
+                          {hotel?.hotelDetails?.hotel_include_breakfast ===
+                            0 && (
+                            <span className="bg-green-500 rounded-full px-3 py-1 text-white dark:text-black">
+                              Breakfast
+                            </span>
+                          )}
+                          {hotel?.hotelDetails?.has_free_parking && (
+                            <span className="bg-gray-500 rounded-full px-3 py-1  text-white dark:text-black">
+                              Free parking
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="mt-auto">
+                        <div className="flex mt-2 flex-wrap justify-between">
+                          <Link
+                            to={`/hotels/${hotel?.hotelDetails?.hotel_id}`}
+                            className="text-blue-600 hover:text-blue-800 font-bold text-lg cursor-pointer mb-2"
+                          >
+                            See Details
+                          </Link>
+                          <a
+                            className=" text-green-600 hover:text-green-800 font-bold text-lg cursor-pointer mb-2"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => {
+                              addToUpcomingTrips(hotel.hotelDetails.hotel_id);
+                              toast.success("Added to upcoming trips!");
+                            }}
+                          >
+                            Add to upcoming trips
+                          </a>
+                          {/*
                         <h2>
                           FOR ADDING ARRIVAL AND DEPARTURE DATE IN THE FUTURE SO
                           THAT THE USER CAN PLAN
                         </h2> */}
-                        <h2 className="mb-2">
-                          {" "}
-                          Arrival: {hotel?.hotelDetails?.data?.arrival_date}
-                        </h2>
-                        <h2 className="mb-2">
-                          Departure: {hotel?.hotelDetails?.data?.departure_date}
-                        </h2>
+                          <div className="flex gap-8 flex-wrap items-center">
+                            <h2 className="mb-2 text-sm">
+                              Arrival:{" "}
+                              {new Date(
+                                hotel?.hotelDetails?.data?.arrival_date
+                              ).toLocaleDateString("en-US", {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              })}
+                            </h2>
+                            <h2 className="mb-2 text-sm">
+                              Departure:{" "}
+                              {new Date(
+                                hotel?.hotelDetails?.data?.departure_date
+                              ).toLocaleDateString("en-US", {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              })}
+                            </h2>
+                          </div>
+                        </div>
+                        <div className="mt-auto flex justify-between w-full">
+                          <Tooltip
+                            content="Remove from itinerary"
+                            placement="right"
+                          >
+                            <Button
+                              onClick={() => removeFromItinerary(hotel._id)}
+                              className="bg-red-500 rounded-xl mt-2 relative group"
+                            >
+                              <FontAwesomeIcon icon={faTrash} />
+                            </Button>
+                          </Tooltip>
+                          <Tooltip content="Plan" placement="left">
+                            <Button
+                              onClick={() => {
+                                setIsPlanModalOpen(true);
+
+                                setSelectedItineraryId(hotel._id);
+                              }}
+                              className="bg-blue-500 rounded-xl  mt-2"
+                            >
+                              <FontAwesomeIcon icon={faTasks} />
+                            </Button>
+                          </Tooltip>
+                          <PlanModal
+                            isOpen={isPlanModalOpen}
+                            onClose={() => {
+                              setIsPlanModalOpen(false);
+                              setSelectedItineraryId(null); // Reset selectedItineraryId when closing the modal
+                            }}
+                            itineraryId={selectedItineraryId} // Pass the selected itinerary ID to the modal
+                          />
+                        </div>
                       </div>
-                      <div className="mt-auto flex justify-between w-full">
-                        <Button
-                          onClick={() => removeFromItinerary(hotel._id)}
-                          className="bg-red-500 rounded-3xl mt-2"
-                        >
-                          Remove from itinerary
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setIsPlanModalOpen(true);
-                            console.log("WHAASDASDASD", hotel._id);
-                            setSelectedItineraryId(hotel._id); // Use the actual itinerary's ID here
-                          }}
-                          className="bg-blue-500 rounded-3xl mt-2"
-                        >
-                          Plan
-                        </Button>
-                        <PlanModal
-                          isOpen={isPlanModalOpen}
-                          onClose={() => {
-                            setIsPlanModalOpen(false);
-                            setSelectedItineraryId(null); // Reset selectedItineraryId when closing the modal
-                          }}
-                          itineraryId={selectedItineraryId} // Pass the selected itinerary ID to the modal
-                        />
-                      </div>
-                    </div>
-                  </Card>
+                    </Card>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="col-span-full">
+                <div className="flex flex-col items-center justify-center gap-4">
+                  <p className="md:text-2xl">
+                    {user?.firstName}, your itinerary is empty!
+                  </p>
+                  <img src={emptyItineraryBackground} />
                 </div>
-              );
-            })
-          ) : (
-            <div className="col-span-full">
-              <div className="flex flex-col items-center justify-center gap-4">
-                <p className="md:text-2xl">
-                  {user?.firstName}, your itinerary is empty!
-                </p>
-                <img src={emptyItineraryBackground} />
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
-    </div>
     </>
   );
 };
