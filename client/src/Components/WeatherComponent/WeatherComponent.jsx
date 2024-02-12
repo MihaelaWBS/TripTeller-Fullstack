@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import backgroundImage from '../../Images/mountains.webp'
 
 const WeatherComponent = ({ latitude, longitude, cityName }) => {
   const [dailyForecast, setDailyForecast] = useState(null);
@@ -40,29 +41,33 @@ const WeatherComponent = ({ latitude, longitude, cityName }) => {
     minTemp: dailyForecast.temperature_2m_min[index],
   }));
 
+  const cardStyle = {
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  };
+
   return (
     <div className="max-w-md mx-auto mb-5">
-      <div className="bg-gradient-to-r from-blue-500 to-teal-400 shadow-md rounded-lg overflow-hidden">
-        <div className="p-4 border-b border-teal-200">
+      <div className="shadow-lg rounded-lg overflow-hidden" style={cardStyle}>
+        <div className="p-4 border-b border-blue-800 bg-opacity-50 bg-black">
           <h2 className="text-2xl font-bold text-center text-white">
             {cityName} - 5-Day Weather Forecast
           </h2>
-          <p className="text-center text-teal-100">
+          <p className="text-center text-blue-200">
             Current Temperature: {currentTemperature}°C
           </p>
         </div>
-        <ul className="divide-y divide-gray-200">
+        <ul className="divide-y divide-blue-800">
           {fiveDayForecast.map((day, index) => (
             <li
               key={index}
               className="px-4 py-3 flex justify-between items-center bg-white bg-opacity-25"
             >
-              <span className="font-medium text-gray-800">{day.date}</span>
-              <span className="text-sm text-gray-300">
-                Max:{" "}
-                <span className="font-medium text-white">{day.maxTemp}°C</span>,
-                Min:{" "}
-                <span className="font-medium text-white">{day.minTemp}°C</span>
+              <span className="font-medium text-blue-100">{day.date}</span>
+              <span className="text-sm text-blue-200">
+                Max: <span className="font-medium text-white">{day.maxTemp}°C</span>,
+                Min: <span className="font-medium text-white">{day.minTemp}°C</span>
               </span>
             </li>
           ))}
