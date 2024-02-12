@@ -55,7 +55,7 @@ export const SearchProvider = ({ children }) => {
 
     try {
       const response = await axios.get(
-        "https://api.ipgeolocation.io/ipgeo?apiKey=f57354baa9db47df9066106e23e91ffc"
+        "https://api.ipgeolocation.io/ipgeo?apiKey=a3b9ca377d7f4f37afbce441ac90e113"
       );
       const currencyCode = response.data.currency.code;
 

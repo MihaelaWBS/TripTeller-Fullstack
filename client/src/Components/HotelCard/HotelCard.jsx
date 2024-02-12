@@ -31,15 +31,18 @@ const HotelCard = ({ hotel }) => {
             <div className="flex items-center mb-2">
               <div className="flex gap-2 items-center">
                 <FontAwesomeIcon icon={faMapLocationDot} />
-                <a
-                  onClick={(e) => e.stopPropagation()}
-                  href={`https://www.google.com/maps/search/?api=1&query=${hotel.city}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(
+                      `https://www.google.com/maps/search/?api=1&query=${hotel.city}`,
+                      "_blank"
+                    );
+                  }}
                   className="text-blue-500 font-bold"
                 >
                   {hotel.city}
-                </a>
+                </button>
               </div>
             </div>
           </div>
