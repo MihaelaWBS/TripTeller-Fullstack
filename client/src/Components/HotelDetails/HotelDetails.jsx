@@ -6,18 +6,19 @@ import MapView from "../MapView/MapView";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import WeatherComponent from "../WeatherComponent/WeatherComponent";
 import { useSearch } from "../../Context/SearchContext";
-import backgroundImage from "../../Images/mountains.webp";
-import Modal from "react-modal";
-import freeParkingIcon from "../../Images/parking-svgrepo-com.svg";
-import petFriendlyIcon from "../../Images/pet-shop-svgrepo-com.svg";
-import outdoorPoolIcon from "../../Images/pool-svgrepo-com.svg";
-import restaurantIcon from "../../Images/restaurant-svgrepo-com.svg";
-import spaIcon from "../../Images/spa-candle-svgrepo-com.svg";
-import airConditioningIcon from "../../Images/air-conditioning-svgrepo-com.svg";
-import privateBathroomIcon from "../../Images/bathroom-filled-shower-svgrepo-com.svg";
-import viewIcon from "../../Images/river-svgrepo-com.svg";
-import freeWifiIcon from "../../Images/wifi-svgrepo-com.svg";
-import showerIcon from "../../Images/showers-water-svgrepo-com.svg";
+import backgroundImage from '../../Images/mountains.webp'
+import  Modal  from "react-modal";
+import freeParkingIcon from '../../Images/parking-svgrepo-com.svg';
+import petFriendlyIcon from '../../Images/pet-shop-svgrepo-com.svg';
+import poolIcon from '../../Images/pool-svgrepo-com.svg';
+import restaurantIcon from '../../Images/restaurant-svgrepo-com.svg';
+import spaIcon from '../../Images/spa-candle-svgrepo-com.svg';
+import freeWifiIcon from '../../Images/wifi-svgrepo-com.svg';
+import gymIcon from '../../Images/gym-svgrepo-com.svg';
+import shuttleIcon from '../../Images/shuttle-svgrepo-com.svg'; // Ensure you have this icon
+import familyRoomsIcon from '../../Images/family-3-generations-svgrepo-com.svg'; // Ensure you have this icon
+import roomServiceIcon from '../../Images/room-service-service-svgrepo-com.svg'; // Ensure you have this icon
+import defaultIcon from '../../Images/Animation - 1707483405053.gif';// Update the path to where your default icon is located
 
 Modal.setAppElement("#root");
 const Accordion = ({ title, children }) => {
@@ -70,10 +71,24 @@ const HotelDetails = () => {
   const [activeImage, setActiveImage] = useState("");
   const [error, setError] = useState(null);
   const { hotelId } = useParams();
+  const tempHighlights = [
+    { name: "Parking", icon: freeParkingIcon }, // "iconset/parking_sign"
+    { name: "Pet-Friendly", icon: petFriendlyIcon }, // "iconset/pawprint"
+    { name: "Pool", icon: poolIcon }, // "iconset/pool"
+    { name: "Restaurant", icon: restaurantIcon }, // "iconset/food"
+    { name: "Spa", icon: spaIcon }, // "iconset/spa"
+    { name: "Free Wi-Fi", icon: freeWifiIcon }, // "iconset/wifi"
+    { name: "Gym", icon: gymIcon }, // "iconset/fitness"
+    { name: "Shuttle Service", icon: shuttleIcon }, // "iconset/shuttle"
+    { name: "Family Rooms", icon: familyRoomsIcon }, // "iconset/family"
+    { name: "Room Service", icon: roomServiceIcon }, // "iconset/gourmet"
+  ];
+  
   const [readMore, setReadMore] = useState(null);
   const [isPriceBreakdownModalOpen, setIsPriceBreakdownModalOpen] =
     useState(true);
   const [priceBreakdown, setPriceBreakdown] = useState(null);
+  const [hotelHighlights, setHotelHighlights] = useState([]);
   const [spokenLanguages, setSpokenLanguages] = useState([]);
 
   const [faqs, setFaqs] = useState([
@@ -126,18 +141,7 @@ const HotelDetails = () => {
     },
     // Add more FAQs as needed
   ]);
-  const propertyHighlights = [
-    { name: "Free parking", icon: freeParkingIcon },
-    { name: "Pet friendly", icon: petFriendlyIcon },
-    { name: "Outdoor pool", icon: outdoorPoolIcon },
-    { name: "Restaurant", icon: restaurantIcon },
-    { name: "Spa", icon: spaIcon },
-    { name: "Air conditioning", icon: airConditioningIcon },
-    { name: "Private Bathroom", icon: privateBathroomIcon },
-    { name: "View", icon: viewIcon },
-    { name: "Free WiFi", icon: freeWifiIcon },
-    { name: "Shower", icon: showerIcon },
-  ];
+  
   const checkInDateCookie = localStorage.getItem("checkInDate");
   const checkOutDateCookie = localStorage.getItem("checkOutDate");
 
@@ -170,7 +174,17 @@ const HotelDetails = () => {
           setHotelDetails(response.data.data);
           setSpokenLanguages(response.data.data.spoken_languages || []);
           setPriceBreakdown(response.data.data.product_price_breakdown || {});
+          if (response.data.data && Array.isArray(response.data.data.facilities)) {
+            console.log("Facilities:", response.data.data.facilities);
 
+          const highlightsFromAPI = response.data.data.facilities.map(facility => {
+            return {
+              name: facility.name,
+              icon: determineIcon(facility.name), // Implement this function based on your icon mapping
+            };
+          });
+          setHotelHighlights(highlightsFromAPI);
+          }
           const initialImage =
             (response.data.data.rooms &&
               response.data.data.rooms[0]?.photos[0]?.url_original) ||
@@ -181,6 +195,7 @@ const HotelDetails = () => {
         }
       } catch (error) {
         setError(error.toString());
+        
       }
     };
 
@@ -289,7 +304,24 @@ const HotelDetails = () => {
     "pt-pt": "Portuguese",
     az: "Azerbaijani",
   };
-
+  function determineIcon(facilityIconName) {
+    const iconMap = {
+      "iconset/parking_sign": freeParkingIcon,
+      "iconset/pawprint": petFriendlyIcon,
+      "iconset/pool": poolIcon,
+      "iconset/food": restaurantIcon,
+      "iconset/spa": spaIcon,
+      "iconset/wifi": freeWifiIcon,
+      "iconset/fitness": gymIcon,
+      "iconset/shuttle": shuttleIcon,
+      "iconset/family": familyRoomsIcon,
+      "iconset/gourmet": roomServiceIcon,
+      // ... add all mappings here
+    };
+  
+    return iconMap[facilityIconName] || defaultIcon; // Ensure defaultIcon is defined
+  }
+  
   return (
     <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-4xl font-bold text-gray-800 mb-6">
@@ -519,198 +551,174 @@ const HotelDetails = () => {
         </div>
         {/* Sustainability Efforts Card */}
         <div className="px-2 mb-4 w-full md:w-1/3">
-          <div className="relative">
-            <div className="flex flex-col h-full relative z-10">
-              <div
-                className="p-6 rounded-lg flex-grow relative z-10 text-white"
-                style={{
-                  backgroundImage: `url(${backgroundImage})`,
-                  backgroundSize: "cover", // Cover the entire area of the div
-                  backgroundPosition: "center", // Center the background image
-                  height: "350px", // Fixed height
-                  width: "100%", // Fixed width (responsive within its grid column)
-                  overflow: "auto",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
-                    padding: "10px", // Add padding to create some space around the text
-                    borderRadius: "5px", // Optional: adds rounded corners
-                  }}
-                >
-                  <h2 className="text-xl font-semibold mb-4">
-                    Sustainability Efforts
-                  </h2>
-                  {readMore === "sustainability" ? (
-                    <ul className="list-disc list-inside mb-4">
-                      {hotelDetails.sustainability?.sustainability_page?.efforts?.map(
-                        (effort, index) => (
-                          <li key={index}>
-                            {effort.title}: {effort.steps.join(", ")}
-                          </li>
-                        )
-                      )}
-                    </ul>
-                  ) : (
-                    <p>
-                      {hotelDetails.sustainability?.sustainability_page
-                        ?.efforts?.[0]?.title ||
-                        "Details on sustainability efforts"}
-                    </p>
-                  )}
-                  <button
-                    onClick={() => toggleReadMore("sustainability")}
-                    className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
-                  >
-                    {readMore === "sustainability" ? "Read Less" : "Read More"}
-                  </button>
-                </div>
+  <div className="relative">
+    <div className="flex flex-col h-full relative z-10">
+      <div 
+        className="p-6 rounded-lg flex-grow relative z-10 text-white" 
+        style={{ 
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover', // Cover the entire area of the div
+          backgroundPosition: 'center', // Center the background image
+          height: '350px', // Fixed height
+          width: '100%', // Fixed width (responsive within its grid column)
+          overflow: 'auto',
+       
+       }}>
+          <div 
+          style={{ 
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
+            padding: '10px', // Add padding to create some space around the text
+            borderRadius: '5px', // Optional: adds rounded corners
+          }}>
+                <h2 className="text-xl font-semibold mb-4">Sustainability Efforts</h2>
+                {readMore === "sustainability" ? (
+                  <ul className="list-disc list-inside mb-4">
+                    {hotelDetails.sustainability?.sustainability_page?.efforts?.map((effort, index) => (
+<li key={index}>
+{effort.title}: {effort.steps.join(", ")}
+</li>
+))
+}
+</ul>
+) : (
+<p>
+{hotelDetails.sustainability?.sustainability_page?.efforts?.[0]?.title || "Details on sustainability efforts"}
+</p>
+)}
+<button
+onClick={() => toggleReadMore("sustainability")}
+className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
+>
+{readMore === "sustainability" ? "Read Less" : "Read More"}
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>  {/* COVID-19 Support Card */}
+<div className="px-2 mb-4 w-full md:w-1/3">
+  <div className="relative">
+    <div className="flex flex-col h-full relative z-10">
+      <div 
+        className="p-6 rounded-lg flex-grow relative z-10 text-white" 
+        style={{ 
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover', // Cover the entire area of the div
+          backgroundPosition: 'center', // Center the background image
+          height: '350px', // Fixed height
+          width: '100%', // Fixed width (responsive within its grid column)
+          overflow: 'auto',
+        }}>
+          <div 
+          style={{ 
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
+            padding: '10px', // Add padding to create some space around the text
+            borderRadius: '5px', // Optional: adds rounded corners
+          }}>
+          <h2 className="text-xl font-semibold mb-4">COVID-19 Support</h2>
+          {readMore === "covid" ? (
+            hotelDetails.info_banners?.map((banner, index) => (
+              <div key={index} className="mb-4">
+                <p className="font-semibold">{banner.title}</p>
+                <p>{banner.messages.join(" ")}</p>
               </div>
-            </div>
-          </div>
-        </div>{" "}
-        {/* COVID-19 Support Card */}
-        <div className="px-2 mb-4 w-full md:w-1/3">
-          <div className="relative">
-            <div className="flex flex-col h-full relative z-10">
-              <div
-                className="p-6 rounded-lg flex-grow relative z-10 text-white"
-                style={{
-                  backgroundImage: `url(${backgroundImage})`,
-                  backgroundSize: "cover", // Cover the entire area of the div
-                  backgroundPosition: "center", // Center the background image
-                  height: "350px", // Fixed height
-                  width: "100%", // Fixed width (responsive within its grid column)
-                  overflow: "auto",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
-                    padding: "10px", // Add padding to create some space around the text
-                    borderRadius: "5px", // Optional: adds rounded corners
-                  }}
-                >
-                  <h2 className="text-xl font-semibold mb-4">
-                    COVID-19 Support
-                  </h2>
-                  {readMore === "covid" ? (
-                    hotelDetails.info_banners?.map((banner, index) => (
-                      <div key={index} className="mb-4">
-                        <p className="font-semibold">{banner.title}</p>
-                        <p>{banner.messages.join(" ")}</p>
-                      </div>
-                    ))
-                  ) : (
-                    <p>
-                      {hotelDetails.info_banners?.[0]?.title ||
-                        "COVID-19 support information not available"}
-                    </p>
-                  )}
-                  <button
-                    onClick={() => toggleReadMore("covid")}
-                    className="mt-auto text-white-600 font-bold mt-6 hover:text-red-800"
-                  >
-                    {readMore === "covid" ? "Read Less" : "Read More"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+            ))
+          ) : (
+            <p>
+              {hotelDetails.info_banners?.[0]?.title || "COVID-19 support information not available"}
+            </p>
+          )}
+          <button
+            onClick={() => toggleReadMore("covid")}
+            className="mt-auto text-white-600 font-bold mt-6 hover:text-red-800"
+          >
+            {readMore === "covid" ? "Read Less" : "Read More"}
+          </button>
         </div>
-        {/* Property Highlights Section */}
-        <div className="px-2 mb-4 w-full md:w-1/3">
-          <div className="relative">
-            <div className="flex flex-col h-full relative z-10">
-              <div
-                className="p-6 rounded-lg flex-grow relative z-10 text-white"
-                style={{
-                  backgroundImage: `url(${backgroundImage})`,
-                  backgroundSize: "cover", // Cover the entire area of the div
-                  backgroundPosition: "center", // Center the background image
-                  height: "350px", // Fixed height
-                  width: "100%", // Fixed width (responsive within its grid column)
-                  overflow: "auto",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
-                    padding: "10px", // Add padding to create some space around the text
-                    borderRadius: "5px", // Optional: adds rounded corners
-                  }}
-                >
-                  <h2 className="text-xl font-semibold mb-4">
-                    Property Highlights
-                  </h2>
-                  <div className="flex flex-wrap">
-                    {propertyHighlights.map((highlight, index) => (
-                      <div key={index} className="flex items-center m-2">
-                        <img
-                          src={highlight.icon}
-                          alt={highlight.name}
-                          className="w-6 h-6 mr-2"
-                        />
-                        <span>{highlight.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* Family Facilities Card */}
-        <div className="px-2 mb-4 w-full md:w-1/3">
-          <div className="relative">
-            <div className="flex flex-col h-full relative z-10">
-              <div
-                className="p-6 rounded-lg flex-grow relative z-10 text-white"
-                style={{
-                  backgroundImage: `url(${backgroundImage})`,
-                  backgroundSize: "cover", // Cover the entire area of the div
-                  backgroundPosition: "center", // Center the background image
-                  height: "350px", // Fixed height
-                  width: "100%", // Fixed width (responsive within its grid column)
-                  overflow: "auto",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
-                    padding: "10px", // Add padding to create some space around the text
-                    borderRadius: "5px", // Optional: adds rounded corners
-                  }}
-                >
-                  <h2 className="text-xl font-semibold mb-4">
-                    Family Facilities
-                  </h2>
-                  <ul className="  mb-4">
-                    {readMore
-                      ? familyFacilitiesList.map((facility, index) => (
-                          <li key={index}>{facility}</li>
-                        ))
-                      : familyFacilitiesList
-                          .slice(0, 5)
-                          .map((facility, index) => (
-                            <li key={index}>{facility}</li>
-                          ))}
-                  </ul>
-                  {familyFacilitiesList.length > 5 && (
-                    <button
-                      onClick={() => setReadMore(!readMore)}
-                      className="mt-auto text-blue-600 hover:text-blue-800"
-                    >
-                      Read {readMore ? "Less" : "More"}
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  {/* Property Highlights Section */}
+<div className="px-2 mb-4 w-full md:w-1/3">
+  <div className="relative">
+    <div className="flex flex-col h-full relative z-10">
+      <div
+        className="p-6 rounded-lg flex-grow relative z-10 text-white"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover', // Cover the entire area of the div
+          backgroundPosition: 'center', // Center the background image
+          height: '350px', // Fixed height
+          width: '100%', // Fixed width (responsive within its grid column)
+          overflow: 'auto',
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
+            padding: '10px', // Add padding to create some space around the text
+            borderRadius: '5px', // Optional: adds rounded corners
+          }}
+        >
+          <h2 className="text-xl font-semibold mb-4">Property Highlights</h2>
+          <div className="flex flex-wrap">
+          {tempHighlights.map((highlight, index) => (
+              <div key={index} className="flex items-center m-2">
+                <img src={highlight.icon} alt={highlight.name} className="w-6 h-6 mr-2" />
+                <span>{highlight.name}</span>
+    </div>
+            ))}
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+ {/* Family Facilities Card */}
+ <div className="px-2 mb-4 w-full md:w-1/3">
+  <div className="relative">
+    <div className="flex flex-col h-full relative z-10">
+      <div 
+        className="p-6 rounded-lg flex-grow relative z-10 text-white" 
+        style={{ 
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover', // Cover the entire area of the div
+          backgroundPosition: 'center', // Center the background image
+          height: '350px', // Fixed height
+          width: '100%', // Fixed width (responsive within its grid column)
+          overflow: 'auto',
+       }}>
+          <div 
+          style={{ 
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black background with 50% opacity
+            padding: '10px', // Add padding to create some space around the text
+            borderRadius: '5px', // Optional: adds rounded corners
+          }}>
+        <h2 className="text-xl font-semibold mb-4">Family Facilities</h2>
+        <ul className="  mb-4">
+          {readMore
+            ? familyFacilitiesList.map((facility, index) => (
+                <li key={index}>{facility}</li>
+              ))
+            : familyFacilitiesList.slice(0, 5).map((facility, index) => (
+                <li key={index}>{facility}</li>
+              ))}
+        </ul>
+        {familyFacilitiesList.length > 5 && (
+          <button
+            onClick={() => setReadMore(!readMore)}
+            className="mt-auto text-blue-600 hover:text-blue-800"
+          >
+            Read {readMore ? "Less" : "More"}
+          </button>
+        )}
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+</div>
 
       <div className="px-2 mb-4 w-full md:w-2/3">
         <Card className="flex flex-col h-full">
