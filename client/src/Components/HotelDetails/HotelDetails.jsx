@@ -71,6 +71,19 @@ const HotelDetails = () => {
   const [activeImage, setActiveImage] = useState("");
   const [error, setError] = useState(null);
   const { hotelId } = useParams();
+  const tempHighlights = [
+    { name: "Parking", icon: freeParkingIcon }, // "iconset/parking_sign"
+    { name: "Pet-Friendly", icon: petFriendlyIcon }, // "iconset/pawprint"
+    { name: "Pool", icon: poolIcon }, // "iconset/pool"
+    { name: "Restaurant", icon: restaurantIcon }, // "iconset/food"
+    { name: "Spa", icon: spaIcon }, // "iconset/spa"
+    { name: "Free Wi-Fi", icon: freeWifiIcon }, // "iconset/wifi"
+    { name: "Gym", icon: gymIcon }, // "iconset/fitness"
+    { name: "Shuttle Service", icon: shuttleIcon }, // "iconset/shuttle"
+    { name: "Family Rooms", icon: familyRoomsIcon }, // "iconset/family"
+    { name: "Room Service", icon: roomServiceIcon }, // "iconset/gourmet"
+  ];
+  
   const [readMore, setReadMore] = useState(null);
   const [isPriceBreakdownModalOpen, setIsPriceBreakdownModalOpen] =
     useState(true);
@@ -162,6 +175,8 @@ const HotelDetails = () => {
           setSpokenLanguages(response.data.data.spoken_languages || []);
           setPriceBreakdown(response.data.data.product_price_breakdown || {});
           if (response.data.data && Array.isArray(response.data.data.facilities)) {
+            console.log("Facilities:", response.data.data.facilities);
+
           const highlightsFromAPI = response.data.data.facilities.map(facility => {
             return {
               name: facility.name,
@@ -648,10 +663,10 @@ className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
         >
           <h2 className="text-xl font-semibold mb-4">Property Highlights</h2>
           <div className="flex flex-wrap">
-          {hotelHighlights.map((highlight, index) => (
-    <div key={index} className="flex items-center m-2">
-      <img src={highlight.icon} alt={highlight.name} className="w-6 h-6 mr-2" />
-      <span>{highlight.name}</span>
+          {tempHighlights.map((highlight, index) => (
+              <div key={index} className="flex items-center m-2">
+                <img src={highlight.icon} alt={highlight.name} className="w-6 h-6 mr-2" />
+                <span>{highlight.name}</span>
     </div>
             ))}
           </div>
