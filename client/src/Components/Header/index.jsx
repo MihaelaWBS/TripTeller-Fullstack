@@ -5,12 +5,14 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import HeaderWeather from "../HeaderWeather/HeaderWeather";
 import axiosInstance from "../../axiosInstance";
+import DarkModeToggle from 'react-dark-mode-toggle';
 
 const index = () => {
   const { user, logout } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const [itinerary, setItinerary] = useState([]);
   const [upcomingTripsLength, setUpcomingTripsLength] = useState([]);
+  const [isDarkMode, setIsDarkMode] = useState(() => false);
 
   useEffect(() => {
     if (user) {
@@ -44,6 +46,11 @@ const index = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    document.documentElement.classList = isDarkMode ? 'dark' : '';
+  }, [isDarkMode]);
+
+
   return (
     <>
       <Navbar fluid rounded style={{ position: "relative" }}>
@@ -57,6 +64,12 @@ const index = () => {
           </div>
         </Navbar.Brand>
         <div className="flex md:order-2">
+          <DarkModeToggle
+            onChange={setIsDarkMode}
+            checked={isDarkMode}
+            size={60}
+            className="ml-auto"
+          />
           {user ? (
             <Dropdown
               arrowIcon={false}
