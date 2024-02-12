@@ -76,7 +76,7 @@ const BlogDashboard = () => {
             <Button className="bg-orange-500 rounded-3xl">Create a post</Button>
           </Link>
           <div className="p-2 mt-2 rounded-3xl bg-gray-200 w-32 text-center">
-            <button onClick={sortByDate}>
+            <button onClick={sortByDate} className="text-black dark:text-black">
               <FontAwesomeIcon icon={faSort} /> Sort by date
             </button>
           </div>
@@ -91,7 +91,7 @@ const BlogDashboard = () => {
               <Link
                 to={`/blog/posts/${post._id}`}
                 key={post._id}
-                className="max-w-sm w-full mx-auto rounded overflow-hidden shadow-lg bg-white"
+                className="max-w-sm w-full mx-auto rounded overflow-hidden shadow-lg bg-white dark:bg-gray-600"
               >
                 <img
                   className="h-60 w-full object-cover"
@@ -99,7 +99,7 @@ const BlogDashboard = () => {
                   alt="Blog post"
                 />
                 <div className="px-4 py-2">
-                  <div className="font-bold text-xl mb-2">{post.title}</div>
+                  <div className="font-bold text-xl mb-2 text-black dark:text-white">{post.title}</div>
                 </div>
                 <div className="w-full border-t-2"></div>
                 <div className="px-4 py-2 flex justify-between items-center">
@@ -119,11 +119,11 @@ const BlogDashboard = () => {
                         style={{ width: "40px" }}
                       />
                       <div className="flex  flex-col">
-                        <p className="font-bold text-nowrap">
+                        <p className="font-bold text-nowrap text-black dark:text-white">
                           {post.userId &&
                             `${post.userId.firstName} ${post.userId.lastName}`}
                         </p>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 text-black dark:text-white">
                           <FontAwesomeIcon icon={faClock} />
                           <p>
                             {new Date(post.createdAt).toLocaleDateString(
@@ -160,7 +160,7 @@ const BlogDashboard = () => {
                 <Link
                   to={`/blog/posts/${post._id}`}
                   key={post._id}
-                  className="max-w-sm w-full mx-auto rounded overflow-hidden shadow-lg bg-white"
+                  className="max-w-sm w-full mx-auto rounded overflow-hidden shadow-lg bg-white dark:bg-gray-600"
                 >
                   {" "}
                   {/* Key is moved here */}
@@ -170,7 +170,7 @@ const BlogDashboard = () => {
                     alt="Blog post"
                   />
                   <div className="px-4 py-2">
-                    <div className="font-bold text-xl mb-2">{post.title}</div>
+                    <div className="font-bold text-xl mb-2 text-black dark:text-white">{post.title}</div>
                   </div>
                   <div className="w-full border-t-2"></div>
                   <div className="px-4 py-2 flex justify-between items-center">
