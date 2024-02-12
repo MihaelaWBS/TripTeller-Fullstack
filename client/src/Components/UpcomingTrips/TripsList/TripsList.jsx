@@ -22,7 +22,7 @@ const TripList = ({ activeTab, upcomingTrips, cancelledTrips, cancelTrip }) => {
     return (
       <div
         key={trip._id}
-        className="bg-white shadow rounded-md overflow-hidden mb-4"
+        className="bg-white dark:bg-gray-600 shadow rounded-md overflow-hidden mb-4"
       >
         <div className="px-4 py-5 sm:px-6 grid grid-cols-4 gap-4 items-center">
           <div className="col-span-1">
@@ -33,17 +33,17 @@ const TripList = ({ activeTab, upcomingTrips, cancelledTrips, cancelTrip }) => {
             />
           </div>
           <div className="col-span-3">
-            <h3 className="text-lg leading-6 font-bold text-gray-900">
+            <h3 className="text-lg leading-6 font-bold text-gray-900 dark:text-white">
               {trip.hotelDetails.hotel_name}
             </h3>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">
+            <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-white">
               {trip.hotelDetails.city}
             </p>
             <div className="mt-2 flex justify-between">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-white">
                 Check in: {formatDate(trip.hotelDetails.data.arrival_date)}
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-white">
                 Check out: {formatDate(trip.hotelDetails.data.departure_date)}
               </p>
             </div>
