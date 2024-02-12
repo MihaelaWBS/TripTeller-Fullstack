@@ -1,14 +1,48 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { AuthContext } from "../../Context/Auth";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { useParams } from "react-router-dom";
 import HeaderWeather from "../HeaderWeather/HeaderWeather";
+import axiosInstance from "../../axiosInstance";
 
 const index = () => {
-  const { userId } = useParams();
   const { user, logout } = useContext(AuthContext);
+  const [posts, setPosts] = useState([]);
+  const [itinerary, setItinerary] = useState([]);
+  const [upcomingTripsLength, setUpcomingTripsLength] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/api/posts/user/${user._id}`)
+        .then((res) => {
+          setPosts(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((error) => console.log("Error:", error));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/api/upcomingTrips/user/${user._id}`)
+        .then((res) => {
+          setUpcomingTripsLength(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((error) => console.log("Error:", error));
+    }
+  }, [user]);
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/api/itineraries/user/${user._id}`)
+        .then((res) => {
+          setItinerary(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((error) => console.log("Error:", error));
+    }
+  }, [user]);
 
   return (
     <>
@@ -39,15 +73,20 @@ const index = () => {
                   {user && user.email}
                 </span>
               </Dropdown.Header>
-              <Link to={`/myprofile/${user._id}`}>
+              <Link to={`/myprofile`}>
                 {" "}
                 <Dropdown.Item>My profile</Dropdown.Item>
               </Link>
               <Link to={`/trips/itinerary`}>
-                <Dropdown.Item>My itinerary</Dropdown.Item>
+                <Dropdown.Item>My itinerary ({itinerary.length})</Dropdown.Item>
               </Link>
               <Link to="/upcomingtrips">
-                <Dropdown.Item>Upcoming trips</Dropdown.Item>
+                <Dropdown.Item>
+                  Upcoming trips ({upcomingTripsLength.length})
+                </Dropdown.Item>
+              </Link>
+              <Link to="/myposts">
+                <Dropdown.Item>My posts ({posts.length})</Dropdown.Item>
               </Link>
               <Link to="/blog">
                 <Dropdown.Item>Blog</Dropdown.Item>

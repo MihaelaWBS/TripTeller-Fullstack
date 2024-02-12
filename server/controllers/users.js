@@ -115,7 +115,6 @@ const addAvatar = async (req, res) => {
 
 const addFlag = async (req, res) => {
   try {
-    console.log("req.user:", req.user);
     const { flag } = req.body;
 
     if (!flag) {
@@ -135,11 +134,60 @@ const addFlag = async (req, res) => {
   }
 };
 
+const addNickname = async (req, res) => {
+  try {
+    const { nickname } = req.body;
+    if (!nickname) {
+      return res.status(400).json({ message: "No nickname provided" });
+    }
+
+    const allowedNicknames = [
+      "Solo-Traveler",
+      "Family-Traveler",
+      "Adventure-Seeker",
+      "Luxury-Lover",
+      "Budget-Backpacker",
+      "Culture-Enthusiast",
+      "Foodie-Tourist",
+      "Eco-Tourist",
+      "Digital-Nomad",
+      "Weekend-Warrior",
+      "Road-Tripper",
+      "Beach-Bum",
+      "History-Buff",
+      "Nature-Lover",
+      "Thrill-Seeker",
+      "Volunteer-Voyager",
+      "Urban-Explorer",
+      "Country-Hopper",
+      "Cruise-Aficionado",
+    ];
+    if (!allowedNicknames.includes(nickname)) {
+      return res.status(400).json({ message: "Invalid nickname selected" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { nickname },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ nickname: user.nickname });
+  } catch (error) {
+    console.error("Error", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
   addFlag,
   addAvatar,
+  addNickname,
   getLoggedInUser,
 };

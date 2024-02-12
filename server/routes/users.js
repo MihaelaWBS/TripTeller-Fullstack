@@ -10,13 +10,13 @@ const {
   addFlag,
   updateAvatar,
   addAvatar,
+  addNickname,
   deleteAvatar,
   getLoggedInUser,
 } = require("../controllers/users");
 authRouter.post("/register", register);
 authRouter.post("/login", login);
 authRouter.post("/logout", logout);
-authRouter.get("/currentUser", authenticate, getLoggedInUser);
 authRouter.post(
   "/users/:id/avatar",
   authenticate,
@@ -29,5 +29,7 @@ authRouter.post(
   upload.single("flag"),
   addFlag
 );
+authRouter.post("/users/:id/nickname", authenticate, addNickname);
+authRouter.get("/currentUser", authenticate, getLoggedInUser);
 
 module.exports = authRouter;

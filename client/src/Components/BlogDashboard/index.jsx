@@ -8,29 +8,24 @@ import { Button } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faSort } from "@fortawesome/free-solid-svg-icons";
 
-
 /*
 import io from 'socket.io-client';
 const socket = io(import.meta.env.VITE_SERVER_BASE_URL, { transports: ['websocket'] }); */
 
 const BlogDashboard = () => {
-
   /*const [user, setUser] = useState(null); */
   // Assuming AuthContext provides the current user's information
   const { user } = useContext(AuthContext);
   const [sortOrder, setSortOrder] = useState("desc"); // Add this line
-
 
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     axios
       .get(`/api/posts`)
       .then((res) => {
-        console.log(res.data); // This logs the data correctly
         setPosts(res.data);
       })
       .catch((e) => console.error(e));
-
 
     /* socket.on('postCreated', newPost => {
       setPosts(posts => [newPost, ...posts]);
@@ -40,7 +35,6 @@ const BlogDashboard = () => {
       //disconnect
       socket.disconnect();+-
     }; */
-
   }, []);
 
   const sortByDate = () => {
@@ -59,7 +53,7 @@ const BlogDashboard = () => {
     setPosts(sortedPosts);
   };
 
-  const myPosts = posts.filter(post => post.userId?._id === user?._id);
+  const myPosts = posts.filter((post) => post.userId?._id === user?._id);
 
   return (
     <>
@@ -89,11 +83,11 @@ const BlogDashboard = () => {
         </div>
 
         {/* My Posts section */}
-       
+
         <div className="my-8">
           <h2 className="text-3xl font-bold mb-4">My Posts</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            {myPosts.map(post => (
+            {myPosts.map((post) => (
               <Link
                 to={`/blog/posts/${post._id}`}
                 key={post._id}
@@ -101,7 +95,7 @@ const BlogDashboard = () => {
               >
                 <img
                   className="h-60 w-full object-cover"
-                  src={post.imageUrl} 
+                  src={post.imageUrl}
                   alt="Blog post"
                 />
                 <div className="px-4 py-2">
@@ -117,19 +111,36 @@ const BlogDashboard = () => {
                     />
                   )}
                   <div className="flex flex-col">
-
-                    <p className="font-bold text-nowrap">
-                      {post.userId && `${post.userId.firstName} ${post.userId.lastName}`}
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <FontAwesomeIcon icon={faClock} />
-                      <p>
-                        {new Date(post.createdAt).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </p>
+                    <div className="flex  items-center gap-6">
+                      <img
+                        src={post.userId?.avatar}
+                        alt="profile-avatar"
+                        className="rounded-3xl"
+                        style={{ width: "40px" }}
+                      />
+                      <div className="flex  flex-col">
+                        <p className="font-bold text-nowrap">
+                          {post.userId &&
+                            `${post.userId.firstName} ${post.userId.lastName}`}
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <FontAwesomeIcon icon={faClock} />
+                          <p>
+                            {new Date(post.createdAt).toLocaleDateString(
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              }
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                      {/*    <div className="flex gap-8 items-center">
+                        <div className="w-1 border-r-2 h-10"></div>
+                        <p> {user?.nickname}</p>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -182,7 +193,6 @@ const BlogDashboard = () => {
                           <p className="font-bold text-nowrap">
                             {post.userId &&
                               `${post.userId.firstName} ${post.userId.lastName}`}
-
                           </p>
                           <div className="flex items-center gap-2">
                             <FontAwesomeIcon icon={faClock} />
@@ -198,6 +208,10 @@ const BlogDashboard = () => {
                             </p>
                           </div>
                         </div>
+                        {/*  <div className="flex gap-8 items-center">
+                          <div className="w-1 border-r-2 h-10"></div>
+                          <p> {user?.nickname}</p>
+                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -205,7 +219,6 @@ const BlogDashboard = () => {
               )
             )}
           </div>
-
         </div>
       </div>
     </>
@@ -213,13 +226,3 @@ const BlogDashboard = () => {
 };
 
 export default BlogDashboard;
-
-
-
-      
-
-
-
-        
-              
-

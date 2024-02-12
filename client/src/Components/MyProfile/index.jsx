@@ -3,11 +3,16 @@ import { AuthContext } from "../../Context/Auth";
 import axiosInstance from "../../axiosInstance";
 import { useParams } from "react-router-dom";
 import FlagPickerModal from "../FlagPickerModal/FlagPickerModal";
+import NicknameModal from "../NicknameModal/NicknameModal";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const index = () => {
   const { user, setUser } = useContext(AuthContext);
   const [imageUrl, setImageUrl] = useState(null);
   const { userId } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -66,30 +71,49 @@ const index = () => {
               </div>
 
               {/* User Info */}
-              <div className="flex-grow">
-                <p className="font-bold text-xl">
-                  {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
-                </p>
+              <div>
+                <div className="flex-grow mb-4">
+                  {" "}
+                  {/* Added margin-bottom for spacing */}
+                  <p className="font-bold text-xl">
+                    {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
+                  </p>
+                  <div className="flex items-center mt-2">
+                    <p className="text-gray-600">
+                      {user?.nickname || "YourNickname"}
+                    </p>
+                    <button onClick={toggleModal} className="ml-2">
+                      <FontAwesomeIcon icon={faPencilAlt} />{" "}
+                      {/* Example using FontAwesome */}
+                    </button>
+                  </div>
+                </div>
+                {/* Conditional rendering for the modal */}
+                {isModalOpen && (
+                  <NicknameModal isOpen={isModalOpen} onClose={toggleModal} />
+                )}
+
+                {/* Container for upload and remove buttons for better grouping and spacing */}
+                <div className="flex items-center space-x-2 mt-4">
+                  {" "}
+                  {/* Adjusted spacing and alignment */}
+                  <label
+                    htmlFor="fileInput"
+                    className="bg-black text-white px-3 py-1 rounded shadow cursor-pointer"
+                  >
+                    Upload new
+                  </label>
+                  <input
+                    id="fileInput"
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                  <button className="bg-red-500 text-white px-3 py-1 rounded shadow">
+                    Remove
+                  </button>
+                </div>
               </div>
-
-              {/* Edit Button and File Input */}
-              <label
-                htmlFor="fileInput"
-                className="bg-black text-white px-3 py-1 rounded shadow mr-2"
-              >
-                Upload new
-              </label>
-              <input
-                id="fileInput"
-                type="file"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-
-              {/* Remove Button */}
-              <button className="bg-red-500 text-white px-3 py-1 rounded shadow mr-2">
-                Remove
-              </button>
             </div>
           </div>
 
