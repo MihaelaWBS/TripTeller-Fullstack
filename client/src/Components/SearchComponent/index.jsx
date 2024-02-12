@@ -80,7 +80,7 @@ const index = () => {
 
   const StyledButton = ({ icon, children }) => (
     <Button className="rounded-3xl bg-orange-500">
-      <FontAwesomeIcon icon={icon} className="mr-2" />
+      {icon && <FontAwesomeIcon icon={icon} className="mr-2" />}
       {children}
     </Button>
   );

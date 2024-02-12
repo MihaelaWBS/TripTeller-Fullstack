@@ -19,7 +19,6 @@ const HeaderWeather = () => {
   const longitude = "13.4050";
 
   const getWeatherAnimation = (weatherCode) => {
-    console.log("Weather code", weatherCode);
     switch (weatherCode) {
       case 0: // Clear sky
         return sunny_weather;
@@ -67,7 +66,6 @@ const HeaderWeather = () => {
         const response = await axios.get(
           `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_max,temperature_2m_min&current_weather=true`
         );
-        console.log(response.data.current_weather);
         if (response.data) {
           const { temperature, weathercode } = response.data.current_weather;
           const { temperature_2m_max, temperature_2m_min } =
