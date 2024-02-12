@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useSearch } from "../../Context/SearchContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import SearchComponent from "../SearchComponent/index";
 import MobileSortDropdown from "../../Components/MobileSortDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -92,7 +92,7 @@ const SearchResults = () => {
             </div>
           </div>
         </div>
-
+        <SearchComponent variant="resultsPage" />
         <div className="flex flex-col max-w-2xl mx-auto ">
           <div className="hidden w-full mx-auto md:flex flex-col gap-2 mt-4">
             <div className="flex p-4 border-2 rounded-xl justify-evenly ">

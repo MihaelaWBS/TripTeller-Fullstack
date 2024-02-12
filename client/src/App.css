@@ -31,3 +31,11 @@ html {
 .fi {
   width: 100px !important;
 }
+
+.div-test-results {
+  background-color: #20274d;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 6rem;
+}
