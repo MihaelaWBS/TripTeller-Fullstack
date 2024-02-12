@@ -42,7 +42,7 @@ function App() {
       <ToastContainer />
       <SearchProvider>
         <ItineraryProvider>
-          <div className="flex flex-col min-h-screen">
+          <div className="flex flex-col min-h-screen dark:bg-gray-800 dark:text-white">
             <Header />
             <Main />
             <BottomNavbar />

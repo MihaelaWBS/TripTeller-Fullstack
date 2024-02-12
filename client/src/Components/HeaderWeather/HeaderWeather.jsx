@@ -104,7 +104,7 @@ const HeaderWeather = () => {
           loop={true}
           className="w-12 h-12"
         />
-        <div className="text-black ml-4">
+        <div className="text-black dark:text-white ml-4">
           <div className="text-lg font-bold">{currentWeather.temp}°C</div>
           <div className="text-sm">
             <span className="font-medium">Max: {currentWeather.maxTemp}°C</span>
