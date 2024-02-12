@@ -118,7 +118,7 @@ const MyPosts = () => {
                     })}
                   </p>
                   {activeMenu === post._id && (
-                    <div className="absolute right-0 mt-2 w-30 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    <div className="absolute right-80 mt-6 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                       {" "}
                       <ul className="py-1">
                         <li>
