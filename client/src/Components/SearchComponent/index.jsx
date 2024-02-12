@@ -24,7 +24,7 @@ import { Button } from "flowbite-react";
 import logoTravel from "./assets/logo-travel-2.png";
 import hamburgerMenu from "./assets/icons8-hamburger-menu-48.png"; */
 
-const index = () => {
+const index = ({ variant }) => {
   const {
     hotels,
     setHotels,
@@ -55,6 +55,12 @@ const index = () => {
     displayLocation,
     fetchCoordinates,
   } = useSearch();
+  const divClass = variant === "resultsPage" ? "div-test-results" : "div-test";
+  const divClass2 =
+    variant === "resultsPage" ? "div-test-results-2" : "div-test-2";
+  const divClass3 =
+    variant === "resultsPage" ? "div-test-results-3" : "div-test-3";
+
   const [isCitiesModalOpen, setIsCitiesModalOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState("");
   const checkInInputRef = useRef(null);
@@ -86,15 +92,19 @@ const index = () => {
   );
   return (
     <>
-      <div className="flex items-center flex-col justify-center div-test ">
-        <div className="flex items-center justify-center mt-6 gap-2">
-          <h2 className=" text-black font-bold xxs:text-base md:text-3xl">
-            Book your trip and plan with us!
-          </h2>
-          <FontAwesomeIcon icon={faPlane} color="orange" />
+      <div className={`flex items-center flex-col justify-center ${divClass}`}>
+        <div className={`flex items-center justify-center gap-2 ${divClass3}`}>
+          {variant !== "resultsPage" && (
+            <>
+              <h2 className="text-black font-bold xxs:text-base md:text-3xl">
+                Book your trip and plan with us!
+              </h2>
+              <FontAwesomeIcon icon={faPlane} color="black" />
+            </>
+          )}
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="flex items-center justify-around mt-8">
+          <div className={`flex items-center justify-around ${divClass2}`}>
             <div className=" hidden sm:grid md:max-w-3xl lg:max-w-3xl dark:bg-gray-800 dark:border-white  dark:border-[0.5px] bg-white shadow-xl p-4 rounded-3xl  ">
               <div className="flex space-x-8 flex-col sm:flex-row justify-around items-center">
                 <div className="group relative flex cursor-pointer flex-col gap-1">
