@@ -39,3 +39,7 @@ html {
   background-position: center;
   height: 6rem;
 }
+
+.img-height .rounded-t-lg {
+  max-height: 200px;
+}

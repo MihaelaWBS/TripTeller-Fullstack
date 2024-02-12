@@ -167,7 +167,7 @@ const DraggableList = ({ activities, itineraryId }) => {
           .map((key) => (
             <div key={key} className="mb-6">
               <div className="grid grid-cols-3 gap-4 items-center mb-4">
-                <div className="font-bold px-2 bg-pink-300 rounded-3xl col-span-3">{`Day ${key}`}</div>
+                <div className="font-bold px-2 border-b-2 border-blue-500 col-span-3">{`Day ${key}`}</div>
               </div>
               {myActivities[key]
                 .sort((a, b) => a.time.localeCompare(b.time))
@@ -219,7 +219,7 @@ const DraggableList = ({ activities, itineraryId }) => {
                             </button>
                             <button
                               onClick={() => deleteActivity(key, activity._id)}
-                              className="bg-white hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                              className="bg-white  text-white font-bold py-1 px-2 rounded-full"
                             >
                               <FontAwesomeIcon icon={faTrash} color="red" />
                             </button>
