@@ -2,11 +2,17 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../Context/Auth";
 import axiosInstance from "../../axiosInstance";
 import { useParams } from "react-router-dom";
+import FlagPickerModal from "../FlagPickerModal/FlagPickerModal";
+import NicknameModal from "../NicknameModal/NicknameModal";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const index = () => {
   const { user, setUser } = useContext(AuthContext);
   const [imageUrl, setImageUrl] = useState(null);
   const { userId } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -47,38 +53,67 @@ const index = () => {
           <div className="mb-4">
             <h2 className="text-xl font-semibold mb-2">My Profile</h2>
             <div className="flex flex-wrap items-center mb-4 space-x-4">
-              {/* Profile Image */}
-              <img
-                className="rounded-full h-24 w-24"
-                src={user && user.avatar ? user.avatar : "default_avatar_path"} // Replace with your default avatar path
-                alt="Profile"
-              />
-
-              {/* User Info */}
-              <div className="flex-grow">
-                <p className="font-bold text-xl">
-                  {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
-                </p>
+              <div className="relative inline-block">
+                <img
+                  className="rounded-full h-24 w-24 object-cover"
+                  src={
+                    user && user.avatar ? user.avatar : "default_avatar_path"
+                  }
+                  alt="Profile"
+                />
+                {user && user.flag && (
+                  <i
+                    className={` fi-${user.flag} absolute -right-2 top-1/2 transform -translate-y-1/2 h-5 w-7`}
+                    style={{ height: "1.1rem", width: "1.5rem" }}
+                    title={`${user.flag.toUpperCase()} flag`}
+                  ></i>
+                )}
               </div>
 
-              {/* Edit Button and File Input */}
-              <label
-                htmlFor="fileInput"
-                className="bg-black text-white px-3 py-1 rounded shadow mr-2"
-              >
-                Upload new
-              </label>
-              <input
-                id="fileInput"
-                type="file"
-                className="hidden"
-                onChange={handleFileChange}
-              />
+              {/* User Info */}
+              <div>
+                <div className="flex-grow mb-4">
+                  {" "}
+                  {/* Added margin-bottom for spacing */}
+                  <p className="font-bold text-xl">
+                    {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
+                  </p>
+                  <div className="flex items-center mt-2">
+                    <p className="text-gray-600">
+                      {user?.nickname || "YourNickname"}
+                    </p>
+                    <button onClick={toggleModal} className="ml-2">
+                      <FontAwesomeIcon icon={faPencilAlt} />{" "}
+                      {/* Example using FontAwesome */}
+                    </button>
+                  </div>
+                </div>
+                {/* Conditional rendering for the modal */}
+                {isModalOpen && (
+                  <NicknameModal isOpen={isModalOpen} onClose={toggleModal} />
+                )}
 
-              {/* Remove Button */}
-              <button className="bg-red-500 text-white px-3 py-1 rounded shadow mr-2">
-                Remove
-              </button>
+                {/* Container for upload and remove buttons for better grouping and spacing */}
+                <div className="flex items-center space-x-2 mt-4">
+                  {" "}
+                  {/* Adjusted spacing and alignment */}
+                  <label
+                    htmlFor="fileInput"
+                    className="bg-black text-white px-3 py-1 rounded shadow cursor-pointer"
+                  >
+                    Upload new
+                  </label>
+                  <input
+                    id="fileInput"
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                  <button className="bg-red-500 text-white px-3 py-1 rounded shadow">
+                    Remove
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -98,6 +133,7 @@ const index = () => {
                   <p className="text-gray-500">Email address</p>
                   <p>{user ? user.email : "Loading"}</p>
                 </div>
+                <FlagPickerModal />
               </div>
 
               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 md:mt-0">

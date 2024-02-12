@@ -1,22 +1,60 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { AuthContext } from "../../Context/Auth";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { useParams } from "react-router-dom";
+import HeaderWeather from "../HeaderWeather/HeaderWeather";
+import axiosInstance from "../../axiosInstance";
 
 const index = () => {
-  const { userId } = useParams();
   const { user, logout } = useContext(AuthContext);
+  const [posts, setPosts] = useState([]);
+  const [itinerary, setItinerary] = useState([]);
+  const [upcomingTripsLength, setUpcomingTripsLength] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/api/posts/user/${user._id}`)
+        .then((res) => {
+          setPosts(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((error) => console.log("Error:", error));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/api/upcomingTrips/user/${user._id}`)
+        .then((res) => {
+          setUpcomingTripsLength(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((error) => console.log("Error:", error));
+    }
+  }, [user]);
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/api/itineraries/user/${user._id}`)
+        .then((res) => {
+          setItinerary(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((error) => console.log("Error:", error));
+    }
+  }, [user]);
 
   return (
     <>
-      <Navbar fluid rounded>
+      <Navbar fluid rounded style={{ position: "relative" }}>
         <Navbar.Brand href="/">
           <img src={logo} className="mr-3 h-6 sm:h-9" alt="TripTeller" />
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
             TripTeller
           </span>
+          <div className="absolute left-60 top-1/2 transform -translate-y-1/2">
+            <HeaderWeather />
+          </div>
         </Navbar.Brand>
         <div className="flex md:order-2">
           {user ? (
@@ -35,15 +73,20 @@ const index = () => {
                   {user && user.email}
                 </span>
               </Dropdown.Header>
-              <Link to={`/myprofile/${user._id}`}>
+              <Link to={`/myprofile`}>
                 {" "}
                 <Dropdown.Item>My profile</Dropdown.Item>
               </Link>
               <Link to={`/trips/itinerary`}>
-                <Dropdown.Item>My itinerary</Dropdown.Item>
+                <Dropdown.Item>My itinerary ({itinerary.length})</Dropdown.Item>
               </Link>
               <Link to="/upcomingtrips">
-                <Dropdown.Item>Upcoming trips</Dropdown.Item>
+                <Dropdown.Item>
+                  Upcoming trips ({upcomingTripsLength.length})
+                </Dropdown.Item>
+              </Link>
+              <Link to="/myposts">
+                <Dropdown.Item>My posts ({posts.length})</Dropdown.Item>
               </Link>
               <Link to="/blog">
                 <Dropdown.Item>Blog</Dropdown.Item>
@@ -64,18 +107,20 @@ const index = () => {
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse>
-          <Link to="/hotels" className="block py-2 px-4 text-sm">
-            Hotels
-          </Link>
-          <Link to="/restaurants" className="block py-2 px-4 text-sm">
-            Restaurants
-          </Link>
-          <Link to="/attractions" className="block py-2 px-4 text-sm">
-            Attractions
-          </Link>
-          <Link to="/taxi" className="block py-2 px-4 text-sm">
-            Taxi
-          </Link>
+          <div className="flex">
+            <Link to="/hotels" className="block py-2 px-4 text-sm">
+              Hotels
+            </Link>
+            <Link to="/restaurants" className="block py-2 px-4 text-sm">
+              Restaurants
+            </Link>
+            <Link to="/attractions" className="block py-2 px-4 text-sm">
+              Attractions
+            </Link>
+            <Link to="/taxi" className="block py-2 px-4 text-sm">
+              Taxi
+            </Link>
+          </div>
         </Navbar.Collapse>
       </Navbar>
     </>

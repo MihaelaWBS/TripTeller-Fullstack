@@ -13,6 +13,7 @@ import MyProfile from "../MyProfile";
 import LocationNotification from "../LocationNotification";
 import AddPost from "../AddPost";
 import Dashboard from "../UpcomingTrips/Dashboard/Dashboard";
+import MyPosts from "../MyPosts/MyPosts";
 
 const Main = () => {
   return (
@@ -27,10 +28,10 @@ const Main = () => {
           <Route path="/blog" element={<BlogDashboard />} />
           <Route path="/blog/posts/:postId" element={<PostDescription />} />
           <Route path="/blog/post/addPost" element={<PostForm />} />
-          <Route path="/myprofile/:userId" element={<MyProfile />} />
+          <Route path="/myprofile" element={<MyProfile />} />
           <Route path="/addPost" element={<AddPost />} />
           <Route path="/upcomingtrips" element={<Dashboard />} />
-
+          <Route path="/myposts" element={<MyPosts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>

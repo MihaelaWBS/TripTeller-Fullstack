@@ -11,6 +11,9 @@ import { AuthContext } from "../../Context/Auth";
 import emptyItineraryBackground from "../../assets/empty_itinerary_background.png";
 import PlanModal from "../PlanModal/PlanModal";
 import d6 from "../../assets/d6.jpg";
+import { toast } from "react-toastify";
+import ItinerarySidebar from "./ItinerarySidebar";
+
 const Itinerary = () => {
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [plan, setPlan] = useState(null);
@@ -101,14 +104,18 @@ const Itinerary = () => {
       <div className="relative  md:h-[42rem] w-full overflow-hidden">
         <img src={d6} alt="Travel" className="w-full h-full object-fill" />
         <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-black bg-opacity-10 flex items-center justify-center">
-        {/*<h1 className="text-black text-6xl font-bold">Travel smarter</h1> */}
+          {/*<h1 className="text-black text-6xl font-bold">Travel smarter</h1> */}
         </div>
       </div>
       <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
         <h1 className="text-4xl font-bold text-gray-800 mb-10 text-center">
           My Itinerary
         </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-10 ">
+        <div className="flex flex-col md:flex-row gap-10">
+        <div className="md:w-1/4">
+        <ItinerarySidebar />
+        </div>
+        <div className="flex-grow grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-10 ">
           {itinerary.length > 0 ? (
             itinerary.map((hotel) => {
               let imgSrc = hotel.hotelDetails?.main_photo_url;
@@ -170,11 +177,12 @@ const Itinerary = () => {
                           className=" text-green-600 hover:text-green-800 font-bold text-lg cursor-pointer mb-2"
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() =>
-                            addToUpcomingTrips(hotel.hotelDetails.hotel_id)
-                          }
+                          onClick={() => {
+                            addToUpcomingTrips(hotel.hotelDetails.hotel_id);
+                            toast.success("Added to upcoming trips!");
+                          }}
                         >
-                          Add to Incoming trips
+                          Add to upcoming trips
                         </a>
                         {/*
                         <h2>
@@ -232,6 +240,7 @@ const Itinerary = () => {
           )}
         </div>
       </div>
+    </div>
     </>
   );
 };

@@ -97,8 +97,6 @@ const getLoggedInUser = async (req, res) => {
 };
 const addAvatar = async (req, res) => {
   try {
-    console.log("req.user:", req.user);
-    console.log("req.file:", req.file);
     if (!req.file || !req.file.path) {
       return res.status(400).json({ message: "No file uploaded." });
     }
@@ -115,12 +113,81 @@ const addAvatar = async (req, res) => {
   }
 };
 
+const addFlag = async (req, res) => {
+  try {
+    const { flag } = req.body;
+
+    if (!flag) {
+      return res.status(400).json({ message: "No flag selected." });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { flag },
+      { new: true }
+    );
+
+    res.status(200).json({ flag: user.flag });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const addNickname = async (req, res) => {
+  try {
+    const { nickname } = req.body;
+    if (!nickname) {
+      return res.status(400).json({ message: "No nickname provided" });
+    }
+
+    const allowedNicknames = [
+      "Solo-Traveler",
+      "Family-Traveler",
+      "Adventure-Seeker",
+      "Luxury-Lover",
+      "Budget-Backpacker",
+      "Culture-Enthusiast",
+      "Foodie-Tourist",
+      "Eco-Tourist",
+      "Digital-Nomad",
+      "Weekend-Warrior",
+      "Road-Tripper",
+      "Beach-Bum",
+      "History-Buff",
+      "Nature-Lover",
+      "Thrill-Seeker",
+      "Volunteer-Voyager",
+      "Urban-Explorer",
+      "Country-Hopper",
+      "Cruise-Aficionado",
+    ];
+    if (!allowedNicknames.includes(nickname)) {
+      return res.status(400).json({ message: "Invalid nickname selected" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { nickname },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ nickname: user.nickname });
+  } catch (error) {
+    console.error("Error", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
-
+  addFlag,
   addAvatar,
-
+  addNickname,
   getLoggedInUser,
 };

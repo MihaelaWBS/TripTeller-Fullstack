@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useSearch } from "../../Context/SearchContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import MobileSortDropdown from "../../Components/MobileSortDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -192,10 +193,11 @@ const SearchResults = () => {
                     </p>
                   </div>
                   <button
-                    className="self-center bg-orange-500 text-white rounded-full px-4 py-2 mt-4"
+                    className="self-center bg-orange-500 text-white rounded-full px-4 py-2 mt-4 hover:bg-blue-600"
                     onClick={(event) => {
                       event.stopPropagation();
                       addToItinerary(hotel);
+                      toast.success("Hotel added to itinerary!"); // Add this line
                     }}
                   >
                     Add to itinerary

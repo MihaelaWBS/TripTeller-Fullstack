@@ -14,7 +14,7 @@ import {
 } from "react-icons/hi";
 import { Link } from "react-router-dom";
 
-const SidebarComponent = () => {
+const ItinerarySidebar = () => {
   return (
     <Sidebar className="shadow-xl" aria-label="Sidebar with single-level menu">
       <Sidebar.Items>
@@ -33,9 +33,6 @@ const SidebarComponent = () => {
           </Sidebar.Item>
           <Sidebar.Item href="#" icon={HiOutlineChatAlt2}>
             Property messages
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiOutlineStar}>
-            Reviews
           </Sidebar.Item>
           <Link to="/blog/post/addPost">
             <Sidebar.Item href="#" icon={HiOutlineStar}>
@@ -69,4 +66,4 @@ const SidebarComponent = () => {
   );
 };
 
-export default SidebarComponent;
+export default ItinerarySidebar;
