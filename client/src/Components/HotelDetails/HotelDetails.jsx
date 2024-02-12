@@ -10,15 +10,15 @@ import backgroundImage from '../../Images/mountains.webp'
 import  Modal  from "react-modal";
 import freeParkingIcon from '../../images/parking-svgrepo-com.svg';
 import petFriendlyIcon from '../../images/pet-shop-svgrepo-com.svg';
-import outdoorPoolIcon from '../../images/pool-svgrepo-com.svg';
+import poolIcon from '../../images/pool-svgrepo-com.svg';
 import restaurantIcon from '../../images/restaurant-svgrepo-com.svg';
 import spaIcon from '../../images/spa-candle-svgrepo-com.svg';
-import airConditioningIcon from '../../images/air-conditioning-svgrepo-com.svg';
-import privateBathroomIcon from '../../images/bathroom-filled-shower-svgrepo-com.svg';
-import viewIcon from '../../images/river-svgrepo-com.svg';
 import freeWifiIcon from '../../images/wifi-svgrepo-com.svg';
-import showerIcon from '../../images/showers-water-svgrepo-com.svg';
-
+import gymIcon from '../../images/gym-svgrepo-com.svg';
+import shuttleIcon from '../../images/shuttle-svgrepo-com.svg'; // Ensure you have this icon
+import familyRoomsIcon from '../../images/family-3-generations-svgrepo-com.svg'; // Ensure you have this icon
+import roomServiceIcon from '../../images/room-service-service-svgrepo-com.svg'; // Ensure you have this icon
+import defaultIcon from '../../images/Animation - 1707483405053.gif';// Update the path to where your default icon is located
 
 Modal.setAppElement("#root");
 const Accordion = ({ title, children }) => {
@@ -75,6 +75,7 @@ const HotelDetails = () => {
   const [isPriceBreakdownModalOpen, setIsPriceBreakdownModalOpen] =
     useState(true);
   const [priceBreakdown, setPriceBreakdown] = useState(null);
+  const [hotelHighlights, setHotelHighlights] = useState([]);
   const [spokenLanguages, setSpokenLanguages] = useState([]);
 
   const [faqs, setFaqs] = useState([
@@ -127,18 +128,7 @@ const HotelDetails = () => {
     },
     // Add more FAQs as needed
   ]);
-  const propertyHighlights = [
-    { name: "Free parking", icon: freeParkingIcon },
-    { name: "Pet friendly", icon: petFriendlyIcon },
-    { name: "Outdoor pool", icon: outdoorPoolIcon },
-    { name: "Restaurant", icon: restaurantIcon },
-    { name: "Spa", icon: spaIcon },
-    { name: "Air conditioning", icon: airConditioningIcon },
-    { name: "Private Bathroom", icon: privateBathroomIcon },
-    { name: "View", icon: viewIcon },
-    { name: "Free WiFi", icon: freeWifiIcon },
-    { name: "Shower", icon: showerIcon },
-  ];
+  
   const checkInDateCookie = localStorage.getItem("checkInDate");
   const checkOutDateCookie = localStorage.getItem("checkOutDate");
 
@@ -171,7 +161,15 @@ const HotelDetails = () => {
           setHotelDetails(response.data.data);
           setSpokenLanguages(response.data.data.spoken_languages || []);
           setPriceBreakdown(response.data.data.product_price_breakdown || {});
-
+          if (response.data.data && Array.isArray(response.data.data.facilities)) {
+          const highlightsFromAPI = response.data.data.facilities.map(facility => {
+            return {
+              name: facility.name,
+              icon: determineIcon(facility.name), // Implement this function based on your icon mapping
+            };
+          });
+          setHotelHighlights(highlightsFromAPI);
+          }
           const initialImage =
             (response.data.data.rooms &&
               response.data.data.rooms[0]?.photos[0]?.url_original) ||
@@ -182,6 +180,7 @@ const HotelDetails = () => {
         }
       } catch (error) {
         setError(error.toString());
+        
       }
     };
 
@@ -286,7 +285,24 @@ const HotelDetails = () => {
     ga: "Irish",
     cy: "Welsh","uk": "English", "tr": "Turkish","pt-pt": "Portuguese", "az": "Azerbaijani",
   };
-
+  function determineIcon(facilityIconName) {
+    const iconMap = {
+      "iconset/parking_sign": freeParkingIcon,
+      "iconset/pawprint": petFriendlyIcon,
+      "iconset/pool": poolIcon,
+      "iconset/food": restaurantIcon,
+      "iconset/spa": spaIcon,
+      "iconset/wifi": freeWifiIcon,
+      "iconset/fitness": gymIcon,
+      "iconset/shuttle": shuttleIcon,
+      "iconset/family": familyRoomsIcon,
+      "iconset/gourmet": roomServiceIcon,
+      // ... add all mappings here
+    };
+  
+    return iconMap[facilityIconName] || defaultIcon; // Ensure defaultIcon is defined
+  }
+  
   return (
     <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-4xl font-bold text-gray-800 mb-6">
@@ -584,11 +600,11 @@ className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
         >
           <h2 className="text-xl font-semibold mb-4">Property Highlights</h2>
           <div className="flex flex-wrap">
-            {propertyHighlights.map((highlight, index) => (
-              <div key={index} className="flex items-center m-2">
-                <img src={highlight.icon} alt={highlight.name} className="w-6 h-6 mr-2" />
-                <span>{highlight.name}</span>
-              </div>
+          {hotelHighlights.map((highlight, index) => (
+    <div key={index} className="flex items-center m-2">
+      <img src={highlight.icon} alt={highlight.name} className="w-6 h-6 mr-2" />
+      <span>{highlight.name}</span>
+    </div>
             ))}
           </div>
         </div>
