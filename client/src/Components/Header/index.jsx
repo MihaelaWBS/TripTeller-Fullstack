@@ -68,7 +68,7 @@ const index = () => {
             onChange={setIsDarkMode}
             checked={isDarkMode}
             size={60}
-            className="ml-auto"
+            className="my-auto mr-4"
           />
           {user ? (
             <Dropdown

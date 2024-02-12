@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 const SidebarComponent = () => {
   return (
     <Sidebar className="shadow-xl" aria-label="Sidebar with single-level menu">
-      <Sidebar.Items>
+      <Sidebar.Items className="bg-white dark:bg-gray-600">
         <Sidebar.ItemGroup>
           <Sidebar.Item href="#" icon={HiOutlineClipboardList}>
             All bookings
