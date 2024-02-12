@@ -24,6 +24,8 @@ import { Link } from "react-router-dom";
 import { useItinerary } from "../../Context/ItineraryContext";
 
 const SearchResults = () => {
+  const [itemsShows, setItemsShows] = useState(5);
+
   const { checkInDate, checkOutDate, setSortOrder } = useSearch();
   const navigate = useNavigate();
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
@@ -112,7 +114,7 @@ const SearchResults = () => {
             </div>
           </div>
           {hotels &&
-            hotels.slice(0, 5).map((hotel) => (
+            hotels.slice(0, itemsShows).map((hotel) => (
               <div
                 key={hotel.hotel_id}
                 className="max-w-2xl mx-auto mt-4 bg-white shadow-md rounded-lg overflow-hidden mb-4 flex xxs:hidden md:flex"
@@ -137,6 +139,7 @@ const SearchResults = () => {
                     <div className="flex gap-2 items-center">
                       <FontAwesomeIcon icon={faMapLocationDot} />
                       <a
+                        onClick={(e) => e.stopPropagation()}
                         href={`https://www.google.com/maps/search/?api=1&query=${hotel.city}`}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -145,21 +148,26 @@ const SearchResults = () => {
                         {hotel.city}
                       </a>
                     </div>
-                    <p className="text-sm t text-gray-600 mt-1">
-                      This property offers:
-                    </p>
-                    <div className="flex mt-2 flex-wrap">
-                      {hotel.hotel_include_breakfast === 0 && (
-                        <span className="bg-gray-200 rounded-full px-2 py-1 mr-2">
-                          Breakfast
-                        </span>
-                      )}
-                      {hotel.has_free_parking && (
-                        <span className="bg-gray-200 rounded-full px-3 py-1 mr-2">
-                          Free parking
-                        </span>
-                      )}
-                    </div>
+                    {(hotel.hotel_include_breakfast === 0 ||
+                      hotel.has_free_parking) && (
+                      <>
+                        <p className="text-sm t text-gray-600 mt-1">
+                          This property offers:
+                        </p>
+                        <div className="flex mt-2 flex-wrap">
+                          {hotel.hotel_include_breakfast === 0 && (
+                            <span className="bg-gray-200 rounded-full px-2 py-1 mr-2">
+                              Breakfast
+                            </span>
+                          )}
+                          {hotel.has_free_parking && (
+                            <span className="bg-gray-200 rounded-full px-3 py-1 mr-2">
+                              Free parking
+                            </span>
+                          )}
+                        </div>
+                      </>
+                    )}
                   </div>
                 </Link>
                 <div className="w-1/4 bg-blue-100 py-1 px-2 flex flex-col justify-between">
@@ -193,7 +201,7 @@ const SearchResults = () => {
                     </p>
                   </div>
                   <button
-                    className="self-center bg-orange-500 text-white rounded-full px-4 py-2 mt-4 hover:bg-blue-600"
+                    className="w-40 bg-orange-500 text-white rounded-full py-1  hover:bg-blue-500"
                     onClick={(event) => {
                       event.stopPropagation();
                       addToItinerary(hotel);
@@ -205,6 +213,12 @@ const SearchResults = () => {
                 </div>
               </div>
             ))}
+          <Button
+            onClick={() => setItemsShows(itemsShows + 5)}
+            className="bg-blue-500"
+          >
+            Load more
+          </Button>
         </div>
         {hotels &&
           hotels.map((hotel) => (
@@ -248,14 +262,17 @@ const SearchResults = () => {
                             Free parking
                           </span>
                         )}
-
-                        {/*  <span className="bg-gray-200 rounded-full px-3 py-1">
-                      Express check-in
-                    </span> */}
                       </div>
-                      {/* <p className="text-sm text-red-600 mt-1">
-                    Liked! Last booked a minute ago for various dates
-                  </p> */}
+                      <button
+                        className="self-center bg-orange-500 text-white rounded-full px-4 py-2 mt-4 hover:bg-blue-600"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          addToItinerary(hotel);
+                          toast.success("Hotel added to itinerary!"); // Add this line
+                        }}
+                      >
+                        Add to itinerary
+                      </button>
                     </div>
                     <div className="flex items-center justify-between mt-4">
                       <p className="text-xs text-gray-600">Coupon applicable</p>
