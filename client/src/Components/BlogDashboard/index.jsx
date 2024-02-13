@@ -84,8 +84,9 @@ const BlogDashboard = () => {
 
         {/* My Posts section */}
 
-        <div className="my-8">
-          <h2 className="text-3xl font-bold mb-4">My Posts</h2>
+        <div className="container mx-auto p-4">
+        <div className="my-8 px-4 md:px-0">
+          <h2 className="text-3xl font-bold mb-4 sm:ml-20 md:ml-1 lg:ml-9">My Posts</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {myPosts.map((post) => (
               <Link
@@ -150,8 +151,8 @@ const BlogDashboard = () => {
         </div>
 
         {/* All Posts section */}
-        <div className="my-8">
-          <h2 className="text-3xl font-bold mb-4">All posts</h2>
+        <div className="my-8 px-4 md:px-0">
+          <h2 className="text-3xl font-bold mb-4 sm:ml-20 md:ml-1 lg:ml-9">All posts</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {posts.map(
               (
@@ -220,6 +221,7 @@ const BlogDashboard = () => {
             )}
           </div>
         </div>
+      </div>
       </div>
     </>
   );
