@@ -133,7 +133,7 @@ const index = ({ variant }) => {
 
                     <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                   </div>
-                  <p className="text-gray-500 text-center">
+                  <p className="text-gray-500 dark:text-white text-center">
                     {displayLocation()}
                   </p>
                 </div>
@@ -153,7 +153,7 @@ const index = ({ variant }) => {
 
                     <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                   </div>
-                  <p className="text-gray-500">{formatDate(checkInDate)}</p>
+                  <p className="text-gray-500 dark:text-white">{formatDate(checkInDate)}</p>
                   <input
                     type="date"
                     ref={checkInInputRef}
@@ -185,7 +185,7 @@ const index = ({ variant }) => {
                     </p>
                     <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                   </div>
-                  <p className="text-gray-500">{formatDate(checkOutDate)}</p>
+                  <p className="text-gray-500 dark:text-white">{formatDate(checkOutDate)}</p>
                   <input
                     type="date"
                     ref={checkInInputRef}
@@ -210,10 +210,10 @@ const index = ({ variant }) => {
                       className="text-black dark:text-white"
                     />
                     <div onClick={toggleModal} className="flex flex-col">
-                      <p className="text-gray-500">
+                      <p className="text-gray-500 dark:text-white">
                         {adults} adult{adults > 1 ? "s" : ""}
                       </p>
-                      <p className="text-gray-500">
+                      <p className="text-gray-500 dark:text-white">
                         {rooms} room{rooms > 1 ? "s" : ""}
                       </p>
                     </div>
@@ -265,13 +265,13 @@ const index = ({ variant }) => {
         {/*   MOBILE ONLY!!!  */}
         <form onSubmit={handleSubmit} className="flex md:hidden">
           <div className="max-w-sm mx-auto">
-            <div className="bg-white rounded-lg border shadow-md p-5 max-w-xs">
+            <div className="bg-white  dark:bg-gray-800 rounded-lg border shadow-md p-5 max-w-xs">
               <div className="flex flex-col space-y-4">
                 <div className="relative">
                   <input
                     readOnly
                     value={displayLocation()}
-                    className="w-full px-2 py-2 pl-4 border text-left rounded-md"
+                    className="w-full px-2 py-2 pl-4 border text-left rounded-md dark:text-black  dark:placeholder::text-black"
                     type="text"
                     placeholder="Where would you like to go?"
                   />
@@ -284,7 +284,7 @@ const index = ({ variant }) => {
                 </div>
                 <div className="flex space-x-4">
                   <input
-                    className="w-1/2 px-4 py-2 border rounded-md"
+                    className="w-1/2 px-4 py-2 border rounded-md  dark:text-black"
                     type="date"
                     name="checkin"
                     value={checkInDate}
@@ -295,28 +295,28 @@ const index = ({ variant }) => {
                     value={checkOutDate}
                     ref={checkOutInputRef}
                     onChange={(e) => setCheckOutDate(e.target.value)}
-                    className="w-1/2 px-4 py-2 border rounded-md"
+                    className="w-1/2 px-4 py-2 border rounded-md  dark:text-black"
                     type="date"
                     name="checkout"
                   />
                 </div>
                 <div className="flex space-x-4">
                   <input
-                    className="w-1/3 px-4 py-2 border rounded-md"
+                    className="w-1/3 px-4 py-2 border rounded-md  dark:text-black"
                     type="number"
                     value={rooms}
                     placeholder="1 Room"
                     onChange={(e) => setRooms(e.target.value)}
                   />
                   <input
-                    className="w-1/3 px-4 py-2 border rounded-md"
+                    className="w-1/3 px-4 py-2 border rounded-md  dark:text-black"
                     type="number"
                     value={adults}
                     placeholder="2 Adults"
                     onChange={(e) => setAdults(e.target.value)}
                   />
                   <input
-                    className="w-1/3 px-4 py-2 border rounded-md"
+                    className="w-1/3 px-4 py-2 border rounded-md  dark:text-black"
                     type="number"
                     value={childrenAge}
                     placeholder="0 Children"
