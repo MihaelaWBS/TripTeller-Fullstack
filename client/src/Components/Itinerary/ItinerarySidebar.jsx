@@ -19,6 +19,11 @@ const ItinerarySidebar = () => {
     <Sidebar className="shadow-xl" aria-label="Sidebar with single-level menu">
       <Sidebar.Items>
         <Sidebar.ItemGroup>
+        <Link to="/">
+            <Sidebar.Item href="#" icon={HiOutlineHome}>
+                Home
+            </Sidebar.Item>
+          </Link>
           <Sidebar.Item href="#" icon={HiOutlineClipboardList}>
             All bookings
           </Sidebar.Item>
