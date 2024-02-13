@@ -28,7 +28,10 @@ const Trips = () => {
         const response = await axiosInstance.get(
           `/api/upcomingTrips/user/${user._id}`
         );
-        setUpcomingTrips(response.data);
+        const nonCancelledTrips = response.data.filter(
+          (trip) => trip.status !== "cancelled"
+        );
+        setUpcomingTrips(nonCancelledTrips);
       } catch (error) {
         console.log("Error fetching upcoming trips:", error);
       }
