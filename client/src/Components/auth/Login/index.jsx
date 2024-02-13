@@ -77,7 +77,6 @@ const index = () => {
                     {typeof context.loginError === "object"
                       ? JSON.stringify(context.loginError)
                       : context.loginError}{" "}
-                    ERROR!!
                   </div>
                 )}
               </div>
