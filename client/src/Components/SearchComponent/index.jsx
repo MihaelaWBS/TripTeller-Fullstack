@@ -133,7 +133,7 @@ const index = ({ variant }) => {
 
                     <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                   </div>
-                  <p className="text-gray-500 text-center">
+                  <p className="text-gray-500 dark:text-white text-center">
                     {displayLocation()}
                   </p>
                 </div>
@@ -153,7 +153,7 @@ const index = ({ variant }) => {
 
                     <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                   </div>
-                  <p className="text-gray-500">{formatDate(checkInDate)}</p>
+                  <p className="text-gray-500 dark:text-white">{formatDate(checkInDate)}</p>
                   <input
                     type="date"
                     ref={checkInInputRef}
@@ -185,7 +185,7 @@ const index = ({ variant }) => {
                     </p>
                     <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                   </div>
-                  <p className="text-gray-500">{formatDate(checkOutDate)}</p>
+                  <p className="text-gray-500 dark:text-white">{formatDate(checkOutDate)}</p>
                   <input
                     type="date"
                     ref={checkInInputRef}
@@ -210,10 +210,10 @@ const index = ({ variant }) => {
                       className="text-black dark:text-white"
                     />
                     <div onClick={toggleModal} className="flex flex-col">
-                      <p className="text-gray-500">
+                      <p className="text-gray-500 dark:text-white">
                         {adults} adult{adults > 1 ? "s" : ""}
                       </p>
-                      <p className="text-gray-500">
+                      <p className="text-gray-500 dark:text-white">
                         {rooms} room{rooms > 1 ? "s" : ""}
                       </p>
                     </div>
