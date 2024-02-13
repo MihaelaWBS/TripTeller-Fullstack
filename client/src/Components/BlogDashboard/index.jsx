@@ -71,11 +71,11 @@ const BlogDashboard = () => {
           <h2 className="text-4xl font-bold">OUR LATEST POSTS</h2>
         </div>
 
-        <div className=" mb-10 md:ml-1 xl:ml-10 flex- flex-col">
+        <div className="flex items-center gap-2">
           <Link to="/addPost">
             <Button className="bg-orange-500 rounded-3xl">Create a post</Button>
           </Link>
-          <div className="p-2 mt-2 rounded-3xl bg-gray-200 w-32 text-center">
+          <div className="p-2 rounded-3xl bg-gray-200 w-32 text-center">
             <button onClick={sortByDate} className="text-black dark:text-black">
               <FontAwesomeIcon icon={faSort} /> Sort by date
             </button>
@@ -84,10 +84,9 @@ const BlogDashboard = () => {
 
         {/* My Posts section */}
 
-        <div className="container mx-auto p-4">
-        <div className="my-8 px-4 md:px-0">
-          <h2 className="text-3xl font-bold mb-4 sm:ml-20 md:ml-1 lg:ml-9">My Posts</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div className="my-8 flex flex-col">
+          <h2 className="text-3xl font-bold mb-4">My Posts</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {myPosts.map((post) => (
               <Link
                 to={`/blog/posts/${post._id}`}
@@ -100,7 +99,9 @@ const BlogDashboard = () => {
                   alt="Blog post"
                 />
                 <div className="px-4 py-2">
-                  <div className="font-bold text-xl mb-2 text-black dark:text-white">{post.title}</div>
+                  <div className="font-bold text-xl mb-2 text-black dark:text-white">
+                    {post.title}
+                  </div>
                 </div>
                 <div className="w-full border-t-2"></div>
                 <div className="px-4 py-2 flex justify-between items-center">
@@ -151,9 +152,9 @@ const BlogDashboard = () => {
         </div>
 
         {/* All Posts section */}
-        <div className="my-8 px-4 md:px-0">
-          <h2 className="text-3xl font-bold mb-4 sm:ml-20 md:ml-1 lg:ml-9">All posts</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div className="my-8">
+          <h2 className="text-3xl font-bold mb-4">All posts</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {posts.map(
               (
                 post // Removed incorrect usage of `userId` here
@@ -171,7 +172,9 @@ const BlogDashboard = () => {
                     alt="Blog post"
                   />
                   <div className="px-4 py-2">
-                    <div className="font-bold text-xl mb-2 text-black dark:text-white">{post.title}</div>
+                    <div className="font-bold text-xl mb-2 text-black dark:text-white">
+                      {post.title}
+                    </div>
                   </div>
                   <div className="w-full border-t-2"></div>
                   <div className="px-4 py-2 flex justify-between items-center">
@@ -221,7 +224,6 @@ const BlogDashboard = () => {
             )}
           </div>
         </div>
-      </div>
       </div>
     </>
   );
