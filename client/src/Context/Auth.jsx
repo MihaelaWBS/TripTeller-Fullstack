@@ -55,7 +55,34 @@ function AuthProvider({ children }) {
         navigate("/");
       })
       .catch((err) => {
-        setState(null, false, err.response.data.errors);
+        setLoading(false);
+        let errorMessage;
+
+        if (
+          typeof err.response.data === "object" &&
+          err.response.data.message
+        ) {
+          // Assuming the errors are returned in a concatenated string within err.response.data.message
+          errorMessage = err.response.data.message
+            .split(",")
+            .map((err) => {
+              // Split each error at the first colon to separate the field name from the message
+              const parts = err.split(":");
+              if (parts.length > 1) {
+                // Return everything after the first colon, which should be the error message
+                return parts.slice(1).join(":").trim();
+              }
+              return err; // Return the original error if it doesn't match the expected format
+            })
+            .join(", ");
+        } else if (typeof err.response.data === "string") {
+          errorMessage = err.response.data;
+        } else {
+          errorMessage = "An unexpected error occurred. Please try again.";
+        }
+
+        setErrors(errorMessage);
+        setState(null, false, err.response.data);
       });
   };
 
