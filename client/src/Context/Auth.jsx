@@ -9,10 +9,12 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState(null);
-  const setState = (user, loading, errors) => {
+  const [loginError, setLoginError] = useState(null);
+
+  const setState = (user, loading, error) => {
     setUser(user);
     setLoading(loading);
-    setErrors(errors);
+    setLoginError(error);
   };
   useEffect(() => {
     axios
@@ -28,17 +30,22 @@ function AuthProvider({ children }) {
 
   const login = (user) => {
     setLoading(true);
-    const { email, password } = user; // Extract only username and password
+    const { email, password } = user;
     axios
-      .post("/auth/login", { email, password }) // Send only username and password
+      .post("/auth/login", { email, password })
       .then((res) => {
-        setState(res.data.user, false, null);
+        setUser(res.data.user);
+        setLoading(false);
+        setLoginError(null);
         navigate("/");
       })
       .catch((err) => {
-        setState(null, false, err.response.data);
+        setUser(null);
+        setLoading(false);
+        setLoginError(err.response.data.message || err.response.data);
       });
   };
+
   const register = (user) => {
     setLoading(true);
     axios
@@ -48,7 +55,34 @@ function AuthProvider({ children }) {
         navigate("/");
       })
       .catch((err) => {
-        setState(null, false, err.response.data.errors);
+        setLoading(false);
+        let errorMessage;
+
+        if (
+          typeof err.response.data === "object" &&
+          err.response.data.message
+        ) {
+          // Assuming the errors are returned in a concatenated string within err.response.data.message
+          errorMessage = err.response.data.message
+            .split(",")
+            .map((err) => {
+              // Split each error at the first colon to separate the field name from the message
+              const parts = err.split(":");
+              if (parts.length > 1) {
+                // Return everything after the first colon, which should be the error message
+                return parts.slice(1).join(":").trim();
+              }
+              return err; // Return the original error if it doesn't match the expected format
+            })
+            .join(", ");
+        } else if (typeof err.response.data === "string") {
+          errorMessage = err.response.data;
+        } else {
+          errorMessage = "An unexpected error occurred. Please try again.";
+        }
+
+        setErrors(errorMessage);
+        setState(null, false, err.response.data);
       });
   };
 
@@ -75,7 +109,16 @@ function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, errors, loading, register, login, logout, setUser }}
+      value={{
+        user,
+        errors,
+        loading,
+        register,
+        login,
+        logout,
+        setUser,
+        loginError,
+      }}
     >
       {children}
     </AuthContext.Provider>

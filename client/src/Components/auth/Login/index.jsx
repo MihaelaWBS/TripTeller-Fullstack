@@ -71,6 +71,15 @@ const index = () => {
                 value={user.password}
                 onChange={handleChange}
               />
+              <div>
+                {context.loginError && (
+                  <div className="mb-4 text-center text-red-500">
+                    {typeof context.loginError === "object"
+                      ? JSON.stringify(context.loginError)
+                      : context.loginError}{" "}
+                  </div>
+                )}
+              </div>
               <div className="flex flex-col gap-2 ">
                 <button
                   className="bg-orange-500 max-w-2xl w-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
