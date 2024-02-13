@@ -48,9 +48,6 @@ const DraggableList = ({ activities, itineraryId }) => {
     event.preventDefault();
     const { time, content } = event.target.elements;
 
-    // Log the ID to ensure it's correct
-    console.log("Updating activity with ID:", activityId);
-
     const updatedActivity = {
       day,
       time: time.value,
@@ -64,14 +61,21 @@ const DraggableList = ({ activities, itineraryId }) => {
         updatedActivity
       );
 
-      console.log("Updated activity:", response.data);
-      // Fetch activities again here or update the state to reflect the changes
-      // This might include setting myActivities with the updated activity list
+      setMyActivities((prevActivities) => {
+        return {
+          ...prevActivities,
+          [day]: prevActivities[day].map((activity) =>
+            activity._id === activityId
+              ? { ...activity, time: time.value, content: content.value }
+              : activity
+          ),
+        };
+      });
     } catch (error) {
       console.error("Error updating activity:", error);
     }
 
-    setEditingActivity(null); // Reset editing state
+    setEditingActivity(null);
   };
   const addActivity = async (e) => {
     e.preventDefault();
@@ -155,7 +159,7 @@ const DraggableList = ({ activities, itineraryId }) => {
       const groupedData = groupBy(activities, "day");
       console.log("Activities with ID:", groupedData);
 
-      setMyActivities(groupedData); // objects
+      setMyActivities(groupedData);
     }
   }, [activities]);
 
@@ -167,14 +171,14 @@ const DraggableList = ({ activities, itineraryId }) => {
           .map((key) => (
             <div key={key} className="mb-6">
               <div className="grid grid-cols-3 gap-4 items-center mb-4">
-                <div className="font-bold px-2 border-b-2 border-blue-500 col-span-3">{`Day ${key}`}</div>
+                <div className="font-bold px-2 border-b-2 border-blue-500 col-span-3 ">{`Day ${key}`}</div>
               </div>
               {myActivities[key]
                 .sort((a, b) => a.time.localeCompare(b.time))
                 .map((activity, index) => (
                   <div
                     key={activity._id}
-                    className="grid grid-cols-3 gap-4 items-center p-4 mb-2 bg-transparent rounded-xl"
+                    className="grid grid-cols-3 gap-4 items-center p-4 mb-2 bg-transparent rounded-xl dark:text-white"
                   >
                     {editingActivity === activity._id ? (
                       <form
@@ -182,7 +186,7 @@ const DraggableList = ({ activities, itineraryId }) => {
                           updateActivity(event, key, activity._id);
                           setEditingActivity(null);
                         }}
-                        className="col-span-3 grid grid-cols-3 gap-4 items-center"
+                        className="col-span-3 grid grid-cols-3 gap-4 items-center dark:text-black"
                       >
                         <input
                           name="time"
@@ -207,7 +211,9 @@ const DraggableList = ({ activities, itineraryId }) => {
                       </form>
                     ) : (
                       <>
-                        <span className="font-bold">{activity.time}</span>
+                        <span className="font-bold dark:text-white">
+                          {activity.time}
+                        </span>
                         <div className="col-span-2 flex justify-between">
                           {activity.content}
                           <div>
@@ -231,7 +237,7 @@ const DraggableList = ({ activities, itineraryId }) => {
                 ))}
             </div>
           ))}
-      <div className="flex items">
+      <div className="flex items dark:text-black">
         <form
           onSubmit={addActivity}
           className="grid grid-cols-2 gap-4 items-center mt-4"
@@ -253,7 +259,7 @@ const DraggableList = ({ activities, itineraryId }) => {
             required
             value={newActivity.time}
             onChange={handleInputChange}
-            className="p-2 text-lg rounded-lg border"
+            className="p-2 text-lg rounded-lg border "
           />
           <input
             name="content"
