@@ -109,6 +109,25 @@ const cancelUpcomingTrip = async (req, res) => {
   }
 };
 
+const completeUpcomingTrip = async (req, res) => {
+  const { tripId } = req.params;
+  try {
+    const trip = await UpcomingTrip.findOneAndUpdate(
+      { _id: tripId },
+      { status: "completed" },
+      { new: true }
+    );
+    if (!trip) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
+    res.status(200).json(trip);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to complete trip", error: error.message });
+  }
+};
+
 const getCancelledTripsByUserId = async (req, res) => {
   try {
     const trips = await UpcomingTrip.find({
@@ -122,7 +141,21 @@ const getCancelledTripsByUserId = async (req, res) => {
   }
 };
 
+const getCompletedTripsByUserId = async (req, res) => {
+  try {
+    const trips = await UpcomingTrip.find({
+      userId: req.params.userId,
+      status: "completed",
+    });
+    res.status(200).json(trips);
+  } catch (error) {
+    console.error("Error fetching completed trips:", error);
+    res.status(500).send();
+  }
+};
 module.exports = {
+  completeUpcomingTrip,
+  getCompletedTripsByUserId,
   createUpcomingTrip,
   findUpcomingTrips,
   getCancelledTripsByUserId,
