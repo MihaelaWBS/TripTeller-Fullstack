@@ -48,7 +48,7 @@ const MyPosts = () => {
   }, [user]);
 
   return (
-    <div className="max-w-4xl w-full mx-auto mt-10 flex flex-col">
+    <div className="max-w-4xl w-full mx-auto mt-10 flex flex-col px-8 md:px-4">
       <div className="flex items-center gap-10">
         <div className="relative inline-block">
           <img
@@ -83,11 +83,16 @@ const MyPosts = () => {
           </Link>
         </div>
       </div>
-      <p className="md:text-2xl font-bold mt-10">Your Posts</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1">
+      <p className="md:text-2xl font-bold mt-10 mb-5 md:mb-10">Your Posts</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {posts.map((post) => (
-          <div key={post._id} className="overflow-hidden mb-4">
-            <div className=" py-5 grid grid-cols-4 gap-4 items-center">
+          <div
+            key={post._id}
+            className={`overflow-hidden dark:bg-gray-700 ${
+              activeMenu === post._id ? "mb-8" : "mb-4"
+            }`}
+          >
+            <div className="py-5  grid grid-cols-1 gap-4 items-center relative ">
               <div className="col-span-1">
                 <img
                   src={post.imageUrl}
@@ -95,24 +100,24 @@ const MyPosts = () => {
                   className="w-full h-24 object-cover rounded-md"
                 />
               </div>
-              <div className="col-span-3">
-                <h3 className="text-lg leading-6 font-bold text-gray-900 dark:text-white">
+              <div className="relative">
+                <h3 className="text-lg leading-6 font-bold text-gray-900 dark:text-white ml-2">
                   {post.title}
                 </h3>
                 <div className="flex justify-between items-center">
-                  <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-white">
+                  <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-white ml-2">
                     {post.userId &&
                       `${post.userId.firstName} ${post.userId.lastName}`}
                   </p>
                   <button
                     onClick={() => toggleMenu(post._id)}
-                    className="text-gray-600 hover:text-gray-900 self-center dark:text-white"
+                    className="text-gray-600 hover:text-gray-900 self-end dark:text-white"
                   >
-                    <FontAwesomeIcon icon={faEllipsis} />{" "}
+                    <FontAwesomeIcon icon={faEllipsis} className="pr-4" />{" "}
                   </button>
                 </div>
                 <div className="mt-2 flex justify-between items-center">
-                  <p className="text-sm text-gray-500 dark:text-white">
+                  <p className="text-sm text-gray-500 dark:text-white ml-2">
                     {new Date(post.createdAt).toLocaleDateString("en-GB", {
                       day: "2-digit",
                       month: "short",
@@ -120,13 +125,15 @@ const MyPosts = () => {
                     })}
                   </p>
                   {activeMenu === post._id && (
-                    <div className="absolute right-80 mt-6 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                      {" "}
+                    <div
+                      className="absolute z-10 left-0 mt-2 w-full md:w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 dark:bg-gray-700"
+                      style={{ transform: "translateX(-50%)", left: "50%" }}
+                    >
                       <ul className="py-1">
                         <li>
                           <Link
                             to={`/blog/posts/${post._id}`}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100  dark:text-white dark:hover:bg-gray-500 dark:hover:text-white"
                           >
                             Edit post
                           </Link>
@@ -135,7 +142,7 @@ const MyPosts = () => {
                           <a
                             href="#"
                             onClick={() => handleDelete(post._id)}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100  dark:text-white dark:hover:bg-gray-500 dark:hover:text-white"
                           >
                             Delete post
                           </a>
