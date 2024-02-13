@@ -13,7 +13,7 @@ const HotelCard = ({ hotel }) => {
         to={`/hotels/${hotel.hotel_id}`}
         className="flex flex-col cursor-pointer h-full"
       >
-        <div className="flex-grow">
+        <div className="flex-grow bg-white dark:bg-gray-600">
           <div className="relative">
             <img
               className="w-full h-48 object-cover"
@@ -47,8 +47,8 @@ const HotelCard = ({ hotel }) => {
             </div>
           </div>
         </div>
-        <div className="mt-auto p-4 rounded-b">
-          <div className="text-gray-700 text-sm">After tax & fees</div>
+        <div className="mt-auto p-4 rounded-b bg-white dark:bg-gray-600 ">
+          <div className="text-gray-700 dark:text-white text-sm">After tax & fees</div>
           <div className="text-2xl font-extrabold text-red-500">
             {hotel.composite_price_breakdown.all_inclusive_amount.currency ===
             "EUR"
