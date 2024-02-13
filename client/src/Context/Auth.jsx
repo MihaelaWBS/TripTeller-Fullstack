@@ -9,10 +9,12 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState(null);
-  const setState = (user, loading, errors) => {
+  const [loginError, setLoginError] = useState(null);
+
+  const setState = (user, loading, error) => {
     setUser(user);
     setLoading(loading);
-    setErrors(errors);
+    setLoginError(error);
   };
   useEffect(() => {
     axios
@@ -28,17 +30,22 @@ function AuthProvider({ children }) {
 
   const login = (user) => {
     setLoading(true);
-    const { email, password } = user; // Extract only username and password
+    const { email, password } = user;
     axios
-      .post("/auth/login", { email, password }) // Send only username and password
+      .post("/auth/login", { email, password })
       .then((res) => {
-        setState(res.data.user, false, null);
+        setUser(res.data.user);
+        setLoading(false);
+        setLoginError(null);
         navigate("/");
       })
       .catch((err) => {
-        setState(null, false, err.response.data);
+        setUser(null);
+        setLoading(false);
+        setLoginError(err.response.data.message || err.response.data);
       });
   };
+
   const register = (user) => {
     setLoading(true);
     axios
@@ -75,7 +82,16 @@ function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, errors, loading, register, login, logout, setUser }}
+      value={{
+        user,
+        errors,
+        loading,
+        register,
+        login,
+        logout,
+        setUser,
+        loginError,
+      }}
     >
       {children}
     </AuthContext.Provider>
