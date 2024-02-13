@@ -17,8 +17,14 @@ import { Link } from "react-router-dom";
 const SidebarComponent = () => {
   return (
     <Sidebar className="shadow-xl" aria-label="Sidebar with single-level menu">
-      <Sidebar.Items className="bg-white dark:bg-gray-600">
+      <Sidebar.Items className="bg-white dark:bg-gray-800">
         <Sidebar.ItemGroup>
+          <Link to="/">
+            <Sidebar.Item href="#" icon={HiOutlineHome}>
+                Home
+            </Sidebar.Item>
+          </Link>
+
           <Sidebar.Item href="#" icon={HiOutlineClipboardList}>
             All bookings
           </Sidebar.Item>

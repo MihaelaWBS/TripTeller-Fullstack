@@ -135,7 +135,7 @@ const Itinerary = () => {
                 return (
                   <div key={hotel?.hotel_id} className="flex flex-col h-full">
                     <Card
-                      className="mb-5  flex flex-col img-height"
+                      className="mb-5  flex flex-col img-height dark:bg-gray-700 "
                       imgAlt="Property picture"
                       imgSrc={imgSrc}
                     >
@@ -149,7 +149,7 @@ const Itinerary = () => {
                           href={`https://www.google.com/maps/search/?api=1&query=${hotel.city}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-500 font-bold"
+                          className="text-blue-500 dark:text-blue-600  font-bold"
                         >
                           {hotel?.hotelDetails?.city}
                         </a>
@@ -182,12 +182,12 @@ const Itinerary = () => {
                         <div className="flex mt-2 flex-wrap justify-between">
                           <Link
                             to={`/hotels/${hotel?.hotelDetails?.hotel_id}`}
-                            className="text-blue-600 hover:text-blue-800 font-bold text-lg cursor-pointer mb-2"
+                            className="text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400 font-bold text-lg cursor-pointer mb-2"
                           >
                             See Details
                           </Link>
                           <a
-                            className=" text-green-600 hover:text-green-800 font-bold text-lg cursor-pointer mb-2"
+                            className=" text-green-600 hover:text-green-800  dark:text-green-500 dark:hover:text-green-400 font-bold text-lg cursor-pointer mb-2"
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => {
