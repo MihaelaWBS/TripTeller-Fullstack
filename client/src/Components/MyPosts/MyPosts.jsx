@@ -68,11 +68,13 @@ const MyPosts = () => {
           <p className="font-bold text-xl">
             {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
           </p>
-          <p className="text-gray-600">{user?.nickname || "Your nickname"}</p>
+          <p className="text-gray-600 dark:text-white">
+            {user?.nickname || "Your nickname"}
+          </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Link to="/myprofile">
-            <Button className="bg-gray-200 text-black font-bold  rounded-3xl">
+            <Button className="bg-gray-200 text-black font-bold  rounded-3xl dark:text-white">
               Edit profile
             </Button>
           </Link>
@@ -94,23 +96,23 @@ const MyPosts = () => {
                 />
               </div>
               <div className="col-span-3">
-                <h3 className="text-lg leading-6 font-bold text-gray-900">
+                <h3 className="text-lg leading-6 font-bold text-gray-900 dark:text-white">
                   {post.title}
                 </h3>
                 <div className="flex justify-between items-center">
-                  <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                  <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-white">
                     {post.userId &&
                       `${post.userId.firstName} ${post.userId.lastName}`}
                   </p>
                   <button
                     onClick={() => toggleMenu(post._id)}
-                    className="text-gray-600 hover:text-gray-900 self-center"
+                    className="text-gray-600 hover:text-gray-900 self-center dark:text-white"
                   >
                     <FontAwesomeIcon icon={faEllipsis} />{" "}
                   </button>
                 </div>
                 <div className="mt-2 flex justify-between items-center">
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-white">
                     {new Date(post.createdAt).toLocaleDateString("en-GB", {
                       day: "2-digit",
                       month: "short",
