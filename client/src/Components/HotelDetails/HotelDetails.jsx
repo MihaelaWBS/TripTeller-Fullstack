@@ -327,7 +327,7 @@ const HotelDetails = () => {
   }
 
   return (
-    <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
+    <div className="container max-w-7xl mx-auto my-8 p-6  ">
       <h1 className="text-4xl font-bold text-gray-800 mb-6">
         {hotelDetails.hotel_name}
       </h1>
@@ -366,385 +366,186 @@ const HotelDetails = () => {
         ))}
       </div>
 
-      {hotelDetails && (
-        <WeatherComponent
-          latitude={hotelDetails.latitude}
-          longitude={hotelDetails.longitude}
-          cityName={hotelDetails.city} // Assuming 'city' is the correct field
-        />
-      )}
-
       <div className="flex flex-wrap -mx-2">
         {/* Hotel Information Card */}
-        <div className="px-2 mb-4 w-full md:w-1/3">
-          <div className="relative">
-            <div className="flex flex-col  h-full relative z-10">
-              <div
-                className="p-6 rounded-lg flex-grow relative z-10 text-white"
-                style={{
-                  backgroundImage: `url(${backgroundImage})`,
-                  backgroundSize: "cover", // Cover the entire area of the div
-                  backgroundPosition: "center", // Center the background image
-                  height: "350px", // Fixed height
-                  width: "100%", // Fixed width (responsive within its grid column)
-                  overflow: "auto",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
-                    padding: "10px", // Add padding to create some space around the text
-                    borderRadius: "5px", // Optional: adds rounded corners
-                  }}
-                >
-                  <h2 className="text-xl 	 font-semibold mb-4">
-                    Hotel Information
-                  </h2>
-                  <p className="mb-2">
-                    {hotelDetails?.address}, {hotelDetails?.city},{" "}
-                    {hotelDetails?.country_trans}
-                  </p>
-                  <p className="mb-2">
-                    Latitude: {hotelDetails?.latitude}, Longitude:{" "}
-                    {hotelDetails?.longitude}
-                  </p>
-                  <p className="mb-4">
-                    Check-in: {hotelDetails?.arrival_date}, Check-out:{" "}
-                    {hotelDetails?.departure_date}
-                  </p>
-                  <a
-                    href={hotelDetails?.url}
-                    className="text-white-600 font-bold mt-6  hover:text-yellow-800"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Visit Hotel Website
-                  </a>
-                  {readMore === "hotelInfo" && (
-                    <p>
-                      Facilities: {hotelDetails?.family_facilities?.join(", ")}
-                    </p>
-                  )}
-                  <button
-                    onClick={() => toggleReadMore("hotelInfo")}
-                    className="mt-auto  text-white-600 font-bold mt-6 hover:text-blue-800 ml-6"
-                  >
-                    {readMore === "hotelInfo" ? "Read Less" : "Read More"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
         <Modal
           isOpen={isPriceBreakdownModalOpen}
           onRequestClose={() => setIsPriceBreakdownModalOpen(false)}
-          style={{
-            overlay: {
-              backgroundColor: "rgba(0, 0, 0, 0.75)",
-              zIndex: 1000,
-            },
-            content: {
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              right: "auto",
-              bottom: "auto",
-              marginRight: "-50%",
-              transform: "translate(-50%, -50%)",
-              border: "1px solid #ccc",
-              background: `url(${backgroundImage}) center/cover no-repeat, rgba(0, 0, 0, 0.5)`,
-              overflow: "auto",
-              WebkitOverflowScrolling: "touch",
-              borderRadius: "10px",
-              outline: "none",
-              padding: "20px",
-              color: "white",
-              width: "80%",
-              maxWidth: "600px",
-            },
-          }}
+          className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex"
         >
-          <h2
-            style={{
-              textAlign: "center",
-              fontSize: "24px",
-              fontWeight: "bold",
-              marginBottom: "20px",
-            }}
-          >
-            Price Breakdown
-          </h2>
-          {priceBreakdown && (
-            <div style={{ lineHeight: "1.5" }}>
-              <p>
-                Gross Amount:{" "}
-                <strong>
-                  {priceBreakdown.gross_amount.currency}{" "}
-                  {priceBreakdown.gross_amount.value.toFixed(2)}
-                </strong>
-              </p>
-              <p>
-                All Inclusive Amount:{" "}
-                <strong>
-                  {priceBreakdown.all_inclusive_amount.currency}{" "}
-                  {priceBreakdown.all_inclusive_amount.value.toFixed(2)}
-                </strong>
-              </p>
-              <p>
-                Trip-teller Discount:{" "}
-                <strong>
-                  {priceBreakdown.excluded_amount.currency}{" "}
-                  {priceBreakdown.excluded_amount.value.toFixed(2)}
-                </strong>
-              </p>
-            </div>
-          )}
-          <button
-            onClick={() => setIsPriceBreakdownModalOpen(false)}
-            style={{
-              display: "block",
-              marginTop: "20px",
-              marginLeft: "auto",
-              marginRight: "auto",
-              padding: "10px 20px",
-              backgroundColor: "#007bff", // Button color
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Close to View more
-          </button>
+          <div className="relative p-6 mx-auto my-auto max-w-md w-80 md:w-1/2 lg:w-2/3 bg-white rounded-lg overflow-auto">
+            <h2 className="text-center text-2xl font-bold mb-5">
+              Price Breakdown
+            </h2>
+            {priceBreakdown && (
+              <div className="leading-relaxed">
+                <p>
+                  Gross Amount:{" "}
+                  <strong>
+                    {priceBreakdown.gross_amount.currency}{" "}
+                    {priceBreakdown.gross_amount.value.toFixed(2)}
+                  </strong>
+                </p>
+                <p>
+                  All Inclusive Amount:{" "}
+                  <strong>
+                    {priceBreakdown.all_inclusive_amount.currency}{" "}
+                    {priceBreakdown.all_inclusive_amount.value.toFixed(2)}
+                  </strong>
+                </p>
+                <p>
+                  Trip-teller Discount:{" "}
+                  <strong>
+                    {priceBreakdown.excluded_amount.currency}{" "}
+                    {priceBreakdown.excluded_amount.value.toFixed(2)}
+                  </strong>
+                </p>
+              </div>
+            )}
+            <button
+              onClick={() => setIsPriceBreakdownModalOpen(false)}
+              className="block mt-5 mx-auto px-5 py-2 bg-blue-500 text-white rounded-md cursor-pointer"
+            >
+              Close to view more
+            </button>
+          </div>
         </Modal>
-        {/* Spoken Languages Card */}
-        <div className="px-2 mb-4 w-full md:w-1/3">
-          <div className="relative">
-            <div className="flex flex-col h-full relative z-10">
-              <div
-                className="p-6 rounded-lg flex-grow relative z-10 text-white"
-                style={{
-                  backgroundImage: `url(${backgroundImage})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  height: "350px",
-                  width: "100%",
-                  overflow: "auto",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    padding: "10px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  <h2 className="text-xl font-semibold mb-4">
-                    Spoken Languages
-                  </h2>
-                  <ul className="list-disc list-inside text-white">
-                    {spokenLanguages.map((code, index) => (
-                      <li key={index}>{languageMap[code] || code}</li>
-                    ))}
-                  </ul>
+      </div>
+
+      <div className="container mx-auto p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Languages Spoken Card */}
+          <div className="bg-white p-6 rounded-lg shadow overflow-auto">
+            <h2 className="text-xl font-semibold mb-4">Languages Spoken</h2>
+            <ul className="list-disc list-inside">
+              {spokenLanguages.map((code, index) => (
+                <li key={index}>{languageMap[code] || code}</li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Cleanliness and Safety Card */}
+          <div className="bg-white p-6 rounded-lg shadow overflow-auto">
+            <h2 className="text-xl font-semibold mb-4">Hotel information</h2>
+
+            <p className="mb-2">
+              {hotelDetails?.address}, {hotelDetails?.city},{" "}
+              {hotelDetails?.country_trans}
+            </p>
+            <p className="mb-2">
+              Latitude: {hotelDetails?.latitude}, Longitude:{" "}
+              {hotelDetails?.longitude}
+            </p>
+            <p className="mb-4">
+              Check-in: {hotelDetails?.arrival_date}, Check-out:{" "}
+              {hotelDetails?.departure_date}
+            </p>
+            <a
+              href={hotelDetails?.url}
+              className="text-white-600 font-bold mt-6  hover:text-yellow-800"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Visit Hotel Website
+            </a>
+            {readMore === "hotelInfo" && (
+              <p>Facilities: {hotelDetails?.family_facilities?.join(", ")}</p>
+            )}
+            <button
+              onClick={() => toggleReadMore("hotelInfo")}
+              className="mt-auto  text-white-600 font-bold mt-6 hover:text-blue-800 ml-6"
+            >
+              {readMore === "hotelInfo" ? "Read Less" : "Read More"}
+            </button>
+          </div>
+
+          {/* Sustainability Efforts
+           */}
+          <div className="bg-white p-6 rounded-lg shadow overflow-auto">
+            <h2 className="text-xl font-semibold mb-4">
+              Sustainability Efforts
+            </h2>
+            <ul className="list-disc list-inside mb-4">
+              {hotelDetails.sustainability?.sustainability_page?.efforts?.map(
+                (effort, index) => (
+                  <li key={index}>
+                    {effort.title}: {effort.steps.join(", ").substring(0, 50)}
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
+
+          {/* Available in all rooms Card */}
+          <div className="bg-white p-6 rounded-lg shadow overflow-auto">
+            <h2 className="text-xl font-semibold mb-4">
+              Available in all rooms
+            </h2>
+            <div className="grid grid-cols-2 ">
+              {tempHighlights.map((highlight, index) => (
+                <div key={index} className="flex items-center m-2">
+                  <img
+                    src={highlight.icon}
+                    alt={highlight.name}
+                    className="w-6 h-6 mr-2"
+                  />
+                  <span>{highlight.name}</span>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
-        </div>
-        {/* Sustainability Efforts Card */}
-        <div className="px-2 mb-4 w-full md:w-1/3">
-          <div className="relative">
-            <div className="flex flex-col h-full relative z-10">
-              <div
-                className="p-6 rounded-lg flex-grow relative z-10 text-white"
-                style={{
-                  backgroundImage: `url(${backgroundImage})`,
-                  backgroundSize: "cover", // Cover the entire area of the div
-                  backgroundPosition: "center", // Center the background image
-                  height: "350px", // Fixed height
-                  width: "100%", // Fixed width (responsive within its grid column)
-                  overflow: "auto",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
-                    padding: "10px", // Add padding to create some space around the text
-                    borderRadius: "5px", // Optional: adds rounded corners
-                  }}
-                >
-                  <h2 className="text-xl font-semibold mb-4">
-                    Sustainability Efforts
-                  </h2>
-                  {readMore === "sustainability" ? (
-                    <ul className="list-disc list-inside mb-4">
-                      {hotelDetails.sustainability?.sustainability_page?.efforts?.map(
-                        (effort, index) => (
-                          <li key={index}>
-                            {effort.title}: {effort.steps.join(", ")}
-                          </li>
-                        )
-                      )}
-                    </ul>
-                  ) : (
-                    <p>
-                      {hotelDetails.sustainability?.sustainability_page
-                        ?.efforts?.[0]?.title ||
-                        "Details on sustainability efforts"}
-                    </p>
-                  )}
-                  <button
-                    onClick={() => toggleReadMore("sustainability")}
-                    className="mt-auto text-white-600 font-bold mt-6 hover:text-green-800"
-                  >
-                    {readMore === "sustainability" ? "Read Less" : "Read More"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>{" "}
-        {/* COVID-19 Support Card */}
-        <div className="px-2 mb-4 w-full md:w-1/3">
-          <div className="relative">
-            <div className="flex flex-col h-full relative z-10">
-              <div
-                className="p-6 rounded-lg flex-grow relative z-10 text-white"
-                style={{
-                  backgroundImage: `url(${backgroundImage})`,
-                  backgroundSize: "cover", // Cover the entire area of the div
-                  backgroundPosition: "center", // Center the background image
-                  height: "350px", // Fixed height
-                  width: "100%", // Fixed width (responsive within its grid column)
-                  overflow: "auto",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
-                    padding: "10px", // Add padding to create some space around the text
-                    borderRadius: "5px", // Optional: adds rounded corners
-                  }}
-                >
-                  <h2 className="text-xl font-semibold mb-4">
-                    COVID-19 Support
-                  </h2>
-                  {readMore === "covid" ? (
-                    hotelDetails.info_banners?.map((banner, index) => (
-                      <div key={index} className="mb-4">
-                        <p className="font-semibold">{banner.title}</p>
-                        <p>{banner.messages.join(" ")}</p>
-                      </div>
-                    ))
-                  ) : (
-                    <p>
-                      {hotelDetails.info_banners?.[0]?.title ||
-                        "COVID-19 support information not available"}
-                    </p>
-                  )}
-                  <button
-                    onClick={() => toggleReadMore("covid")}
-                    className="mt-auto text-white-600 font-bold mt-6 hover:text-red-800"
-                  >
-                    {readMore === "covid" ? "Read Less" : "Read More"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* Property Highlights Section */}
-        <div className="px-2 mb-4 w-full md:w-1/3">
-          <div className="relative">
-            <div className="flex flex-col h-full relative z-10">
-              <div
-                className="p-6 rounded-lg flex-grow relative z-10 text-white"
-                style={{
-                  backgroundImage: `url(${backgroundImage})`,
-                  backgroundSize: "cover", // Cover the entire area of the div
-                  backgroundPosition: "center", // Center the background image
-                  height: "350px", // Fixed height
-                  width: "100%", // Fixed width (responsive within its grid column)
-                  overflow: "auto",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
-                    padding: "10px", // Add padding to create some space around the text
-                    borderRadius: "5px", // Optional: adds rounded corners
-                  }}
-                >
-                  <h2 className="text-xl font-semibold mb-4">
-                    Property Highlights
-                  </h2>
-                  <div className="flex flex-wrap">
-                    {tempHighlights.map((highlight, index) => (
-                      <div key={index} className="flex items-center m-2">
-                        <img
-                          src={highlight.icon}
-                          alt={highlight.name}
-                          className="w-6 h-6 mr-2"
-                        />
-                        <span>{highlight.name}</span>
-                      </div>
-                    ))}
+          {/* Available in all rooms Card */}
+          <div className="bg-white p-6 rounded-lg shadow overflow-auto">
+            <h2 className="text-xl font-semibold mb-4">COVID-19 Support</h2>
+            <div className="grid grid-cols-2 ">
+              {readMore === "covid" ? (
+                hotelDetails.info_banners?.map((banner, index) => (
+                  <div key={index} className="mb-4">
+                    <p className="font-semibold">{banner.title}</p>
+                    <p>{banner.messages.join(" ")}</p>
                   </div>
-                </div>
-              </div>
+                ))
+              ) : (
+                <p>
+                  {hotelDetails.info_banners?.[0]?.title ||
+                    "COVID-19 support information not available"}
+                </p>
+              )}
             </div>
           </div>
-        </div>
-        {/* Family Facilities Card */}
-        <div className="px-2 mb-4 w-full md:w-1/3">
-          <div className="relative">
-            <div className="flex flex-col h-full relative z-10">
-              <div
-                className="p-6 rounded-lg flex-grow relative z-10 text-white"
-                style={{
-                  backgroundImage: `url(${backgroundImage})`,
-                  backgroundSize: "cover", // Cover the entire area of the div
-                  backgroundPosition: "center", // Center the background image
-                  height: "350px", // Fixed height
-                  width: "100%", // Fixed width (responsive within its grid column)
-                  overflow: "auto",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Black background with 50% opacity
-                    padding: "10px", // Add padding to create some space around the text
-                    borderRadius: "5px", // Optional: adds rounded corners
-                  }}
+          {/* Available in all rooms Card */}
+          <div className="bg-white p-6 rounded-lg shadow overflow-auto">
+            <h2 className="text-xl font-semibold mb-4">Family Facilities</h2>
+            <div className="grid grid-cols-2 ">
+              <ul className="mb-4">
+                {readMore
+                  ? familyFacilitiesList
+                  : familyFacilitiesList.slice(0, 5)}
+              </ul>
+              {familyFacilitiesList.length > 5 && (
+                <button
+                  onClick={() => setReadMore(!readMore)}
+                  className="mt-auto text-blue-600 hover:text-blue-800"
                 >
-                  <h2 className="text-xl font-semibold mb-4">
-                    Family Facilities
-                  </h2>
-                  <ul className="mb-4">
-                    {readMore
-                      ? familyFacilitiesList
-                      : familyFacilitiesList.slice(0, 5)}
-                  </ul>
-                  {familyFacilitiesList.length > 5 && (
-                    <button
-                      onClick={() => setReadMore(!readMore)}
-                      className="mt-auto text-blue-600 hover:text-blue-800"
-                    >
-                      Read {readMore ? "Less" : "More"}
-                    </button>
-                  )}
-                </div>
-              </div>
+                  Read {readMore ? "Less" : "More"}
+                </button>
+              )}
             </div>
           </div>
+          {hotelDetails && (
+            <WeatherComponent
+              latitude={hotelDetails.latitude}
+              longitude={hotelDetails.longitude}
+              cityName={hotelDetails.city} // Assuming 'city' is the correct field
+            />
+          )}
         </div>
       </div>
 
-      <div className="px-2 mb-4 w-full md:w-2/3">
-        <Card className="flex flex-col h-full">
-          <div className="my-8">
+      <div className="px-2 mb-4 w-full  md:w-2/3">
+        <Card className="flex flex-col  h-full">
+          <div className="my-8 ">
             <h2 className="text-3xl font-semibold mb-4">
               {" "}
               Frequently Asked Questions{" "}
