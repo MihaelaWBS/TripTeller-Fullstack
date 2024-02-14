@@ -1,6 +1,13 @@
 import React from "react";
 
-const TripList = ({ activeTab, upcomingTrips, cancelledTrips, cancelTrip }) => {
+const TripList = ({
+  activeTab,
+  upcomingTrips,
+  cancelledTrips,
+  cancelTrip,
+  completeTrip,
+  completedTrips,
+}) => {
   const formatDate = (dateString) => {
     const options = {
       weekday: "short",
@@ -18,7 +25,7 @@ const TripList = ({ activeTab, upcomingTrips, cancelledTrips, cancelTrip }) => {
     } else {
       imgSrc = "default_image_url";
     }
-
+    const buttonText = activeTab === "Cancelled" ? "Upcoming" : "Cancel";
     return (
       <div
         key={trip._id}
@@ -62,7 +69,7 @@ const TripList = ({ activeTab, upcomingTrips, cancelledTrips, cancelTrip }) => {
             onClick={() => cancelTrip(trip._id)}
             className="btn-secondary"
           >
-            Cancel
+            {buttonText}
           </button>
           <button
             onClick={() => completeTrip(trip._id)}
@@ -81,6 +88,8 @@ const TripList = ({ activeTab, upcomingTrips, cancelledTrips, cancelTrip }) => {
         upcomingTrips.map((trip) => renderTrip(trip, "Upcoming"))}
       {activeTab === "Cancelled" &&
         cancelledTrips.map((trip) => renderTrip(trip, "Cancelled"))}
+      {activeTab === "Completed" &&
+        completedTrips.map((trip) => renderTrip(trip, "Completed"))}
     </div>
   );
 };

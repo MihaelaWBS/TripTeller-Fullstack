@@ -19,14 +19,12 @@ const ItinerarySidebar = () => {
     <Sidebar className="shadow-xl" aria-label="Sidebar with single-level menu">
       <Sidebar.Items>
         <Sidebar.ItemGroup>
-        <Link to="/">
+          <Link to="/">
             <Sidebar.Item href="#" icon={HiOutlineHome}>
-                Home
+              Home
             </Sidebar.Item>
           </Link>
-          <Sidebar.Item href="#" icon={HiOutlineClipboardList}>
-            All bookings
-          </Sidebar.Item>
+
           <Sidebar.Item href="#" icon={HiOutlineHome}>
             Hotels
           </Sidebar.Item>
@@ -41,17 +39,17 @@ const ItinerarySidebar = () => {
           </Sidebar.Item>
           <Link to="/blog/post/addPost">
             <Sidebar.Item href="#" icon={HiOutlineStar}>
-                Add New Post
+              Add New Post
             </Sidebar.Item>
           </Link>
           <Link to="/blog">
             <Sidebar.Item href="#" icon={HiOutlineDocumentText}>
-                My Blog
+              My Blog
             </Sidebar.Item>
           </Link>
           <Link to="/upcomingtrips">
             <Sidebar.Item href="#" icon={HiOutlineDocumentText}>
-                Upcoming Trips
+              Upcoming Trips
             </Sidebar.Item>
           </Link>
 
