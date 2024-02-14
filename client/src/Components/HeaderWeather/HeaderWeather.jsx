@@ -98,7 +98,7 @@ const HeaderWeather = () => {
 
   return (
     <>
-      <div className="sm:hidden md:flex">
+      <div className="xxs:hidden xl:flex">
         <Lottie
           animationData={weatherAnimation}
           loop={true}

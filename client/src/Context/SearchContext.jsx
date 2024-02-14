@@ -3,12 +3,17 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import LoadingComponent from "../Components/LoadingComponent/LoadingComponent";
 import LoadingComponentNearbyCities from "../Components/LoadingComponent/LoadingComponentNearbyCities/index";
-
+import { AuthContext } from "./Auth";
+import axiosInstance from "../axiosInstance";
 const SearchContext = createContext();
 
 export const useSearch = () => useContext(SearchContext);
 
 export const SearchProvider = ({ children }) => {
+  const { user } = useContext(AuthContext);
+  const [upcomingTrips, setUpcomingTrips] = useState([]);
+  const [upcomingTripsLength, setUpcomingTripsLength] = useState([]);
+
   const [hotels, setHotels] = useState(null);
   const [hotelsBerlin, setHotelsBerlin] = useState(null);
   const [hotelsMunich, setHotelsMunich] = useState(null);
@@ -26,7 +31,8 @@ export const SearchProvider = ({ children }) => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [locationSetByGeo, setLocationSetByGeo] = useState(false);
-
+  const [posts, setPosts] = useState([]);
+  const [itinerary, setItinerary] = useState([]);
   const getCurrencyCode = async () => {
     const allowedCurrencyCodes = [
       "hotel_currency",
@@ -347,9 +353,46 @@ export const SearchProvider = ({ children }) => {
       setIsLoadingNearbyCities(false); // Set loading to false after the fetch operation is done
     }
   };
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/api/posts/user/${user._id}`)
+        .then((res) => {
+          setPosts(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((error) => console.log("Error:", error));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/api/upcomingTrips/user/${user._id}`)
+        .then((res) => {
+          setUpcomingTripsLength(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((error) => console.log("Error:", error));
+    }
+  }, [user]);
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/api/itineraries/user/${user._id}`)
+        .then((res) => {
+          setItinerary(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((error) => console.log("Error:", error));
+    }
+  }, [user]);
   // ATTRACTIONS API! //
 
   const value = {
+    setUpcomingTrips,
+    upcomingTrips,
+    setItinerary,
+    setPosts,
+    itinerary,
+    posts,
     hotels,
     setHotels,
     isLoading,
@@ -389,6 +432,8 @@ export const SearchProvider = ({ children }) => {
     setHotelsFrankfurt,
     setHotelsBerlin,
     fetchAttractions,
+    setUpcomingTripsLength,
+    upcomingTripsLength,
   };
   return (
     <SearchContext.Provider value={value}>{children}</SearchContext.Provider>

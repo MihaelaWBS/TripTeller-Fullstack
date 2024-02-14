@@ -27,7 +27,7 @@ const Itinerary = () => {
   const [selectedItineraryId, setSelectedItineraryId] = useState(null);
 
   const { user } = useContext(AuthContext);
-  const { hotels } = useSearch();
+  const { hotels, setUpcomingTripsLength } = useSearch();
   const [hotelDetails, setHotelDetails] = useState(null);
   const [error, setError] = useState(null);
   const { hotelId } = useParams();
@@ -100,6 +100,7 @@ const Itinerary = () => {
         // If you want to immediately show the new trip in the UI,
         // you should use the response data since it contains the updated trip details.
         setUpcomingTrips((prevTrips) => [...prevTrips, response.data]);
+        setUpcomingTripsLength((prevLength) => prevLength + 1);
       }
     } catch (error) {
       console.log("Error adding hotel to upcoming trips:", error);

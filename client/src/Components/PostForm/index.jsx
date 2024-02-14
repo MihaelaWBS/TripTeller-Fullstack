@@ -5,10 +5,12 @@ import parse from "html-react-parser";
 import axiosInstance from "../../axiosInstance";
 import { useNavigate } from "react-router-dom";
 import TextBlock from "../TextBlock";
+import { useSearch } from "../../Context/SearchContext";
 
 import { Button } from "flowbite-react";
 
 const PostForm = () => {
+  const { setPosts } = useSearch();
   const [editorContent, setEditorContent] = useState("");
   const [postData, setPostData] = useState({ title: "", picture_url: "" });
   const [file, setFile] = useState(null);
@@ -45,9 +47,9 @@ const PostForm = () => {
 
     try {
       const response = await axiosInstance.post("/api/posts", finalPostData);
-      console.log("response:", response);
-      console.log("Post added", response.data);
+
       const postId = response.data._id;
+      setPosts((prevP) => [...prevP, response.data]);
       navigate(`/blog/posts/${postId}`);
     } catch (error) {
       if (error.response) {

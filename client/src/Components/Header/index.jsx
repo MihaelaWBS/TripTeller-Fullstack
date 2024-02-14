@@ -5,37 +5,15 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import HeaderWeather from "../HeaderWeather/HeaderWeather";
 import axiosInstance from "../../axiosInstance";
-import DarkModeToggle from 'react-dark-mode-toggle';
+import DarkModeToggle from "react-dark-mode-toggle";
+import { useSearch } from "../../Context/SearchContext";
 
 const index = () => {
+  const { itinerary, upcomingTripsLength, posts } = useSearch();
   const { user, logout } = useContext(AuthContext);
-  const [posts, setPosts] = useState([]);
-  const [itinerary, setItinerary] = useState([]);
-  const [upcomingTripsLength, setUpcomingTripsLength] = useState([]);
   const [isDarkMode, setIsDarkMode] = useState(() => false);
 
-  useEffect(() => {
-    if (user) {
-      axiosInstance
-        .get(`/api/posts/user/${user._id}`)
-        .then((res) => {
-          setPosts(Array.isArray(res.data) ? res.data : []);
-        })
-        .catch((error) => console.log("Error:", error));
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
-      axiosInstance
-        .get(`/api/upcomingTrips/user/${user._id}`)
-        .then((res) => {
-          setUpcomingTripsLength(Array.isArray(res.data) ? res.data : []);
-        })
-        .catch((error) => console.log("Error:", error));
-    }
-  }, [user]);
-  useEffect(() => {
+  /*   useEffect(() => {
     if (user) {
       axiosInstance
         .get(`/api/itineraries/user/${user._id}`)
@@ -45,11 +23,10 @@ const index = () => {
         .catch((error) => console.log("Error:", error));
     }
   }, [user]);
-
+ */
   useEffect(() => {
-    document.documentElement.classList = isDarkMode ? 'dark' : '';
+    document.documentElement.classList = isDarkMode ? "dark" : "";
   }, [isDarkMode]);
-
 
   return (
     <>
