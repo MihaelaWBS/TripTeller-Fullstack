@@ -10,6 +10,11 @@ const ItinerarySchema = new mongoose.Schema({
     type: Object, // This field should be able to hold an object
     required: true,
   },
+  status: {
+    type: String,
+    enum: ["upcoming", "cancelled", "completed"],
+    default: "upcoming",
+  },
 
   // ... any other fields your itinerary might have
 });

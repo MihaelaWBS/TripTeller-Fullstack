@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import ReactQuill, { Quill } from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import "./QuillEditor.css";
 import uploadImageToCloudinary from "../Cloudinary/CloudinaryService";
 import DOMPurify from "dompurify";
 
@@ -54,6 +54,7 @@ const QuillEditor = ({ value, onChange }) => {
 
   return (
     <ReactQuill
+      className="ql-snow"
       ref={quillRef}
       value={value}
       onChange={sanitizedOnChange}

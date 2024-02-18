@@ -28,3 +28,22 @@ body {
 html {
   scroll-behavior: smooth;
 }
+.fi {
+  width: 100px !important;
+}
+
+.div-test-results {
+  background-color: #20274d;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 6rem;
+}
+
+.img-height .rounded-t-lg {
+  max-height: 200px;
+}
+
+.dark-mode .ql-snow .ql-toolbar button .ql-icon {
+  color: #fff; /* Change the icon color to white */
+}

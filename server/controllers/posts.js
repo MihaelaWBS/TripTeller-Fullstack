@@ -16,7 +16,7 @@ const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find().populate(
       "userId",
-      "username email avatar firstName lastName"
+      "username email avatar firstName lastName flag"
     );
     res.json(posts);
   } catch (error) {
@@ -84,11 +84,69 @@ const deletePost = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const likePost = async (req, res) => {
+  const postId = req.params.id;
+  const userId = req.body.userId;
+
+  try {
+    const post = await Post.findById(postId);
+    const userIndex = post.likedBy.indexOf(userId);
+
+    if (userIndex === -1) {
+      post.likes += 1;
+      post.likedBy.push(userId);
+      await post.save();
+      res.status(200).json({ message: "Post liked successfully", post });
+    } else {
+      post.likes -= 1;
+      post.likedBy.splice(userIndex, 1);
+      await post.save();
+      res.status(200).json({ message: "Post unliked successfully", post });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "An error occurred", error });
+  }
+};
+
+const clapPost = async (req, res) => {
+  const postId = req.params.id;
+
+  try {
+    const clapsToAdd = req.body.claps || 1;
+    const post = await Post.findByIdAndUpdate(
+      postId,
+      { $inc: { claps: clapsToAdd } },
+      { new: true }
+    );
+
+    res.status(200).json({ message: "Claps added successfully", post });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred", error });
+  }
+};
+
+const getPostsByUserId = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const posts = await Post.find({ userId }).populate(
+      "userId",
+      "username email avatar firstName lastName flag"
+    );
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   createPost,
+  likePost,
   getAllPosts,
   getPostById,
   updatePost,
+  clapPost,
   deletePost,
+  getPostsByUserId,
 };

@@ -5,6 +5,9 @@ import Attractions from "../Attractions/index";
 import PostForm from "../PostForm";
 import Itinerary from "../Itinerary";
 import TellerAI from "../TellerAI";
+import PlanForm from "../PlanForm/TravelItinerary";
+import HeaderWeather from "../HeaderWeather/HeaderWeather";
+import HotelsNearby from "../HotelsNearby/HotelsNearby";
 
 const index = () => {
   return (
@@ -12,9 +15,10 @@ const index = () => {
       <SearchComponent />
       {/* <PostForm /> */}
 
-      <NearbyCities />
+      {/*  <NearbyCities /> */}
+      <HotelsNearby />
       <TellerAI />
-
+      {/* <PlanForm /> */}
       {/*  <Attractions /> */}
     </>
   );

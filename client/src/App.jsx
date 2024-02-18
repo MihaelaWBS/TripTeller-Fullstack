@@ -9,6 +9,8 @@ import React, { useState, useEffect } from "react";
 import { ItineraryProvider } from "./Context/ItineraryContext";
 import Footer1 from "./Components/Footer1";
 import axios from "axios";
+import "react-toastify/dist/ReactToastify.css"; // Add this line
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [itinerary, setItinerary] = useState([]);
@@ -19,6 +21,8 @@ function App() {
       // Set your state here to indicate that the user is logged in
     }
   }, []);
+
+  /*
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,26 +35,21 @@ function App() {
     };
 
     fetchData();
-  }, []);
-
+  }, []); */
 
   return (
     <>
-      <ItineraryProvider value={{ itinerary, setItinerary }}>
-
-
-        <SearchProvider>
-          <div className="flex flex-col min-h-screen">
+      <ToastContainer />
+      <SearchProvider>
+        <ItineraryProvider>
+          <div className="flex flex-col min-h-screen dark:bg-gray-800 dark:text-white">
             <Header />
-
             <Main />
-
             <BottomNavbar />
             <Footer1 />
           </div>
-        </SearchProvider>
-
-      </ItineraryProvider>
+        </ItineraryProvider>
+      </SearchProvider>
     </>
   );
 }

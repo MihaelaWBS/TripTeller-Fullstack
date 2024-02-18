@@ -122,6 +122,15 @@ const index = () => {
               onChange={handleChange}
             />
           </div>
+          <div>
+            {context.errors && (
+              <div className="mb-4 text-center text-red-500">
+                {typeof context.errors === "object"
+                  ? JSON.stringify(context.errors)
+                  : context.errors}{" "}
+              </div>
+            )}
+          </div>
           <div className="mb-6">
             {/* <label className="inline-flex items-center">
               <input

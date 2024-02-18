@@ -24,7 +24,7 @@ import { Button } from "flowbite-react";
 import logoTravel from "./assets/logo-travel-2.png";
 import hamburgerMenu from "./assets/icons8-hamburger-menu-48.png"; */
 
-const index = () => {
+const index = ({ variant }) => {
   const {
     hotels,
     setHotels,
@@ -55,6 +55,12 @@ const index = () => {
     displayLocation,
     fetchCoordinates,
   } = useSearch();
+  const divClass = variant === "resultsPage" ? "div-test-results" : "div-test";
+  const divClass2 =
+    variant === "resultsPage" ? "div-test-results-2" : "div-test-2";
+  const divClass3 =
+    variant === "resultsPage" ? "div-test-results-3" : "div-test-3";
+
   const [isCitiesModalOpen, setIsCitiesModalOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState("");
   const checkInInputRef = useRef(null);
@@ -80,21 +86,25 @@ const index = () => {
 
   const StyledButton = ({ icon, children }) => (
     <Button className="rounded-3xl bg-orange-500">
-      <FontAwesomeIcon icon={icon} className="mr-2" />
+      {icon && <FontAwesomeIcon icon={icon} className="mr-2" />}
       {children}
     </Button>
   );
   return (
     <>
-      <div className="flex items-center flex-col justify-center div-test ">
-        <div className="flex items-center justify-center mt-6 gap-2">
-          <h2 className=" text-black font-bold xxs:text-base md:text-3xl">
-            Book your trip and plan with us!
-          </h2>
-          <FontAwesomeIcon icon={faPlane} color="orange" />
+      <div className={`flex items-center flex-col justify-center ${divClass}`}>
+        <div className={`flex items-center justify-center gap-2 ${divClass3}`}>
+          {variant !== "resultsPage" && (
+            <>
+              <h2 className="text-black font-bold xxs:text-base md:text-3xl">
+                Book your trip and plan with us!
+              </h2>
+              <FontAwesomeIcon icon={faPlane} color="black" />
+            </>
+          )}
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="flex items-center justify-around mt-8">
+          <div className={`flex items-center justify-around ${divClass2}`}>
             <div className=" hidden sm:grid md:max-w-3xl lg:max-w-3xl dark:bg-gray-800 dark:border-white  dark:border-[0.5px] bg-white shadow-xl p-4 rounded-3xl  ">
               <div className="flex space-x-8 flex-col sm:flex-row justify-around items-center">
                 <div className="group relative flex cursor-pointer flex-col gap-1">
@@ -123,7 +133,7 @@ const index = () => {
 
                     <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                   </div>
-                  <p className="text-gray-500 text-center">
+                  <p className="text-gray-500 dark:text-white text-center">
                     {displayLocation()}
                   </p>
                 </div>
@@ -143,7 +153,7 @@ const index = () => {
 
                     <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                   </div>
-                  <p className="text-gray-500">{formatDate(checkInDate)}</p>
+                  <p className="text-gray-500 dark:text-white">{formatDate(checkInDate)}</p>
                   <input
                     type="date"
                     ref={checkInInputRef}
@@ -175,7 +185,7 @@ const index = () => {
                     </p>
                     <div className="gradient-line absolute inset-x-0 -top-4 h-1 bg-transparent rounded-sm scale-x-0 group-hover:scale-x-100 transition-transform origin-top-left duration-300"></div>
                   </div>
-                  <p className="text-gray-500">{formatDate(checkOutDate)}</p>
+                  <p className="text-gray-500 dark:text-white">{formatDate(checkOutDate)}</p>
                   <input
                     type="date"
                     ref={checkInInputRef}
@@ -200,10 +210,10 @@ const index = () => {
                       className="text-black dark:text-white"
                     />
                     <div onClick={toggleModal} className="flex flex-col">
-                      <p className="text-gray-500">
+                      <p className="text-gray-500 dark:text-white">
                         {adults} adult{adults > 1 ? "s" : ""}
                       </p>
-                      <p className="text-gray-500">
+                      <p className="text-gray-500 dark:text-white">
                         {rooms} room{rooms > 1 ? "s" : ""}
                       </p>
                     </div>
@@ -255,13 +265,13 @@ const index = () => {
         {/*   MOBILE ONLY!!!  */}
         <form onSubmit={handleSubmit} className="flex md:hidden">
           <div className="max-w-sm mx-auto">
-            <div className="bg-white rounded-lg border shadow-md p-5 max-w-xs">
+            <div className="bg-white  dark:bg-gray-800 rounded-lg border shadow-md p-5 max-w-xs">
               <div className="flex flex-col space-y-4">
                 <div className="relative">
                   <input
                     readOnly
                     value={displayLocation()}
-                    className="w-full px-2 py-2 pl-4 border text-left rounded-md"
+                    className="w-full px-2 py-2 pl-4 border text-left rounded-md dark:text-black  dark:placeholder::text-black"
                     type="text"
                     placeholder="Where would you like to go?"
                   />
@@ -274,7 +284,7 @@ const index = () => {
                 </div>
                 <div className="flex space-x-4">
                   <input
-                    className="w-1/2 px-4 py-2 border rounded-md"
+                    className="w-1/2 px-4 py-2 border rounded-md  dark:text-black"
                     type="date"
                     name="checkin"
                     value={checkInDate}
@@ -285,28 +295,28 @@ const index = () => {
                     value={checkOutDate}
                     ref={checkOutInputRef}
                     onChange={(e) => setCheckOutDate(e.target.value)}
-                    className="w-1/2 px-4 py-2 border rounded-md"
+                    className="w-1/2 px-4 py-2 border rounded-md  dark:text-black"
                     type="date"
                     name="checkout"
                   />
                 </div>
                 <div className="flex space-x-4">
                   <input
-                    className="w-1/3 px-4 py-2 border rounded-md"
+                    className="w-1/3 px-4 py-2 border rounded-md  dark:text-black"
                     type="number"
                     value={rooms}
                     placeholder="1 Room"
                     onChange={(e) => setRooms(e.target.value)}
                   />
                   <input
-                    className="w-1/3 px-4 py-2 border rounded-md"
+                    className="w-1/3 px-4 py-2 border rounded-md  dark:text-black"
                     type="number"
                     value={adults}
                     placeholder="2 Adults"
                     onChange={(e) => setAdults(e.target.value)}
                   />
                   <input
-                    className="w-1/3 px-4 py-2 border rounded-md"
+                    className="w-1/3 px-4 py-2 border rounded-md  dark:text-black"
                     type="number"
                     value={childrenAge}
                     placeholder="0 Children"
